@@ -19,6 +19,6 @@
 
 [[redirects]]
   from = "https://qsortby.netlify.app/*"
-  to   = "https://qsortby.vn/:splat"
+  to   = "https://qsortby.com/:splat"
   status = 301
   force = true
