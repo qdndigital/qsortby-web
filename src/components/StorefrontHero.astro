@@ -1,0 +1,53 @@
+---
+// Hero NARRATIVE visual — a 5-step story told by animation, in 3D:
+//  ① Default order (sold-out featured, low conversion)
+//  ② Reading signals (sweep + sales/trend/stock light up)
+//  ③ Sorting live (cards reflow in 3D)
+//  ④ Best sellers up front (winner promoted, demoted sold-out)
+//  ⑤ Shoppers convert ("Added to cart" + conversion climbs)
+// Real product thumbnails float out of their cards (translateZ + shadow).
+// Phase driven by [data-phase] on #sfront (controller in public/assets/app.js).
+const products = [
+  { cls: 'p1', slug: 'trailhead-pack',  name: 'Trailhead Pack',  price: '$140', win: true },
+  { cls: 'p2', slug: 'linen-overshirt', name: 'Linen Overshirt', price: '$96' },
+  { cls: 'p3', slug: 'aurora-sneaker',  name: 'Aurora Sneaker',  price: '$128' },
+  { cls: 'p4', slug: 'cloud-pant',      name: 'Cloud Pant',      price: '$72', out: true },
+];
+---
+<div class="sf-scene" aria-hidden="true">
+  <div class="sfront" id="sfront" data-phase="arrive">
+    <div class="sf-top">
+      <span class="sf-shop"><span class="sf-dot"></span> your-store.com</span>
+      <span class="sf-cap">Default order</span>
+    </div>
+    <div class="sf-head">Bestsellers</div>
+
+    <div class="sf-signals">
+      <span class="sg s1">Sales</span><span class="sg s2">Trend</span><span class="sg s3">In&nbsp;stock</span>
+    </div>
+
+    <div class="sf-stage">
+      <div class="sf-sweepclip"><div class="sf-sweep"></div></div>
+      {products.map((p) => (
+        <article class={`sf-card ${p.cls}${p.out ? ' out' : ''}`}>
+          {p.win && <span class="sf-badge win"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg> Bestseller</span>}
+          {p.out && <span class="sf-badge no">Sold out</span>}
+          <span class="sf-thumb"><img src={`/products/${p.slug}.png`} alt="" width="120" height="120" loading="eager" decoding="async" /></span>
+          <span class="sf-meta"><span class="sf-nm">{p.name}</span><span class="sf-pr">{p.price}</span></span>
+        </article>
+      ))}
+      <div class="sf-toast"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> Added to cart</div>
+    </div>
+
+    <div class="sf-foot">
+      <div class="sf-kpi">
+        <span class="sf-k">Conversion rate</span>
+        <span class="sf-v"><b>1.9</b>%<em>▲</em></span>
+      </div>
+      <svg class="sf-spark" viewBox="0 0 118 34" preserveAspectRatio="none">
+        <path class="sp-base" d="M2 26 L24 25 L46 26 L70 24 L94 25 L116 24" />
+        <path class="sp-rise" d="M2 28 L24 26 L46 25 L70 18 L94 12 L116 6" />
+      </svg>
+    </div>
+  </div>
+</div>

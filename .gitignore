@@ -1,0 +1,15 @@
+# build output
+dist/
+.astro/
+
+# deps
+node_modules/
+
+# env / local
+.env
+.env.*
+.DS_Store
+
+# netlify
+.netlify/
+

@@ -1,0 +1,92 @@
+---
+import Base from '../layouts/Base.astro';
+import { APP_STORE_URL, DEMO_URL } from '../consts';
+
+const title = 'Integrations — QSortby for Shopify';
+const description =
+  'QSortby is built on native Shopify surfaces — Online Store, collections, metafields, Flow, POS and Markets — so your sorted collections show up everywhere your store already lives.';
+
+const native = [
+  { nm: 'Online Store', sub: 'Theme & collections', d: 'QSortby maintains real Shopify collections, sorted by your chosen signal. Add them to your nav, homepage or any section like any other collection.' },
+  { nm: 'Metafields', sub: 'Per-product ranks', d: 'Store-wide and per-segment ranks are written to product metafields your theme can read — build custom badges, "best seller" tags and sorted rows.' },
+  { nm: 'Shopify Flow', sub: 'Automate on rank', d: 'Use ranking changes as signals in your own Flow automations — tag a new #1, notify a channel, or kick off a campaign.' },
+  { nm: 'Shopify POS', sub: 'In-store top sellers', d: 'The same ranking data is available in-store, so your POS and online merchandising tell one consistent story.' },
+  { nm: 'Shopify Markets', sub: 'Per-market velocity', d: 'Rankings reflect what is actually selling in each market, not a blended global average.' },
+  { nm: 'Checkout', sub: 'Velocity-aware surfaces', d: 'Ranking signals are available to power velocity-aware merchandising across the funnel.' },
+];
+---
+<Base title={title} description={description}>
+  <section class="phero">
+    <div class="wrap">
+      <div class="crumb"><a href="/">~</a> / integrations</div>
+      <h1>Native to Shopify. Connected to your stack.</h1>
+      <p>QSortby reads orders and inventory, and writes sorted collections back through standard Shopify surfaces — no brittle middleware, no theme rebuild.</p>
+    </div>
+  </section>
+
+  <!-- native surfaces -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="shead rv" style="margin-bottom:2.5rem">
+        <span class="eyebrow"><span class="dot"></span> Shopify-native</span>
+        <h2>The surfaces QSortby uses.</h2>
+      </div>
+      <div class="cards">
+        {native.map((n) => (
+          <div class="card rv">
+            <span class="kicker">{n.sub}</span>
+            <h3 style="margin-top:.6rem">{n.nm}</h3>
+            <p>{n.d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- setup flow -->
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="shead rv" style="margin-bottom:2.5rem">
+        <span class="eyebrow"><span class="dot"></span> Setup</span>
+        <h2>Connected in three steps.</h2>
+      </div>
+      <div class="steps">
+        <div class="step rv"><div class="sn">01</div><h3>Install &amp; authorize</h3><p>Grant read access to orders, products and inventory at install. QSortby registers for Shopify's native event delivery automatically.</p></div>
+        <div class="step rv"><div class="sn">02</div><h3>Pick your surfaces</h3><p>Choose which collections to sort and which segments to rank. Optional: enable metafields for theme-level badges.</p></div>
+        <div class="step rv"><div class="sn">03</div><h3>Go live</h3><p>Sorted collections flow into your storefront, POS and Markets. Wire ranking events into Shopify Flow if you want to automate further.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ecosystem (honest framing) -->
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="shead ctr rv" style="margin-bottom:2.5rem">
+        <span class="eyebrow" style="justify-content:center"><span class="dot"></span> Your stack</span>
+        <h2>Feeds the tools you already run.</h2>
+        <p class="lead-c">Because rankings live in Shopify collections and metafields, they flow out to the rest of your stack through Shopify's standard data — no proprietary lock-in.</p>
+      </div>
+      <div class="intg rv">
+        <div class="i"><span class="lg"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3z"/><path d="M3 7l9 6 9-6"/></svg></span><span class="nm">Email &amp; SMS<small>Klaviyo, Shopify Email</small></span></div>
+        <div class="i"><span class="lg"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 16V9M13 16v-5M18 16v-8"/></svg></span><span class="nm">Analytics &amp; BI<small>metafield feeds</small></span></div>
+        <div class="i"><span class="lg"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></span><span class="nm">Ads &amp; catalogs<small>Meta, Google feeds</small></span></div>
+        <div class="i"><span class="lg"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span><span class="nm">Helpdesk<small>Gorgias, Zendesk</small></span></div>
+      </div>
+      <p class="kicker rv" style="text-align:center;margin-top:1.25rem">Surfaced via Shopify data — direct connectors are on the roadmap.</p>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="cta rv">
+        <span class="eyebrow"><span class="dot"></span> Get started</span>
+        <h2>Plug it into your <em>storefront</em>.</h2>
+        <p>Book a demo and see your sorted collections show up everywhere Shopify already does.</p>
+        <div class="hero-cta" style="justify-content:center">
+          <a href={DEMO_URL} class="btn btn-accent btn-lg">Book a demo <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a href={APP_STORE_URL} class="btn btn-ghost btn-lg">Add to Shopify</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

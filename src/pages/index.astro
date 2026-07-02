@@ -1,0 +1,256 @@
+---
+import Base from '../layouts/Base.astro';
+import StorefrontHero from '../components/StorefrontHero.astro';
+import { APP_STORE_URL, DEMO_URL } from '../consts';
+
+const title = 'QSortby — Smart Collection Sorting for Shopify';
+const description =
+  'QSortby reorders every Shopify collection in real time so your best-converting, in-stock products always meet shoppers first — selling more from the catalog you already have.';
+---
+<Base title={title} description={description}>
+  <!-- ===================== HERO ===================== -->
+  <section class="hero">
+    <div class="wrap herogrid">
+      <div class="hero-copy">
+        <span class="eyebrow"><span class="dot"></span> Built for Shopify</span>
+        <h1><em>Sell more</em> from the <em>catalog</em> you already have.</h1>
+        <p class="lead">
+          QSortby reorders every collection by what's selling right now — your best products meet
+          shoppers first, sold-out steps aside. No theme code.
+        </p>
+        <div class="hero-cta">
+          <a href={DEMO_URL} class="btn btn-accent btn-lg">Book a demo <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a href={APP_STORE_URL} class="btn btn-line btn-lg">Add to Shopify</a>
+        </div>
+        <p class="hero-note">No theme code · 7-day free trial · Live in minutes</p>
+      </div>
+      <div class="hero-viz"><StorefrontHero /></div>
+    </div>
+  </section>
+
+  <!-- ===================== TRUST BAR ===================== -->
+  <section style="padding:1rem 0 0">
+    <div class="wrap">
+      <div class="trustbar rv">
+        <span class="ti"><svg viewBox="0 0 24 24"><path d="M12 3l8 4v6c0 5-4 7-8 8-4-1-8-3-8-8V7z"/></svg> Built for Shopify</span>
+        <span class="sep"></span>
+        <span class="ti"><svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-4 8-8 10-4-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg> GDPR-ready</span>
+        <span class="sep"></span>
+        <span class="ti"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg> Shopify Billing</span>
+        <span class="sep"></span>
+        <span class="ti"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg> Real-time</span>
+        <span class="sep"></span>
+        <span class="ti"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/></svg> No theme code</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FEATURE BENTO ===================== -->
+  <section class="sec alt">
+    <div class="wrap">
+      <div class="shead ctr rv" style="margin-bottom:2.5rem">
+        <span class="eyebrow"><span class="dot"></span> The product</span>
+        <h2>Everything you need to <em>convert more shoppers.</em></h2>
+      </div>
+
+      <div class="fbento">
+        <article class="fb wide rv">
+          <div class="fb-txt">
+            <span class="kicker">Smart auto-sort</span>
+            <h3>Sort by any signal</h3>
+            <p>Best sellers, revenue, trending, inventory — the collection orders itself.</p>
+            <div class="chips">
+              <span class="ch on">Best sellers</span><span class="ch">Revenue</span><span class="ch">Trending</span><span class="ch">Inventory</span><span class="ch">Newest</span>
+            </div>
+          </div>
+          <div class="fb-viz">
+            <div class="anim-sort" aria-hidden="true">
+              <div class="asr asr-a"><span class="th"><img src="/products/aurora-sneaker.png" alt="" /></span><span class="ln"></span><b>142</b></div>
+              <div class="asr asr-b"><span class="th"><img src="/products/linen-overshirt.png" alt="" /></span><span class="ln"></span><b>118</b></div>
+              <div class="asr asr-c"><span class="th"><img src="/products/trailhead-pack.png" alt="" /></span><span class="ln"></span><b>97</b></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="fb rv">
+          <span class="kicker">Real-time</span>
+          <h3>Updates as sales land</h3>
+          <p>Every order re-scores your catalog instantly.</p>
+          <div class="fb-viz">
+            <div class="anim-rt" aria-hidden="true">
+              <span class="rt-live"><i></i> live</span>
+              <div class="gcard rt-card">
+                <span class="gthumb"><img src="/products/aurora-sneaker.png" alt="" /></span>
+                <div class="rt-meta">
+                  <span class="rt-nm">Aurora Sneaker</span>
+                  <span class="rt-bar"><i></i></span>
+                  <span class="rt-pip">+1</span>
+                </div>
+                <span class="rt-rank">#1</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="fb rv">
+          <span class="kicker">Inventory-aware</span>
+          <h3>Sold-out steps aside</h3>
+          <p>Out-of-stock drops; restocks climb back.</p>
+          <div class="fb-viz">
+            <div class="anim-drop" aria-hidden="true">
+              <div class="drow"><span class="th"><img src="/products/aurora-sneaker.png" alt="" /></span><span class="ln"></span><span class="pill ok">In stock</span></div>
+              <div class="drow out"><span class="th"><img src="/products/cloud-pant.png" alt="" /></span><span class="ln"></span><span class="pill no">Sold out</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="fb rv">
+          <span class="kicker">Full control</span>
+          <h3>Drag, pin &amp; preview</h3>
+          <p>Override by hand. Preview before it goes live.</p>
+          <div class="fb-viz">
+            <div class="anim-drag" aria-hidden="true">
+              <div class="grow"><span class="grip"></span><span class="th"><img src="/products/trailhead-pack.png" alt="" /></span><span class="ln"></span></div>
+              <div class="grow lift"><span class="grip"></span><span class="th"><img src="/products/linen-overshirt.png" alt="" /></span><span class="ln"></span><span class="pin">pinned</span></div>
+              <div class="grow"><span class="grip"></span><span class="th"><img src="/products/aurora-sneaker.png" alt="" /></span><span class="ln"></span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="fb rv">
+          <span class="kicker">Segments</span>
+          <h3>Rules per audience</h3>
+          <p>Each segment leads with its own bestsellers.</p>
+          <div class="fb-viz">
+            <div class="anim-aud" aria-hidden="true">
+              <div class="aud-tabs"><span class="atab a1">New</span><span class="atab a2">VIP</span></div>
+              <div class="aud-list">
+                <div class="gcard arow ra"><span class="gthumb"><img src="/products/aurora-sneaker.png" alt="" /></span><span class="rt-nm">Aurora Sneaker</span></div>
+                <div class="gcard arow rb"><span class="gthumb"><img src="/products/linen-overshirt.png" alt="" /></span><span class="rt-nm">Linen Overshirt</span></div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="fb wide rv">
+          <div class="fb-txt">
+            <span class="kicker">Shopper insights</span>
+            <h3>Know why products move</h3>
+            <p>Events, heatmaps and journeys you can actually act on.</p>
+          </div>
+          <div class="fb-viz">
+            <div class="anim-why" aria-hidden="true">
+              <div class="gcard why-stage w1"><span class="why-k">Views</span><span class="why-v">1,240</span><span class="why-bar"><i style="--w:100%"></i></span></div>
+              <span class="why-flow"></span>
+              <div class="gcard why-stage w2"><span class="why-k">Carts</span><span class="why-v">384</span><span class="why-bar"><i style="--w:64%"></i></span></div>
+              <span class="why-flow"></span>
+              <div class="gcard why-stage w3"><span class="why-k">Sales</span><span class="why-v">96</span><span class="why-bar"><i style="--w:30%"></i></span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="fb rv">
+          <span class="kicker">Emotional AI</span>
+          <h3>Read buyer intent</h3>
+          <p>Surface what shoppers are most likely to buy.</p>
+          <div class="fb-viz">
+            <div class="anim-int" aria-hidden="true">
+              <div class="int-sigs"><span class="sig sg1">dwell</span><span class="sig sg2">revisit</span><span class="sig sg3">compare</span></div>
+              <div class="int-meter"><i class="int-fill"></i></div>
+              <span class="int-lbl">High intent</span>
+              <div class="gcard int-rec"><span class="gthumb"><img src="/products/trailhead-pack.png" alt="" /></span><span class="rt-nm">Trailhead Pack</span><span class="int-tag">Show now</span></div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== HOW IT WORKS ===================== -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="shead rv" style="margin-bottom:2.5rem">
+        <span class="eyebrow"><span class="dot"></span> How it works</span>
+        <h2>Live in three steps.</h2>
+      </div>
+      <div class="steps">
+        <div class="step rv"><div class="sn">01</div><h3>Install</h3><p>Add QSortby from the App Store. No theme edits.</p></div>
+        <div class="step rv"><div class="sn">02</div><h3>Pick a signal</h3><p>Choose how each collection sorts. Preview it.</p></div>
+        <div class="step rv"><div class="sn">03</div><h3>It sorts itself</h3><p>Real-time ordering, sold-out demoted. Done.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SOCIAL PROOF (placeholder for video testimonials) ===================== -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="shead ctr rv" style="margin-bottom:2.5rem">
+        <span class="eyebrow"><span class="dot"></span> Merchants</span>
+        <h2>Hear it from the stores.</h2>
+      </div>
+      <!-- PLACEHOLDER: swap each tile for a real merchant video testimonial before launch. -->
+      <div class="vquotes rv">
+        <div class="vq"><span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="vlbl">Video testimonial</span><span class="vsub">Coming soon</span></div>
+        <div class="vq"><span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="vlbl">Video testimonial</span><span class="vsub">Coming soon</span></div>
+        <div class="vq"><span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span><span class="vlbl">Video testimonial</span><span class="vsub">Coming soon</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PRICING TEASER (mock — finalize later) ===================== -->
+  <section class="sec alt">
+    <div class="wrap">
+      <div class="shead ctr rv" style="margin-bottom:2.5rem">
+        <span class="eyebrow"><span class="dot"></span> Pricing</span>
+        <h2>Simple pricing. Free for 7 days.</h2>
+      </div>
+      <div class="plans rv">
+        <div class="plan">
+          <span class="ptag">Starter</span>
+          <div class="price"><b>$29</b><span>/ month</span></div>
+          <p class="pdesc">A storefront that sorts itself.</p>
+          <a href="/pricing" class="btn btn-line w-full">Compare plans</a>
+        </div>
+        <div class="plan feat">
+          <span class="badge">Most popular</span>
+          <span class="ptag">Pro</span>
+          <div class="price"><b>$99</b><span>/ month</span></div>
+          <p class="pdesc">Segments, insights &amp; Emotional AI.</p>
+          <a href={DEMO_URL} class="btn btn-accent w-full">Book a demo</a>
+        </div>
+      </div>
+      <p class="kicker" style="text-align:center;margin-top:1.5rem">Placeholder pricing · final plans TBD</p>
+    </div>
+  </section>
+
+  <!-- ===================== FAQ ===================== -->
+  <section class="sec">
+    <div class="narrow">
+      <div class="shead ctr rv" style="margin-bottom:2.5rem">
+        <span class="eyebrow"><span class="dot"></span> Questions</span>
+        <h2>Good to know</h2>
+      </div>
+      <div class="faq rv">
+        <details><summary>What can QSortby sort by?<span class="pm"></span></summary><div class="ans">Best sellers, revenue, click-through, trending, newest or most in-stock — over a window you choose. Or order any collection by hand.</div></details>
+        <details><summary>Do I need to edit my theme?<span class="pm"></span></summary><div class="ans">No. QSortby maintains standard Shopify collections — add them like any other. No custom code.</div></details>
+        <details><summary>What happens when a product sells out?<span class="pm"></span></summary><div class="ans">It drops to the bottom automatically, and returns to its earned spot once restocked.</div></details>
+        <details><summary>Is there a free trial?<span class="pm"></span></summary><div class="ans">Yes — 7 days, billed through Shopify's Billing API on your normal invoice.</div></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FINAL CTA ===================== -->
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="cta rv">
+        <span class="eyebrow"><span class="dot"></span> Get started</span>
+        <h2>Let your storefront optimize itself for <em>higher conversion.</em></h2>
+        <p>Book a 15-minute demo and watch QSortby re-sort your real collections in real time.</p>
+        <div class="hero-cta" style="justify-content:center">
+          <a href={DEMO_URL} class="btn btn-accent btn-lg">Book a demo <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a href={APP_STORE_URL} class="btn btn-ghost btn-lg">Add to Shopify</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

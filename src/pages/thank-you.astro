@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+
+const title = 'Thank you — QSortby';
+const description = 'Your message has been received.';
+---
+<Base title={title} description={description} noindex={true}>
+  <section class="phero">
+    <div class="wrap">
+      <div class="crumb"><a href="/">~</a> / thank you</div>
+      <h1>Message received.</h1>
+      <p>Thanks for reaching out — we'll get back to you within one business day. In the meantime, feel free to explore use cases or pricing.</p>
+      <div class="hero-cta" style="margin-top:2rem">
+        <a href="/use-cases" class="btn btn-ink">Explore use cases</a>
+        <a href="/" class="btn btn-line">Back home</a>
+      </div>
+    </div>
+  </section>
+</Base>

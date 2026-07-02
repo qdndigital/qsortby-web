@@ -1,0 +1,56 @@
+---
+import Base from '../layouts/Base.astro';
+import { SUPPORT_EMAIL } from '../consts';
+
+const title = 'Terms of Service — QSortby';
+const description = 'The terms governing use of the QSortby Shopify app.';
+---
+<Base title={title} description={description}>
+  <section class="phero">
+    <div class="wrap">
+      <div class="crumb"><a href="/">~</a> / terms</div>
+      <h1>Terms of Service</h1>
+      <p class="upd font-mono">Last updated: 21 June 2026</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="prose rv">
+        <p>These Terms of Service ("Terms") govern your use of the <strong>QSortby</strong> application ("QSortby", "the app", "we", "us") for Shopify. By installing or using the app, you ("the merchant", "you") agree to these Terms.</p>
+
+        <h2>1. The service</h2>
+        <p>QSortby ranks your Shopify catalog by real-time sales velocity and maintains a Best Sellers collection and product ranking metafields, along with related merchandising features described on this website and in the app.</p>
+
+        <h2>2. Eligibility &amp; account</h2>
+        <p>You must have an active Shopify store and the authority to install apps on it. You are responsible for the permissions you grant at install and for activity within your store.</p>
+
+        <h2>3. Billing</h2>
+        <ul>
+          <li>Paid plans are billed through the <strong>Shopify Billing API</strong> and appear on your Shopify invoice.</li>
+          <li>Each plan includes a <strong>7-day free trial</strong>. After the trial, the selected plan's recurring charge begins.</li>
+          <li>Plan prices are <strong>$29/month (Starter)</strong> and <strong>$99/month (Pro)</strong>, in USD.</li>
+          <li>You may change plans or uninstall at any time; billing stops on uninstall.</li>
+        </ul>
+
+        <h2>4. Acceptable use</h2>
+        <p>You agree not to misuse the service, including: attempting to disrupt or reverse-engineer it, using it to violate Shopify's terms or applicable law, or using it to harm shoppers.</p>
+
+        <h2>5. Data</h2>
+        <p>Your use of the app is also governed by our <a href="/privacy">Privacy Policy</a>, which explains what data we process and how. You are responsible for maintaining your own customer-facing privacy disclosures as required by law.</p>
+
+        <h2>6. Availability &amp; changes</h2>
+        <p>We aim for high availability but do not guarantee uninterrupted service. We may add, change, or remove features over time. Material changes to these Terms will be reflected by the "last updated" date above.</p>
+
+        <h2>7. Disclaimer &amp; limitation of liability</h2>
+        <p>The service is provided "as is" without warranties of any kind. To the maximum extent permitted by law, QSortby is not liable for indirect, incidental, or consequential damages, or for lost sales, profits, or data arising from use of the app. Our total liability is limited to the fees you paid in the three months preceding the claim.</p>
+
+        <h2>8. Termination</h2>
+        <p>You may terminate at any time by uninstalling the app. We may suspend or terminate access for violations of these Terms. On termination, your Best Sellers collection remains in your store but is no longer updated.</p>
+
+        <h2>9. Contact</h2>
+        <p>Questions about these Terms? Email <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.</p>
+      </div>
+    </div>
+  </section>
+</Base>

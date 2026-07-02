@@ -1,0 +1,82 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import StickyCta from '../components/StickyCta.astro';
+import '../styles/global.css';
+
+const { title, description, noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': 'https://qsortby.com/#org',
+      name: 'QSortby',
+      url: 'https://qsortby.com/',
+      email: 'support@qsortby.com',
+      description:
+        'QSortby is a Shopify app for smart collection sorting — it turns live store signals (sales velocity, trends, inventory, shopper intent) into collections that sort themselves, so your storefront always leads with what converts.',
+      logo: 'https://qsortby.com/favicon.svg',
+      areaServed: 'Worldwide',
+    },
+    {
+      '@type': 'SoftwareApplication',
+      '@id': 'https://qsortby.com/#app',
+      name: 'QSortby — Smart Collection Sorting',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Shopify',
+      description:
+        'Smart collection sorting for Shopify: auto-sort by sales, revenue, trending, inventory and more; manual drag-and-drop ordering with preview; per-segment rules; and shopper insights — fully Shopify-native.',
+      offers: [
+        { '@type': 'Offer', name: 'Starter', price: '29', priceCurrency: 'USD' },
+        { '@type': 'Offer', name: 'Pro', price: '99', priceCurrency: 'USD' },
+      ],
+      publisher: { '@id': 'https://qsortby.com/#org' },
+    },
+    {
+      '@type': 'WebSite',
+      '@id': 'https://qsortby.com/#website',
+      url: 'https://qsortby.com/',
+      name: 'QSortby',
+      publisher: { '@id': 'https://qsortby.com/#org' },
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {/* Self-hosted fonts (see src/styles/fonts.css) — no third-party origin.
+        Preload the faces visible above the fold; the rest load on demand. */}
+    <link rel="preload" href="/fonts/playfair-vf-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/playfair-italic-vf-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter-vf-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex,follow" />}
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="QSortby" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />
+  </head>
+  <body>
+    <Header />
+    <main><slot /></main>
+    <Footer />
+    <StickyCta />
+    <script src="/assets/app.js" is:inline defer></script>
+  </body>
+</html>

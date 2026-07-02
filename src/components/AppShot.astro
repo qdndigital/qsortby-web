@@ -1,0 +1,80 @@
+---
+// Light "QSortby" product window with a live collection that re-sorts as sales
+// arrive. Driven by public/assets/app.js → #js-board (rows translateY to rank
+// slots). Niche-agnostic product names. Floating chips hint at the full product.
+const tiles = [
+  { k: 'Orders · 24h', v: '1,284', em: '+8%' },
+  { k: 'Top mover', v: 'Aurora', em: '▲3' },
+  { k: 'Sold out', v: '1', em: 'demoted' },
+];
+const rows = [
+  { name: 'Aurora Sneaker',  slug: 'aurora-sneaker',  cat: 'Footwear', sold: 142, rate: 6,  delta: '▲2', cls: 'up'   },
+  { name: 'Linen Overshirt', slug: 'linen-overshirt', cat: 'Apparel',  sold: 118, rate: 11, delta: '▲5', cls: 'up'   },
+  { name: 'Trailhead Pack',  slug: 'trailhead-pack',  cat: 'Bags',     sold: 97,  rate: 7,  delta: '▲1', cls: 'up'   },
+  { name: 'Cloud Pant',      slug: 'cloud-pant',      cat: 'Apparel',  sold: 0,   rate: 0,  delta: '–',  cls: 'flat' },
+];
+const max = 142;
+---
+<div class="qstage">
+  <!-- floating capability chips (desktop) -->
+  <span class="qchip qc-1"><span class="qd"></span> Auto-sort</span>
+  <span class="qchip qc-2"><span class="qd"></span> Real-time</span>
+  <span class="qchip qc-3"><span class="qd"></span> Analytics</span>
+  <span class="qchip qc-4"><span class="qd"></span> Emotional AI</span>
+
+  <div class="appshot" id="appshot" aria-label="QSortby app — live collection sorting (illustrative)">
+    <div class="as-top">
+      <i></i><i></i><i></i>
+      <span class="u"><span class="umk"></span> QSortby · <b>Collections</b></span>
+    </div>
+    <div class="as-body">
+      <aside class="as-side">
+        <div class="brand"><span class="mk"></span> QSortby</div>
+        <div class="as-nav"><span class="d"></span> Dashboard</div>
+        <div class="as-nav on"><span class="d"></span> Collections</div>
+        <div class="as-nav"><span class="d"></span> Segment rules</div>
+        <div class="as-nav"><span class="d"></span> Insights</div>
+        <div class="as-nav"><span class="d"></span> Settings</div>
+      </aside>
+      <div class="as-main">
+        <div class="as-h">
+          <div class="ttl">Summer Collection<small>auto-sorted · last 24 hours</small></div>
+          <span class="as-live"><i></i> live</span>
+        </div>
+        <div class="as-ctl">
+          <span class="as-sort">Sort by <b>Best sellers</b>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </span>
+          <span class="as-win">Rolling 24h</span>
+        </div>
+        <div class="as-tiles">
+          {tiles.map((t) => (
+            <div class="as-tile"><div class="k">{t.k}</div><div class="v">{t.v}<em>{t.em}</em></div></div>
+          ))}
+        </div>
+        <div class="as-rank">
+          <div class="as-rhead"><span>#</span><span>Product</span><span>Trend</span><span>Sold</span></div>
+          <div class="as-list" id="js-board">
+            {rows.map((r, i) => (
+              <div class={`lrow${i === 0 ? ' lead' : ''}`} data-sold={r.sold} data-rate={r.rate}>
+                <div class="lr-rank">{String(i + 1).padStart(2, '0')}</div>
+                <div class="lr-prod">
+                  <span class={`lr-thumb${r.sold === 0 ? ' out' : ''}`}><img src={`/products/${r.slug}.png`} alt="" loading="lazy" decoding="async" /></span>
+                  <div style="min-width:0">
+                    <div class="lr-name">{r.name}</div>
+                    <div class="lr-sub">{r.sold === 0 ? 'sold out · demoted' : `${r.cat} · ${r.sold} sold`}</div>
+                  </div>
+                </div>
+                <div class="lr-trend">
+                  <span class="lr-bar"><i style={`width:${Math.round((r.sold / max) * 100)}%`}></i></span>
+                  <span class={`lr-delta ${r.cls}`}>{r.delta}</span>
+                </div>
+                <div class="lr-sold">{r.sold}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

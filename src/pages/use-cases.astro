@@ -1,0 +1,151 @@
+---
+import Base from '../layouts/Base.astro';
+import { APP_STORE_URL, DEMO_URL } from '../consts';
+
+const title = 'Solutions — QSortby for Shopify';
+const description =
+  'Every catalog moves differently. QSortby merchandises each one by the signal that matters most — trending velocity for fashion, shopper intent for beauty, conversion for electronics, live inventory for food, auto-curation for home.';
+const check = '<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>';
+---
+<Base title={title} description={description}>
+  <section class="phero">
+    <div class="wrap">
+      <div class="crumb"><a href="/">~</a> / solutions</div>
+      <h1>Merchandised by what matters to <em>your</em> category.</h1>
+      <p>Fashion lives on trends. Beauty lives on discovery. Electronics on proof. Food on availability. Home on scale. QSortby sorts each catalog by the one signal that moves it — automatically.</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap ucs">
+
+      <!-- ===== FASHION — trending velocity + sold-out sizes ===== -->
+      <article class="uc rv">
+        <div class="uc-copy">
+          <span class="tag">Fashion &amp; apparel</span>
+          <h3>Catch what's trending this drop — not last season.</h3>
+          <p>Apparel lives and dies on momentum. QSortby ranks by <b>trending velocity</b>, so the piece catching fire rises to the front the moment it moves — and the size that just sold out steps aside before it kills a click.</p>
+          <ul>
+            <li><span set:html={check} /> Trending velocity, not all-time sales</li>
+            <li><span set:html={check} /> Sold-out sizes demoted instantly</li>
+            <li><span set:html={check} /> A fresh front row every drop</li>
+          </ul>
+        </div>
+        <div class="uc-panel">
+          <span class="uc-cap" data-c="trend">Trending this drop</span>
+          <div class="uc-stage uc-trend">
+            <div class="gcard tr-row tr-a"><span class="gthumb"><img src="/products/fashion-jacket.png" alt="" /></span><span class="tr-nm">Denim Jacket</span><span class="tr-tag sold">Sold out · M</span></div>
+            <div class="gcard tr-row tr-b"><span class="gthumb"><img src="/products/fashion-skirt.png" alt="" /></span><span class="tr-nm">Pleated Skirt</span><span class="tr-tag up">▲ Trending</span></div>
+            <div class="gcard tr-row tr-c"><span class="gthumb"><img src="/products/fashion-tee.png" alt="" /></span><span class="tr-nm">Oversized Tee</span></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== BEAUTY — Emotional AI / intent ===== -->
+      <article class="uc rev rv">
+        <div class="uc-copy">
+          <span class="tag">Beauty &amp; fragrance</span>
+          <h3>Turn browsing into discovery.</h3>
+          <p>Beauty is bought on feeling, and most shoppers don't know the name of what they want. QSortby reads <b>on-site intent</b> — what they linger on, revisit, compare — and surfaces the hero they're most likely to fall for.</p>
+          <ul>
+            <li><span set:html={check} /> Reads passive intent signals</li>
+            <li><span set:html={check} /> Surfaces the right hero per shopper</li>
+            <li><span set:html={check} /> Per-line bestsellers stay fresh</li>
+          </ul>
+        </div>
+        <div class="uc-panel">
+          <span class="uc-cap" data-c="intent">Reading intent</span>
+          <div class="uc-stage uc-int">
+            <div class="bi-sigs"><span class="bi-sig s1">gifting</span><span class="bi-sig s2">evening</span><span class="bi-sig s3">warm</span></div>
+            <div class="bi-meter"><i></i></div>
+            <span class="bi-lbl">Match found</span>
+            <div class="gcard bi-rec"><span class="gthumb"><img src="/products/beauty-oud.png" alt="" /></span><span class="tr-nm">Midnight Oud</span><span class="bi-tag">Surface</span></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== ELECTRONICS — revenue / conversion ===== -->
+      <article class="uc rv">
+        <div class="uc-copy">
+          <span class="tag">Electronics &amp; accessories</span>
+          <h3>Lead with proven sellers, not a flat grid.</h3>
+          <p>Accessory catalogs are wide, similar and price-sensitive. QSortby sorts by <b>revenue and conversion</b> — so the SKUs that actually close move to the front, and the lookalikes that don't quietly sink.</p>
+          <ul>
+            <li><span set:html={check} /> Sort by revenue or conversion rate</li>
+            <li><span set:html={check} /> Proven sellers &amp; bundles up front</li>
+            <li><span set:html={check} /> Insights on what truly converts</li>
+          </ul>
+        </div>
+        <div class="uc-panel">
+          <span class="uc-cap" data-c="rev">Sort · Revenue</span>
+          <div class="uc-stage uc-rev">
+            <div class="rv-row rv-a gcard"><span class="gthumb"><img src="/products/tech-charger.png" alt="" /></span><span class="tr-nm">Fast Charger</span><span class="rv-bar"><i style="--w:38%"></i></span><span class="rv-amt">$2.1k</span></div>
+            <div class="rv-row rv-b gcard win"><span class="gthumb"><img src="/products/tech-buds.png" alt="" /></span><span class="tr-nm">Aero Buds</span><span class="rv-bar"><i style="--w:100%"></i></span><span class="rv-amt">$8.4k</span><span class="rv-cvr">3.2× CVR</span></div>
+            <div class="rv-row rv-c gcard"><span class="gthumb"><img src="/products/tech-hub.png" alt="" /></span><span class="tr-nm">USB-C Hub</span><span class="rv-bar"><i style="--w:62%"></i></span><span class="rv-amt">$4.7k</span></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== FOOD — inventory-aware ===== -->
+      <article class="uc rev rv">
+        <div class="uc-copy">
+          <span class="tag">Food &amp; beverage</span>
+          <h3>Only feature what's actually buyable.</h3>
+          <p>Perishable and limited stock means availability matters as much as popularity. QSortby pairs sales velocity with <b>live inventory</b>: when stock runs low it demotes before it sells out, and promotes the moment you restock.</p>
+          <ul>
+            <li><span set:html={check} /> Inventory-aware ranking</li>
+            <li><span set:html={check} /> Low stock demotes before it's gone</li>
+            <li><span set:html={check} /> Restock auto-promotes back up</li>
+          </ul>
+        </div>
+        <div class="uc-panel">
+          <span class="uc-cap" data-c="stock">Live inventory</span>
+          <div class="uc-stage uc-stock">
+            <div class="st-row st-a gcard"><span class="gthumb"><img src="/products/food-matcha.png" alt="" /></span><span class="tr-nm">Matcha Set</span><span class="st-bar"><i class="ok"></i></span><span class="st-pill ok">In stock</span></div>
+            <div class="st-row st-b gcard"><span class="gthumb"><img src="/products/food-coldbrew.png" alt="" /></span><span class="tr-nm">Cold Brew</span><span class="st-bar"><i class="low"></i></span><span class="st-pill no">Low → out</span></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ===== HOME — auto-curation at scale ===== -->
+      <article class="uc rv">
+        <div class="uc-copy">
+          <span class="tag">Home &amp; living</span>
+          <h3>Make a huge catalog feel hand-picked.</h3>
+          <p>Big home catalogs are impossible to merchandise by hand. QSortby <b>auto-curates at scale</b> — every collection arranges itself by what's actually selling, so a thousand SKUs look like someone hand-picked the front row.</p>
+          <ul>
+            <li><span set:html={check} /> Hands-off curation at scale</li>
+            <li><span set:html={check} /> Per-collection rules</li>
+            <li><span set:html={check} /> Always-fresh homepage rows</li>
+          </ul>
+        </div>
+        <div class="uc-panel">
+          <span class="uc-cap" data-c="curate">Auto-curated</span>
+          <div class="uc-stage uc-curate">
+            <span class="cu-tile c1"><img src="/products/home-mug.png" alt="" /></span>
+            <span class="cu-tile c2"><img src="/products/home-candle.png" alt="" /></span>
+            <span class="cu-tile c3"><img src="/products/home-vase.png" alt="" /></span>
+            <span class="cu-tile c4"><img src="/products/home-throw.png" alt="" /></span>
+            <span class="cu-tile c5"><img src="/products/home-candle.png" alt="" /></span>
+            <span class="cu-tile c6"><img src="/products/home-mug.png" alt="" /></span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="cta rv">
+        <span class="eyebrow"><span class="dot"></span> Get started</span>
+        <h2>Sorted for <em>your</em> catalog.</h2>
+        <p>Book a 15-minute demo and see QSortby merchandise your real collections — by the signal that matters most to you.</p>
+        <div class="hero-cta" style="justify-content:center">
+          <a href={DEMO_URL} class="btn btn-accent btn-lg">Book a demo <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a href={APP_STORE_URL} class="btn btn-ghost btn-lg">Add to Shopify</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

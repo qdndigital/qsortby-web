@@ -1,0 +1,85 @@
+---
+import Base from '../layouts/Base.astro';
+import { SUPPORT_EMAIL } from '../consts';
+
+const title = 'Privacy Policy — QSortby';
+const description = 'How QSortby collects, uses, retains, and protects merchant and shopper data.';
+---
+<Base title={title} description={description}>
+  <section class="phero">
+    <div class="wrap">
+      <div class="crumb"><a href="/">~</a> / privacy</div>
+      <h1>Privacy Policy</h1>
+      <p class="upd font-mono">Last updated: 21 June 2026</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="prose rv">
+        <p>This Privacy Policy explains how <strong>QSortby</strong> ("QSortby", "we", "us") collects, uses, retains, and protects information when a merchant installs our Shopify app and when shoppers visit a store that uses it. By installing QSortby, the merchant agrees to this policy.</p>
+
+        <h2>1. Who controls the data</h2>
+        <p>The merchant who installs QSortby is the <em>data controller</em> for their store's data. QSortby acts as a <em>data processor</em>, handling data on the merchant's behalf to provide the service. First-party store data remains owned by the merchant.</p>
+
+        <h2>2. Merchant &amp; store data we process</h2>
+        <p>To rank products by sales velocity and keep your storefront updated, QSortby accesses, via the permissions you grant at install:</p>
+        <ul>
+          <li><strong>Orders &amp; refunds</strong> — used to compute real-time sales velocity.</li>
+          <li><strong>Products</strong> — titles, identifiers, and segment attributes (e.g. category) used to build rankings and write ranking metafields.</li>
+          <li><strong>Inventory levels</strong> — used to demote sold-out products.</li>
+          <li><strong>Store &amp; account details</strong> — shop domain and an access token needed to call the Shopify Admin API. Access tokens are encrypted at rest.</li>
+        </ul>
+
+        <h2>3. Shopper data collected by the storefront pixel</h2>
+        <p>If the merchant enables QSortby's storefront features, a lightweight first-party pixel may collect <strong>passive behavioral signals</strong> from store visitors to support merchandising and (where enabled) personalization. These can include:</p>
+        <ul>
+          <li>Page views, products viewed, and recently-viewed history</li>
+          <li>Scroll, hover, search, and cart interaction signals</li>
+          <li>Session metadata such as referrer, device type, and timestamps</li>
+          <li>Technical data including IP address and user-agent string</li>
+        </ul>
+        <p>This data is tied to an anonymous visitor/session identifier. QSortby does <strong>not</strong> use it to build identified profiles of named individuals, and does <strong>not</strong> require shopper purchase history.</p>
+
+        <h2>4. How we use data</h2>
+        <ul>
+          <li>To compute and publish best-seller rankings and ranking metafields</li>
+          <li>To maintain a Best Sellers collection and demote out-of-stock items</li>
+          <li>To operate, secure, debug, and improve the service</li>
+          <li>To provide support you request</li>
+        </ul>
+
+        <h2>5. What we never do</h2>
+        <ul>
+          <li>We never sell or rent personal data.</li>
+          <li>We never share shopper data with third parties for their own marketing.</li>
+          <li>We never use behavioral signals to manipulate or exploit shoppers.</li>
+        </ul>
+
+        <h2>6. Data retention</h2>
+        <p>Behavioral event data is retained on a rolling basis (approximately 90 days) and then pruned. Ranking data reflects a rolling 24-hour window. Merchant account data is retained for the life of the installation and deleted on the schedule below after uninstall.</p>
+
+        <h2>7. Sub-processors &amp; infrastructure</h2>
+        <p>QSortby runs on cloud infrastructure (including Google Cloud) and uses Shopify's APIs and native event delivery. Data is processed only to deliver the service described here.</p>
+
+        <h2>8. Your rights &amp; GDPR</h2>
+        <p>QSortby is built to be GDPR-compliant. We honor Shopify's mandatory data-protection webhooks:</p>
+        <ul>
+          <li><strong>Data request</strong> — we surface the data we hold for a shopper on request.</li>
+          <li><strong>Customer redaction</strong> — we delete a shopper's data, including IP/user-agent records and recently-viewed history.</li>
+          <li><strong>Shop redaction</strong> — when a store uninstalls, we delete its data (within 48 hours of Shopify's redaction request, typically 30–48 days after uninstall per Shopify's schedule).</li>
+        </ul>
+        <p>To make a data request directly, email <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.</p>
+
+        <h2>9. Security</h2>
+        <p>Access tokens are encrypted at rest (AES-256-GCM). All API and webhook traffic uses HTTPS, and webhook authenticity is verified. Internal service calls require an authenticated token.</p>
+
+        <h2>10. Changes to this policy</h2>
+        <p>We may update this policy as the product evolves. Material changes will be reflected by the "last updated" date above.</p>
+
+        <h2>11. Contact</h2>
+        <p>Questions about this policy or your data? Email <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.</p>
+      </div>
+    </div>
+  </section>
+</Base>

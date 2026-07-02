@@ -1,0 +1,29 @@
+---
+import { NAV, APP_STORE_URL, DEMO_URL } from '../consts';
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+---
+<header class="site">
+  <div class="wrap nav">
+    <a href="/" class="logo" aria-label="QSortby home">
+      <svg class="logomark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <rect x="2.5" y="2.5" width="27" height="27" rx="7" stroke="#191a12" stroke-width="2"/>
+        <rect x="13.25" y="7.6" width="5.5" height="5.5" rx="1.5" fill="#0e9d63"/>
+        <rect x="13.25" y="13.75" width="5.5" height="5.5" rx="1.5" fill="#0e9d63" fill-opacity="0.55"/>
+        <rect x="13.25" y="19.9" width="5.5" height="5.5" rx="1.5" fill="#0e9d63" fill-opacity="0.28"/>
+      </svg>
+      <span>QSortby</span>
+    </a>
+    <nav class="nav-links" id="nav-links">
+      {NAV.map(([href, label]) => <a href={href} class={path === href ? 'active' : ''}>{label}</a>)}
+    </nav>
+    <div class="nav-cta">
+      <a href={APP_STORE_URL} class="btn btn-line nav-secondary">Add to Shopify</a>
+      <a href={DEMO_URL} class="btn btn-accent">Book a demo</a>
+      <button class="menu-btn" aria-label="Open menu" aria-controls="nav-links" aria-expanded="false">
+        <svg class="ic-open" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg class="ic-close" viewBox="0 0 24 24"><path d="M6 6l12 12M6 18L18 6"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="nav-overlay"></div>
