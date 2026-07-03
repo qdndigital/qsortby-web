@@ -6,8 +6,8 @@ const title = 'Pricing — QSortby for Shopify';
 const description = 'Simple pricing with a 7-day free trial, billed through Shopify. Plans and prices shown are placeholders pending launch.';
 
 const check = '<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>';
-const starter = ['Smart auto-sort by any signal', 'Real-time re-sorting', 'Sold-out auto-demotion', 'Manual order & preview', 'Embedded Shopify dashboard', 'Email support'];
-const pro = ['Everything in Starter', 'Per-segment rules', 'Shopper insights & heatmaps', 'Emotional AI intent signals', 'Priority refresh & throughput', 'Priority support'];
+const starter = ['Real-time top-sellers ranking', 'Sold-out auto-demotion', 'Auto-syncing collections + Best Sellers', 'Personalized "For You" feed', 'Manual order, preview & CSV export', 'Klaviyo & Google Analytics', 'Email support'];
+const pro = ['Everything in Starter, unlimited', 'Customer events & analytics', 'AI authoring (taxonomy + logic)', 'Emotional analytics (beta)', 'Priority refresh & throughput', 'Priority support'];
 ---
 <Base title={title} description={description}>
   <section class="phero">
@@ -24,7 +24,7 @@ const pro = ['Everything in Starter', 'Per-segment rules', 'Shopper insights & h
         <div class="plan rv">
           <span class="ptag">Starter</span>
           <div class="price"><b>$29</b><span>/ month</span></div>
-          <p class="pdesc">For solo &amp; small stores that want a storefront that sorts itself.</p>
+          <p class="pdesc">For solo &amp; small stores that want a storefront that sorts and personalizes itself.</p>
           <ul>
             {starter.map((f) => <li><span set:html={check} /> {f}</li>)}
           </ul>
@@ -35,7 +35,7 @@ const pro = ['Everything in Starter', 'Per-segment rules', 'Shopper insights & h
           <span class="badge">Most popular</span>
           <span class="ptag">Pro</span>
           <div class="price"><b>$99</b><span>/ month</span></div>
-          <p class="pdesc">For growing brands &amp; teams that need segments, insights and control.</p>
+          <p class="pdesc">For growing brands &amp; teams that need unlimited scale, analytics and AI.</p>
           <ul>
             {pro.map((f) => <li><span set:html={check} /> {f}</li>)}
           </ul>
@@ -60,14 +60,15 @@ const pro = ['Everything in Starter', 'Per-segment rules', 'Shopper insights & h
             <tr><th>Feature</th><th>Starter</th><th class="colhi">Pro</th></tr>
           </thead>
           <tbody>
-            <tr><th>Smart auto-sort by any signal</th><td class="yes">✓</td><td class="yes colhi">✓</td></tr>
-            <tr><th>Real-time re-sorting</th><td class="yes">✓</td><td class="yes colhi">✓</td></tr>
+            <tr><th>Real-time top-sellers ranking</th><td class="yes">✓</td><td class="yes colhi">✓</td></tr>
             <tr><th>Sold-out auto-demotion</th><td class="yes">✓</td><td class="yes colhi">✓</td></tr>
-            <tr><th>Manual order & preview</th><td class="yes">✓</td><td class="yes colhi">✓</td></tr>
-            <tr><th>Embedded Shopify dashboard</th><td class="yes">✓</td><td class="yes colhi">✓</td></tr>
-            <tr><th>Per-segment rules</th><td class="no">—</td><td class="yes colhi">✓</td></tr>
-            <tr><th>Shopper insights & heatmaps</th><td class="no">—</td><td class="yes colhi">✓</td></tr>
-            <tr><th>Emotional AI intent signals</th><td class="no">—</td><td class="yes colhi">✓</td></tr>
+            <tr><th>Manual order, preview & CSV export</th><td class="yes">✓</td><td class="yes colhi">✓</td></tr>
+            <tr><th>Personalized "For You" feed</th><td class="yes">✓</td><td class="yes colhi">✓</td></tr>
+            <tr><th>Klaviyo & Google Analytics</th><td class="yes">✓</td><td class="yes colhi">✓</td></tr>
+            <tr><th>Managed collections</th><td>Up to 5</td><td class="colhi">Unlimited</td></tr>
+            <tr><th>Customer events & analytics</th><td class="no">—</td><td class="yes colhi">✓</td></tr>
+            <tr><th>AI authoring (taxonomy + logic)</th><td class="no">—</td><td class="yes colhi">✓</td></tr>
+            <tr><th>Emotional analytics</th><td class="no">—</td><td class="colhi">Beta</td></tr>
             <tr><th>Refresh & throughput</th><td>Standard</td><td class="colhi">Priority</td></tr>
             <tr><th>Support</th><td>Email</td><td class="colhi">Priority</td></tr>
             <tr><th>Free trial</th><td class="yes">7 days</td><td class="yes colhi">7 days</td></tr>

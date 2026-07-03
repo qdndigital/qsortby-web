@@ -7,7 +7,7 @@ export const APP_STORE_URL = 'https://apps.shopify.com/qsortby';
 // Placeholder cal.com booking link — replace with the real demo URL when provided.
 export const DEMO_URL = 'https://cal.com/qsortby/demo';
 
-export const SUPPORT_EMAIL = 'quang.dinh@scentiment.com';
+export const SUPPORT_EMAIL = 'support@qsortby.com';
 
 // Primary nav.
 export const NAV = [

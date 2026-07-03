@@ -442,6 +442,8 @@ body.nav-open .menu-btn .ic-close { display:block; }
 .fb .chips { display:flex; flex-wrap:wrap; gap:7px; margin-top:14px; }
 .fb .ch { font-family:var(--mono); font-size:11px; font-weight:600; padding:5px 10px; border-radius:999px; background:var(--bg-2); border:1px solid var(--line); color:var(--muted); }
 .fb .ch.on { background:var(--green-soft); border-color:var(--green-line); color:var(--green-ink); }
+/* "Coming soon" tag — used to mark features that are not yet generally available */
+.soon { display:inline-block; font-family:var(--mono); font-size:10px; font-weight:700; line-height:1; text-transform:uppercase; letter-spacing:.08em; padding:4px 8px; border-radius:999px; background:var(--green-soft); border:1px solid var(--green-line); color:var(--green-ink); vertical-align:middle; }
 @media (max-width:880px){ .fbento { grid-template-columns:1fr 1fr; } .fb.wide { grid-column:span 2; } }
 @media (max-width:560px){ .fbento { grid-template-columns:1fr; } .fb.wide { grid-column:span 1; display:flex; } }
 
@@ -778,6 +780,7 @@ body { background:#fcfcfa; }
 .fb p { color:rgba(255,255,255,.6); }
 .fb .ch { background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.1); color:rgba(255,255,255,.62); }
 .fb .ch.on { background:rgba(255,255,255,.16); border-color:rgba(255,255,255,.24); color:#fff; }
+.fb .soon { background:rgba(255,255,255,.12); border-color:rgba(255,255,255,.2); color:#fff; }
 .fb-viz > div { background:rgba(255,255,255,.045); border-color:rgba(255,255,255,.08); }
 /* keep the dark-panel-only mini element legible */
 .anim-seg .node { background:#fff; color:#15171c; }
