@@ -8,10 +8,10 @@
 // Real product thumbnails float out of their cards (translateZ + shadow).
 // Phase driven by [data-phase] on #sfront (controller in public/assets/app.js).
 const products = [
-  { cls: 'p1', slug: 'trailhead-pack',  name: 'Trailhead Pack',  price: '$140', win: true },
-  { cls: 'p2', slug: 'linen-overshirt', name: 'Linen Overshirt', price: '$96' },
-  { cls: 'p3', slug: 'aurora-sneaker',  name: 'Aurora Sneaker',  price: '$128' },
-  { cls: 'p4', slug: 'cloud-pant',      name: 'Cloud Pant',      price: '$72', out: true },
+  { cls: 'p1', slug: 'candle-amber',  name: 'Amber Noir Candle',   price: '$48', win: true },
+  { cls: 'p2', slug: 'perfume-noir',  name: 'Noir Eau de Parfum',  price: '$120' },
+  { cls: 'p3', slug: 'oud-attar',     name: 'Midnight Oud',        price: '$95' },
+  { cls: 'p4', slug: 'diffuser-reed', name: 'Cedar Reed Diffuser', price: '$38', out: true },
 ];
 ---
 <div class="sf-scene" aria-hidden="true">
@@ -32,7 +32,7 @@ const products = [
         <article class={`sf-card ${p.cls}${p.out ? ' out' : ''}`}>
           {p.win && <span class="sf-badge win"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg> Bestseller</span>}
           {p.out && <span class="sf-badge no">Sold out</span>}
-          <span class="sf-thumb"><img src={`/products/${p.slug}.png`} alt="" width="120" height="120" loading="eager" decoding="async" /></span>
+          <span class="sf-thumb"><img src={`/products/${p.slug}.svg`} alt="" width="120" height="120" loading="eager" decoding="async" /></span>
           <span class="sf-meta"><span class="sf-nm">{p.name}</span><span class="sf-pr">{p.price}</span></span>
         </article>
       ))}

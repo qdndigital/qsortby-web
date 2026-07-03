@@ -4,14 +4,14 @@
 // slots). Niche-agnostic product names. Floating chips hint at the full product.
 const tiles = [
   { k: 'Orders · 24h', v: '1,284', em: '+8%' },
-  { k: 'Top mover', v: 'Aurora', em: '▲3' },
+  { k: 'Top mover', v: 'Amber', em: '▲3' },
   { k: 'Sold out', v: '1', em: 'demoted' },
 ];
 const rows = [
-  { name: 'Aurora Sneaker',  slug: 'aurora-sneaker',  cat: 'Footwear', sold: 142, rate: 6,  delta: '▲2', cls: 'up'   },
-  { name: 'Linen Overshirt', slug: 'linen-overshirt', cat: 'Apparel',  sold: 118, rate: 11, delta: '▲5', cls: 'up'   },
-  { name: 'Trailhead Pack',  slug: 'trailhead-pack',  cat: 'Bags',     sold: 97,  rate: 7,  delta: '▲1', cls: 'up'   },
-  { name: 'Cloud Pant',      slug: 'cloud-pant',      cat: 'Apparel',  sold: 0,   rate: 0,  delta: '–',  cls: 'flat' },
+  { name: 'Amber Noir Candle',   slug: 'candle-amber',  cat: 'Candles',       sold: 142, rate: 6,  delta: '▲2', cls: 'up'   },
+  { name: 'Noir Eau de Parfum',  slug: 'perfume-noir',  cat: 'Perfume',       sold: 118, rate: 11, delta: '▲5', cls: 'up'   },
+  { name: 'Midnight Oud',        slug: 'oud-attar',     cat: 'Fragrance',     sold: 97,  rate: 7,  delta: '▲1', cls: 'up'   },
+  { name: 'Cedar Reed Diffuser', slug: 'diffuser-reed', cat: 'Home fragrance',sold: 0,   rate: 0,  delta: '–',  cls: 'flat' },
 ];
 const max = 142;
 ---
@@ -59,7 +59,7 @@ const max = 142;
               <div class={`lrow${i === 0 ? ' lead' : ''}`} data-sold={r.sold} data-rate={r.rate}>
                 <div class="lr-rank">{String(i + 1).padStart(2, '0')}</div>
                 <div class="lr-prod">
-                  <span class={`lr-thumb${r.sold === 0 ? ' out' : ''}`}><img src={`/products/${r.slug}.png`} alt="" loading="lazy" decoding="async" /></span>
+                  <span class={`lr-thumb${r.sold === 0 ? ' out' : ''}`}><img src={`/products/${r.slug}.svg`} alt="" loading="lazy" decoding="async" /></span>
                   <div style="min-width:0">
                     <div class="lr-name">{r.name}</div>
                     <div class="lr-sub">{r.sold === 0 ? 'sold out · demoted' : `${r.cat} · ${r.sold} sold`}</div>

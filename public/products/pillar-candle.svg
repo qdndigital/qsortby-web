@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 420" fill="none">
+  <defs>
+    <linearGradient id="pc-wax" x1="150" y1="150" x2="270" y2="350" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F6ECD9"/><stop offset="1" stop-color="#E2CDA8"/>
+    </linearGradient>
+    <linearGradient id="pc-flame" x1="210" y1="96" x2="210" y2="150" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFE39B"/><stop offset="1" stop-color="#FF8A32"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="210" cy="356" rx="86" ry="15" fill="#191a12" opacity=".10"/>
+  <!-- flame -->
+  <path d="M210 98c14 18 21 30 21 41a21 21 0 0 1-42 0c0-11 7-23 21-41z" fill="url(#pc-flame)"/>
+  <path d="M210 118c7 10 10 17 10 23a10 10 0 0 1-20 0c0-6 3-13 10-23z" fill="#FFF3D0" opacity=".9"/>
+  <rect x="207" y="140" width="6" height="16" rx="3" fill="#3A3327"/>
+  <!-- pillar body -->
+  <rect x="152" y="150" width="116" height="196" rx="14" fill="url(#pc-wax)"/>
+  <ellipse cx="210" cy="152" rx="58" ry="12" fill="#EAD8B6"/>
+  <ellipse cx="210" cy="150" rx="58" ry="12" fill="#F6ECD9"/>
+  <path d="M170 168c-4 10-5 100-2 168" stroke="#fff" stroke-opacity=".4" stroke-width="6" stroke-linecap="round"/>
+  <rect x="168" y="188" width="84" height="42" rx="8" fill="#0e9d63" opacity=".14"/>
+  <rect x="182" y="203" width="12" height="12" rx="3.5" fill="#0e9d63"/>
+  <rect x="202" y="205" width="40" height="6" rx="3" fill="#B79B7E"/>
+</svg>

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 420" fill="none">
+  <defs>
+    <linearGradient id="pn-glass" x1="146" y1="166" x2="274" y2="334" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3A3B40"/><stop offset="1" stop-color="#17181B"/>
+    </linearGradient>
+    <linearGradient id="pn-cap" x1="192" y1="118" x2="228" y2="152" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#E7C878"/><stop offset="1" stop-color="#B5893C"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="210" cy="356" rx="90" ry="16" fill="#191a12" opacity=".10"/>
+  <!-- cap + neck -->
+  <rect x="191" y="116" width="38" height="36" rx="6" fill="url(#pn-cap)"/>
+  <rect x="198" y="148" width="24" height="20" rx="3" fill="#2A2B2E"/>
+  <!-- body -->
+  <rect x="146" y="164" width="128" height="170" rx="20" fill="url(#pn-glass)"/>
+  <path d="M166 186c-5 10-6 90-3 128" stroke="#fff" stroke-opacity=".16" stroke-width="8" stroke-linecap="round"/>
+  <!-- gold rim -->
+  <rect x="150" y="176" width="120" height="6" rx="3" fill="#C9A24B" opacity=".7"/>
+  <!-- label -->
+  <rect x="164" y="232" width="92" height="70" rx="10" fill="#F5EFE3"/>
+  <rect x="178" y="248" width="14" height="14" rx="4" fill="#0e9d63"/>
+  <rect x="200" y="250" width="44" height="6" rx="3" fill="#B79B7E"/>
+  <rect x="178" y="274" width="64" height="5" rx="2.5" fill="#CDBCA6"/>
+  <rect x="178" y="286" width="40" height="5" rx="2.5" fill="#DAceb8"/>
+</svg>
