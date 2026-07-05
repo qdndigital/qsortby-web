@@ -16,6 +16,7 @@ export const SUPPORT_EMAIL = 'support@qsortby.com';
 // Primary nav.
 export const NAV = [
   ['/use-cases', 'Use cases'],
+  ['/how-it-works', 'How it works'],
   ['/integrations', 'Integrations'],
   ['/pricing', 'Pricing'],
   [GUIDE_URL, 'Guide'],

@@ -1028,3 +1028,44 @@ header.site { background:rgba(252,252,250,.62); -webkit-backdrop-filter:blur(16p
   .st-bar i.low{width:12%} .st-row.st-b{opacity:.55}
   .cu-tile{transform:none;opacity:1}
 }
+
+/* ---- A/B "prove the loop" panel (ranking-engine section on the home page).
+   Every animated element's BASE state is its resolved look, so the global
+   prefers-reduced-motion kill-switch above leaves a sensible static frame
+   (meter filled, verdict shown, winner bar full). ---- */
+.ab-panel { max-width:760px; margin:0 auto 2.75rem; background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:26px 24px 22px; box-shadow:var(--shadow-float); }
+.ab-exp { display:flex; align-items:stretch; justify-content:center; gap:16px; }
+.ab-col { flex:1; max-width:240px; display:flex; flex-direction:column; gap:9px; padding:14px; border:1px solid var(--line); border-radius:14px; background:var(--bg); }
+.ab-col.ab-b { border-color:var(--green-line); }
+.ab-hd { font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }
+.ab-col.ab-b .ab-hd { color:var(--green-ink); }
+.ab-bar { height:12px; border-radius:6px; background:var(--line); }
+.ab-bar.b2 { width:82%; }
+.ab-bar.b3 { width:64%; }
+.ab-col.ab-b .ab-bar.win { transform-origin:left; background:linear-gradient(90deg,var(--green-bright),var(--green)); animation:abWin 5s var(--ease) infinite; }
+@keyframes abWin { 0%,20%{transform:scaleX(.55); opacity:.55} 50%,80%{transform:scaleX(1); opacity:1} 100%{transform:scaleX(.55); opacity:.55} }
+.ab-cvr { margin-top:6px; font-family:var(--mono); font-size:12px; color:var(--muted); }
+.ab-cvr.ab-up { color:var(--green-ink); font-weight:700; }
+.ab-cvr em { font-style:normal; }
+.ab-vs { align-self:center; font-family:var(--mono); font-size:11px; color:var(--faint); }
+.ab-meterwrap { margin-top:16px; display:flex; align-items:center; gap:12px; }
+.ab-meter { flex:1; height:8px; border-radius:5px; background:var(--line); overflow:hidden; }
+.ab-meter i { display:block; height:100%; width:100%; border-radius:5px; transform-origin:left; transform:scaleX(.96); background:linear-gradient(90deg,var(--green),var(--green-bright)); animation:abFill 5s var(--ease) infinite; }
+@keyframes abFill { 0%,15%{transform:scaleX(.05)} 60%,85%{transform:scaleX(.96)} 100%{transform:scaleX(.05)} }
+.ab-verdict { font-family:var(--mono); font-size:12px; color:var(--muted); white-space:nowrap; animation:abVerdict 5s var(--ease) infinite; }
+.ab-verdict b { color:var(--green-ink); }
+@keyframes abVerdict { 0%,55%{opacity:0} 68%,90%{opacity:1} 100%{opacity:0} }
+.ab-cap { margin-top:16px; font-size:.9rem; color:var(--ink-2); line-height:1.6; max-width:60ch; margin-inline:auto; text-align:center; }
+@media (max-width:560px) { .ab-exp{ flex-direction:column; align-items:stretch } .ab-vs{ display:none } .ab-col{ max-width:none } }
+
+/* ---- /how-it-works layout ---- */
+.hiw-grid { display:grid; gap:16px; grid-template-columns:1fr; }
+.hiw-two { display:grid; gap:14px 44px; grid-template-columns:1fr; }
+@media (min-width:768px) {
+  .hiw-grid { grid-template-columns:1fr 1fr; }
+  .hiw-two { grid-template-columns:1fr 1fr; }
+}
+/* checklist rows on this page carry a name + description in a nested span;
+   keep the tick top-aligned with the first line. */
+.hiw-grid .checklist, .hiw-two .checklist { margin-top:0; }
+.hiw-grid .fb .checklist { margin-top:14px; }

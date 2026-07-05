@@ -1,0 +1,220 @@
+---
+import Base from '../layouts/Base.astro';
+import { APP_STORE_URL, DEMO_URL } from '../consts';
+
+const title = 'How the ranking engine works — QSortby';
+const description =
+  'The inside of QSortby: the 10+ signals it ranks on, how it scores your catalog in real time and keeps in-stock first, how it personalizes per shopper — and how it proves the conversion lift with built-in A/B testing and revenue attribution.';
+const check = '<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>';
+
+const groups = [
+  {
+    kicker: 'Sales',
+    title: 'Rank by what sells',
+    items: [
+      ['Best selling (velocity)', 'Units sold over your window — the classic top-seller.'],
+      ['Top revenue (GMV)', 'Summed order value, so high-ticket products rank on the money they make, not just unit count.'],
+      ['Most profitable (margin)', 'Product margin — lead with what actually earns.'],
+      ['Customer favorites', 'Repeat-purchase rate — the products buyers come back for.'],
+    ],
+  },
+  {
+    kicker: 'Momentum',
+    title: 'Catch what’s moving now',
+    items: [
+      ['Trending / rising', 'Sales this window vs. the one before it — surfaces accelerating products, not last season’s hits.'],
+      ['Selling fast', 'Velocity relative to remaining stock — what’s about to sell out rises first.'],
+    ],
+  },
+  {
+    kicker: 'Engagement & conversion',
+    title: 'Rank by shopper behavior',
+    items: [
+      ['Best converting', 'Conversion rate — the products that turn views into orders.'],
+      ['Most added to cart', 'Intent, one step before purchase.'],
+      ['Most clicked / highest CTR', 'What earns the click from the grid.'],
+      ['Longest dwell / most impressions', 'Attention captured on the page.'],
+    ],
+  },
+  {
+    kicker: 'Catalog',
+    title: 'Rank by product quality',
+    items: [
+      ['Top rated', 'Bayesian review average, so a 5.0 from three reviews doesn’t outrank a 4.8 from three hundred.'],
+      ['Newest arrivals', 'Freshness — give launches their moment.'],
+    ],
+  },
+];
+---
+<Base title={title} description={description}>
+  <section class="phero">
+    <div class="wrap">
+      <div class="crumb"><a href="/">~</a> / how it works</div>
+      <h1>How the ranking engine <em>works</em>.</h1>
+      <p>No black box. You choose the signal, QSortby scores your catalog in real time and keeps in-stock first — or personalizes per shopper — then proves the lift with a built-in A/B test and revenue attribution. Here’s the inside.</p>
+    </div>
+  </section>
+
+  <!-- ===== 1. THE SIGNALS ===== -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="shead rv" style="margin-bottom:2.5rem">
+        <span class="eyebrow"><span class="dot"></span> Step 1 · Choose</span>
+        <h2>10+ signals to rank by.</h2>
+        <p class="lead-c">Set the rule per collection, over a window you pick — a rolling <b>last N hours/days</b>, or a fixed range like <b>last week</b> or a specific month. Change it anytime; preview before it goes live.</p>
+      </div>
+      <div class="hiw-grid rv">
+        {groups.map((g) => (
+          <article class="fb">
+            <span class="kicker">{g.kicker}</span>
+            <h3>{g.title}</h3>
+            <ul class="checklist">
+              {g.items.map(([name, desc]) => (
+                <li><span set:html={check} /><span><b>{name}</b> — {desc}</span></li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 2. REAL-TIME & INVENTORY-AWARE ===== -->
+  <section class="sec alt">
+    <div class="wrap">
+      <div class="shead rv" style="margin-bottom:2.5rem">
+        <span class="eyebrow"><span class="dot"></span> Step 2 · Rank</span>
+        <h2>Scored live. In-stock first.</h2>
+      </div>
+      <div class="hiw-two rv">
+        <div>
+          <ul class="checklist">
+            <li><span set:html={check} /><span><b>Re-scored on every order.</b> Shopify order webhooks feed QSortby directly, so the ranking reflects sales within seconds — not a nightly batch.</span></li>
+            <li><span set:html={check} /><span><b>Sold-out steps aside.</b> Out-of-stock products are bucketed to the bottom automatically, and climb back to their earned spot the moment you restock.</span></li>
+            <li><span set:html={check} /><span><b>Windowed &amp; deterministic.</b> The order is a transparent function of the signal + window you chose — no mystery. You can see the exact resulting order.</span></li>
+            <li><span set:html={check} /><span><b>Preview before publish.</b> Every change shows a before/after diff — added, removed, moved — so nothing goes live until you say so.</span></li>
+          </ul>
+        </div>
+        <div>
+          <ul class="checklist">
+            <li><span set:html={check} /><span><b>Standard Shopify collections.</b> QSortby maintains native collections and a Best&nbsp;Sellers collection — no theme code, no custom storefront work.</span></li>
+            <li><span set:html={check} /><span><b>Per-collection rules.</b> Each collection can rank on a different signal and window — trending for new launches, conversion for candles, availability for seasonal lines.</span></li>
+            <li><span set:html={check} /><span><b>Manual override.</b> Reorder or exclude specific products by hand where you want an editorial call; the rest keeps sorting itself.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 3. PERSONALIZATION ===== -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="shead rv" style="margin-bottom:2.5rem">
+        <span class="eyebrow"><span class="dot"></span> Step 2½ · Personalize</span>
+        <h2>A "For You" feed per shopper.</h2>
+        <p class="lead-c">Beyond one order for everyone, QSortby can render a per-visitor feed. Visitors are classified into types you define, and each type gets a ranking that blends weighted signals — a live, personal front row.</p>
+      </div>
+      <div class="hiw-two rv">
+        <div>
+          <ul class="checklist">
+            <li><span set:html={check} /><span><b>Visitor types you control.</b> New, returning, loyal/VIP — each with its own weighting recipe.</span></li>
+            <li><span set:html={check} /><span><b>Blended signals.</b> Top-sellers, recently viewed, session intent, price affinity, category affinity, repeat / replenishment timing, new arrivals, return-rate.</span></li>
+          </ul>
+        </div>
+        <div>
+          <ul class="checklist">
+            <li><span set:html={check} /><span><b>First-party, cookieless.</b> Built from behavior on your store only — no third-party data, no cross-site tracking.</span></li>
+            <li><span set:html={check} /><span><b>Cold-start safe.</b> A brand-new visitor still gets a strong best-sellers order while the feed learns.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 4. THE PROOF LOOP ===== -->
+  <section class="sec alt">
+    <div class="wrap">
+      <div class="shead ctr rv" style="margin-bottom:2.5rem">
+        <span class="eyebrow"><span class="dot"></span> Step 3 · Prove</span>
+        <h2>How we answer <em>"maximum conversion value."</em></h2>
+        <p class="lead-c">You don’t have to trust the sort. QSortby runs it as an experiment and measures the money it actually drove.</p>
+      </div>
+
+      <div class="ab-panel rv">
+        <div class="ab-exp" aria-hidden="true">
+          <div class="ab-col">
+            <span class="ab-hd">A · Control</span>
+            <span class="ab-bar b1"></span><span class="ab-bar b2"></span><span class="ab-bar b3"></span>
+            <span class="ab-cvr">CVR 1.9%</span>
+          </div>
+          <div class="ab-vs">vs</div>
+          <div class="ab-col ab-b">
+            <span class="ab-hd">B · QSortby sort</span>
+            <span class="ab-bar b1 win"></span><span class="ab-bar b2"></span><span class="ab-bar b3"></span>
+            <span class="ab-cvr ab-up">CVR 2.6% <em>▲</em></span>
+          </div>
+        </div>
+        <div class="ab-meterwrap" aria-hidden="true">
+          <span class="ab-meter"><i></i></span>
+          <span class="ab-verdict">96% significant — <b>B wins</b></span>
+        </div>
+        <p class="ab-cap">Illustrative. QSortby splits visitors between your current order and the new sort, then reports the real funnel each drove.</p>
+      </div>
+
+      <div class="hiw-two rv" style="margin-top:2.5rem">
+        <div>
+          <ul class="checklist">
+            <li><span set:html={check} /><span><b>Visitor-split A/B.</b> Shoppers are deterministically split between control (your current order) and the QSortby sort — the same visitor always sees the same arm.</span></li>
+            <li><span set:html={check} /><span><b>The full funnel, per arm.</b> Impressions → clicks (CTR) → add-to-cart → orders, measured for each variant from a first-party pixel.</span></li>
+          </ul>
+        </div>
+        <div>
+          <ul class="checklist">
+            <li><span set:html={check} /><span><b>Revenue attribution.</b> Orders are tied back to the QSortby feed a shopper interacted with, so you see <b>influenced revenue</b> per variant — not just clicks.</span></li>
+            <li><span set:html={check} /><span><b>Statistical significance.</b> QSortby won’t crown a winner on noise — it reports confidence, so you ship the sort the data actually supports.</span></li>
+          </ul>
+        </div>
+      </div>
+      <p class="kicker" style="text-align:center;margin-top:1.75rem;max-width:64ch;margin-inline:auto">Attribution is influenced / last-touch — it shows which sort a converting shopper engaged with, an honest directional read of lift, not a lab-grade incrementality study.</p>
+    </div>
+  </section>
+
+  <!-- ===== 5. PRIVACY & DATA ===== -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="shead rv" style="margin-bottom:2.5rem">
+        <span class="eyebrow"><span class="dot"></span> Data &amp; privacy</span>
+        <h2>Your data, used to rank your store.</h2>
+      </div>
+      <div class="hiw-two rv">
+        <div>
+          <ul class="checklist">
+            <li><span set:html={check} /><span><b>First-party only.</b> A pixel on your storefront — no third-party cookies, no cross-site tracking, nothing sold or shared.</span></li>
+            <li><span set:html={check} /><span><b>GDPR-ready.</b> Shopify’s data-request and redaction webhooks are honored; visitor data is purged on request.</span></li>
+          </ul>
+        </div>
+        <div>
+          <ul class="checklist">
+            <li><span set:html={check} /><span><b>Coarse by design.</b> IP addresses are anonymized before storage; profiles are behavioral, not identity.</span></li>
+            <li><span set:html={check} /><span><b>Shopify-native billing.</b> Free 7-day trial, billed through Shopify’s Billing API on your normal invoice.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="sec alt" style="padding-top:0;border-block:0">
+    <div class="wrap">
+      <div class="cta rv">
+        <span class="eyebrow"><span class="dot"></span> Talk to the team</span>
+        <h2>See the engine on <em>your</em> catalog.</h2>
+        <p>Book a 15-minute demo — we’ll screen-share the dashboard and run the experiment + attribution on your real collections.</p>
+        <div class="hero-cta" style="justify-content:center">
+          <a href={DEMO_URL} class="btn btn-accent btn-lg">Book a demo <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a href={APP_STORE_URL} class="btn btn-ghost btn-lg">Add to Shopify</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
