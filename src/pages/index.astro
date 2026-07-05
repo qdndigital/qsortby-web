@@ -59,9 +59,9 @@ const description =
           <div class="fb-txt">
             <span class="kicker">Smart auto-sort</span>
             <h3>Sort by any signal</h3>
-            <p>Best sellers, revenue, trending, inventory — the collection orders itself.</p>
+            <p>Velocity, revenue, margin, conversion, trending — pick the signal and the collection orders itself.</p>
             <div class="chips">
-              <span class="ch on">Best sellers</span><span class="ch">Engagement</span><span class="ch">Rating</span><span class="ch">Inventory</span><span class="ch">Newest</span>
+              <span class="ch on">Best sellers</span><span class="ch">Revenue</span><span class="ch">Margin</span><span class="ch">Conversion</span><span class="ch">Trending</span><span class="ch">Selling fast</span><span class="ch">Repeat buyers</span><span class="ch">Engagement</span><span class="ch">Rating</span><span class="ch">Newest</span>
             </div>
           </div>
           <div class="fb-viz">
@@ -107,12 +107,12 @@ const description =
 
         <article class="fb rv">
           <span class="kicker">Full control</span>
-          <h3>Drag, pin &amp; preview</h3>
-          <p>Override by hand. Preview before it goes live.</p>
+          <h3>Override &amp; preview</h3>
+          <p>Reorder or exclude products by hand — and preview the exact before/after diff before it goes live.</p>
           <div class="fb-viz">
             <div class="anim-drag" aria-hidden="true">
               <div class="grow"><span class="grip"></span><span class="th"><img src="/products/oud-attar.svg" alt="" /></span><span class="ln"></span></div>
-              <div class="grow lift"><span class="grip"></span><span class="th"><img src="/products/perfume-noir.svg" alt="" /></span><span class="ln"></span><span class="pin">pinned</span></div>
+              <div class="grow lift"><span class="grip"></span><span class="th"><img src="/products/perfume-noir.svg" alt="" /></span><span class="ln"></span><span class="pin">moved</span></div>
               <div class="grow"><span class="grip"></span><span class="th"><img src="/products/candle-amber.svg" alt="" /></span><span class="ln"></span></div>
             </div>
           </div>
@@ -167,11 +167,47 @@ const description =
     </div>
   </section>
 
-  <!-- ===================== HOW IT WORKS ===================== -->
+  <!-- ===================== THE RANKING ENGINE ===================== -->
+  <section class="sec alt">
+    <div class="wrap">
+      <div class="shead ctr rv" style="margin-bottom:2.5rem">
+        <span class="eyebrow"><span class="dot"></span> The ranking engine</span>
+        <h2>Ranked for conversion — and <em>proven</em>, not guessed.</h2>
+        <p class="lead-c">No black box. You pick the signal, QSortby scores your catalog live and keeps in-stock first — or personalizes per shopper — then a built-in A/B test and revenue attribution prove how much it actually lifted.</p>
+      </div>
+
+      <div class="steps rv" style="margin-bottom:2.75rem">
+        <div class="step">
+          <div class="sn">01 · Choose</div>
+          <h3>Pick the signal</h3>
+          <p>Rank each collection by any of 10+ live signals — velocity, revenue, margin, conversion rate, trending momentum, selling-fast, repeat buyers, engagement, rating, newest — over a rolling or fixed window you set.</p>
+        </div>
+        <div class="step">
+          <div class="sn">02 · Rank</div>
+          <h3>Score live, in-stock first</h3>
+          <p>Every order re-scores the catalog within seconds. Sold-out sinks to the bottom, restocks climb back — so shoppers only meet products they can actually buy.</p>
+        </div>
+        <div class="step">
+          <div class="sn">03 · Prove</div>
+          <h3>A/B it, keep the winner</h3>
+          <p>Test any sort against your current order. QSortby measures clicks → cart → attributed revenue and calls statistical significance — so the winning sort is the one the data picks, not a guess.</p>
+        </div>
+      </div>
+
+      <div class="stats rv">
+        <div class="s"><b><em>10+</em></b><span>ranking signals</span></div>
+        <div class="s"><b>Real-time</b><span>re-scored every order</span></div>
+        <div class="s"><b>A/B</b><span>tested for significance</span></div>
+        <div class="s"><b>Attributed</b><span>revenue per sort</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SETUP ===================== -->
   <section class="sec">
     <div class="wrap">
       <div class="shead rv" style="margin-bottom:2.5rem">
-        <span class="eyebrow"><span class="dot"></span> How it works</span>
+        <span class="eyebrow"><span class="dot"></span> Setup</span>
         <h2>Live in three steps.</h2>
       </div>
       <div class="steps">
@@ -232,7 +268,9 @@ const description =
         <h2>Good to know</h2>
       </div>
       <div class="faq rv">
-        <details><summary>What can QSortby sort by?<span class="pm"></span></summary><div class="ans">Best selling (velocity), clicks, click-through rate, dwell time, rating, or newest — over a rolling or fixed window you choose. Or order any collection by hand.</div></details>
+        <details><summary>What algorithm does QSortby use to maximize conversion value?<span class="pm"></span></summary><div class="ans">There's no single black-box formula. You pick the ranking signal per collection — sales velocity, revenue, margin, <b>conversion rate</b>, trending momentum, selling-fast, repeat-purchase, engagement, rating or newest — and QSortby scores your catalog in real time, keeping in-stock products first. The part that answers "maximum conversion value": you can <b>A/B-test any sort against your current order</b>, and QSortby measures the funnel it drove (clicks → add-to-cart → <b>influenced revenue</b>, via last-touch attribution) and reports <b>statistical significance</b> — so the winning sort is the one the data proves, not a guess.</div></details>
+        <details><summary>What can QSortby sort by?<span class="pm"></span></summary><div class="ans">10+ live signals: sales velocity, revenue (GMV), margin, conversion rate, trending momentum, selling-fast (velocity vs. remaining stock), repeat-purchase rate, engagement (clicks / CTR / dwell / add-to-cart), rating, or newest — over a rolling or fixed window you choose. Per-visitor "For You" ranking blends weighted signals per shopper. Or order any collection by hand.</div></details>
+        <details><summary>How do I know it actually lifts sales?<span class="pm"></span></summary><div class="ans">QSortby runs an A/B test between the new sort and your current order, then attributes downstream orders (last-touch) to the feed a shopper interacted with — reporting click-through, add-to-cart and influenced revenue per variant with a significance verdict. You see the lift, you're not taking it on faith.</div></details>
         <details><summary>Do I need to edit my theme?<span class="pm"></span></summary><div class="ans">No. QSortby maintains standard Shopify collections — add them like any other. No custom code.</div></details>
         <details><summary>What happens when a product sells out?<span class="pm"></span></summary><div class="ans">It drops to the bottom automatically, and returns to its earned spot once restocked.</div></details>
         <details><summary>Is there a free trial?<span class="pm"></span></summary><div class="ans">Yes — 7 days, billed through Shopify's Billing API on your normal invoice.</div></details>
