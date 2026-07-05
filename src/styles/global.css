@@ -782,6 +782,12 @@ body { background:#fcfcfa; }
 .fb .ch.on { background:rgba(255,255,255,.16); border-color:rgba(255,255,255,.24); color:#fff; }
 .fb .soon { background:rgba(255,255,255,.12); border-color:rgba(255,255,255,.2); color:#fff; }
 .fb-viz > div { background:rgba(255,255,255,.045); border-color:rgba(255,255,255,.08); }
+/* checklist inside a dark bento card — the default ink tokens are for light
+   backgrounds, so lift text/labels/check to legible values on the dark ground */
+.fb .checklist li { color:rgba(255,255,255,.72); }
+.fb .checklist li b { color:#fff; }
+.fb .checklist li svg { stroke:var(--green-bright); }
+.fb .kicker { color:rgba(255,255,255,.56); }
 /* keep the dark-panel-only mini element legible */
 .anim-seg .node { background:#fff; color:#15171c; }
 
