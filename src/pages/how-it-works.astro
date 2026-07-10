@@ -4,46 +4,50 @@ import { APP_STORE_URL, DEMO_URL } from '../consts';
 
 const title = 'How the ranking engine works — QSortby';
 const description =
-  'The inside of QSortby: the 10+ signals it ranks on, how it scores your catalog in real time and keeps in-stock first, how it personalizes per shopper — and how it proves the conversion lift with built-in A/B testing and revenue attribution.';
+  'Inside QSortby: the 12 signals it ranks on, how it scores your catalog live and keeps in-stock first, personalizes per shopper, and proves the lift with a built-in A/B test.';
 const check = '<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>';
 
+const GUIDE = 'https://guide.qsortby.com/docs/how-it-works';
+const gu = (slug) => (slug ? `${GUIDE}/${slug}` : 'https://guide.qsortby.com');
+
 const groups = [
-  {
-    kicker: 'Sales',
-    title: 'Rank by what sells',
-    items: [
-      ['Best selling (velocity)', 'Units sold over your window — the classic top-seller.'],
-      ['Top revenue (GMV)', 'Summed order value, so high-ticket products rank on the money they make, not just unit count.'],
-      ['Most profitable (margin)', 'Product margin — lead with what actually earns.'],
-      ['Customer favorites', 'Repeat-purchase rate — the products buyers come back for.'],
-    ],
-  },
-  {
-    kicker: 'Momentum',
-    title: 'Catch what’s moving now',
-    items: [
-      ['Trending / rising', 'Sales this window vs. the one before it — surfaces accelerating products, not last season’s hits.'],
-      ['Selling fast', 'Velocity relative to remaining stock — what’s about to sell out rises first.'],
-    ],
-  },
-  {
-    kicker: 'Engagement & conversion',
-    title: 'Rank by shopper behavior',
-    items: [
-      ['Best converting', 'Conversion rate — the products that turn views into orders.'],
-      ['Most added to cart', 'Intent, one step before purchase.'],
-      ['Most clicked / highest CTR', 'What earns the click from the grid.'],
-      ['Longest dwell / most impressions', 'Attention captured on the page.'],
-    ],
-  },
-  {
-    kicker: 'Catalog',
-    title: 'Rank by product quality',
-    items: [
-      ['Top rated', 'Bayesian review average, so a 5.0 from three reviews doesn’t outrank a 4.8 from three hundred.'],
-      ['Newest arrivals', 'Freshness — give launches their moment.'],
-    ],
-  },
+  { kicker: 'Sales', title: 'What sells', items: [
+    ['Best selling', 'ranking-best-selling', 'units sold in your window'],
+    ['Top revenue', 'ranking-revenue', 'money made, not unit count'],
+    ['Most profitable', 'ranking-margin', 'leads with margin'],
+    ['Customer favorites', 'ranking-repeat', 'highest repeat-purchase rate'],
+  ]},
+  { kicker: 'Momentum', title: 'What’s moving', items: [
+    ['Trending', 'ranking-trending', 'accelerating vs. the window before'],
+    ['Selling fast', 'ranking-selling-fast', 'velocity against remaining stock'],
+  ]},
+  { kicker: 'Behavior', title: 'What shoppers do', items: [
+    ['Best converting', '', 'views that become orders'],
+    ['Most added to cart', 'ranking-most-added-to-cart', 'intent, one step from buying'],
+    ['Highest CTR', 'ranking-highest-ctr', 'earns the click from the grid'],
+    ['Longest dwell', 'ranking-longest-dwell', 'holds attention on the page'],
+  ]},
+  { kicker: 'Catalog', title: 'What’s good', items: [
+    ['Top rated', '', 'Bayesian review average'],
+    ['Newest', 'ranking-newest', 'gives launches their moment'],
+  ]},
+];
+
+// Live-demo catalog: site product thumbnails (scents shop) + real metrics.
+const P = [
+  { img: 'candle-amber',  name: 'Amber Candle',   price: 34,  sold: 142, prior: 130, views: 5400, clicks: 275, rating: 4.4, reviews: 1020 },
+  { img: 'perfume-noir',  name: 'Noir Parfum',    price: 118, sold: 110, prior: 62,  views: 1720, clicks: 110, rating: 4.7, reviews: 340 },
+  { img: 'diffuser-reed', name: 'Reed Diffuser',  price: 46,  sold: 88,  prior: 96,  views: 1130, clicks: 88,  rating: 4.9, reviews: 214 },
+  { img: 'perfume-rose',  name: 'Rose Parfum',    price: 132, sold: 71,  prior: 40,  views: 1600, clicks: 94,  rating: 4.6, reviews: 130 },
+  { img: 'oud-attar',     name: 'Oud Attar',      price: 128, sold: 61,  prior: 58,  views: 3100, clicks: 140, rating: 4.6, reviews: 330 },
+  { img: 'pillar-candle', name: 'Pillar Candle',  price: 38,  sold: 54,  prior: 30,  views: 900,  clicks: 63,  rating: 4.8, reviews: 88 },
+  { img: 'room-mist',     name: 'Room Mist',      price: 28,  sold: 37,  prior: 46,  views: 780,  clicks: 55,  rating: 4.5, reviews: 120 },
+  { img: 'wax-melts',     name: 'Wax Melts',      price: 18,  sold: 24,  prior: 15,  views: 610,  clicks: 21,  rating: 4.2, reviews: 60 },
+];
+P.forEach((p) => { p.ctr = +(p.clicks / p.views * 100).toFixed(1); p.mom = p.sold - p.prior; p.bayes = +((p.rating * p.reviews + 20) / (p.reviews + 5)).toFixed(2); });
+const DEMO = [
+  { key: 'sold',  label: 'Best selling' }, { key: 'mom', label: 'Trending' },
+  { key: 'ctr',   label: 'Most clicked' }, { key: 'bayes', label: 'Top rated' },
 ];
 ---
 <Base title={title} description={description}>
@@ -51,17 +55,52 @@ const groups = [
     <div class="wrap">
       <div class="crumb"><a href="/">~</a> / how it works</div>
       <h1>How the ranking engine <em>works</em>.</h1>
-      <p>No black box. You choose the signal, QSortby scores your catalog in real time and keeps in-stock first — or personalizes per shopper — then proves the lift with a built-in A/B test and revenue attribution. Here’s the inside.</p>
+      <p>No black box. You pick the signal — QSortby scores your catalog live, keeps in-stock first, and proves the lift.</p>
     </div>
   </section>
 
-  <!-- ===== 1. THE SIGNALS ===== -->
+  <!-- ===== 1. THE ENGINE, LIVE ===== -->
   <section class="sec">
     <div class="wrap">
-      <div class="shead rv" style="margin-bottom:2.5rem">
-        <span class="eyebrow"><span class="dot"></span> Step 1 · Choose</span>
-        <h2>10+ signals to rank by.</h2>
-        <p class="lead-c">Set the rule per collection, over a window you pick — a rolling <b>last N hours/days</b>, or a fixed range like <b>last week</b> or a specific month. Change it anytime; preview before it goes live.</p>
+      <div class="shead rv" style="margin-bottom:2rem">
+        <span class="eyebrow"><span class="dot"></span> Step 1 · Choose &amp; score</span>
+        <h2>Change the sort. Watch the grid reorder.</h2>
+        <p>The best product for the signal you pick rises to the front row.</p>
+      </div>
+
+      <div class="eng rv" id="eng" data-sig="sold" aria-hidden="true">
+        <div class="eng-bar">
+          <span class="eng-brand"><span class="eng-dot"></span> aura-scents.com</span>
+          <span class="eng-coll" id="engColl">Bestsellers</span>
+        </div>
+        <div class="eng-sort">
+          <span class="eng-sort-lb">Sort by</span>
+          <div class="eng-tabs" id="engTabs" role="tablist" aria-label="Ranking signal">
+            {DEMO.map((s, i) => (
+              <button class={`eng-tab${i === 0 ? ' on' : ''}`} data-sig={s.key} role="tab" aria-selected={i === 0 ? 'true' : 'false'}>{s.label}</button>
+            ))}
+          </div>
+          <a class="eng-guide" href={`${GUIDE}/ranking-best-selling`}>Guide →</a>
+        </div>
+        <div class="eng-grid" id="engGrid">
+          {P.map((p, i) => (
+            <article class="eng-card" data-i={i}
+              data-sold={p.sold} data-mom={p.mom} data-ctr={p.ctr} data-bayes={p.bayes}
+              data-chip-sold={`${p.sold} sold`} data-chip-mom={`${p.mom > 0 ? '+' : ''}${p.mom} vs prior`}
+              data-chip-ctr={`${p.ctr}% CTR`} data-chip-bayes={`${p.bayes}★`}>
+              <span class="eng-front">Front row</span>
+              <span class="eng-chip"></span>
+              <span class="eng-thumb"><img src={`/products/${p.img}.svg`} alt="" width="120" height="120" loading="lazy" decoding="async" /></span>
+              <span class="eng-meta"><b class="eng-nm">{p.name}</b><span class="eng-pr">${p.price}</span></span>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <div class="shead rv" style="margin:3.25rem 0 1.75rem">
+        <span class="eyebrow"><span class="dot"></span> 12 signals</span>
+        <h2>Twelve ways to decide the front row.</h2>
+        <p>One rule per collection. Linked signals open a step-by-step guide.</p>
       </div>
       <div class="hiw-grid rv">
         {groups.map((g) => (
@@ -69,12 +108,34 @@ const groups = [
             <span class="kicker">{g.kicker}</span>
             <h3>{g.title}</h3>
             <ul class="checklist">
-              {g.items.map(([name, desc]) => (
-                <li><span set:html={check} /><span><b>{name}</b> — {desc}</span></li>
+              {g.items.map(([name, slug, desc]) => (
+                <li><span set:html={check} /><span>{slug ? <a class="sig-lnk" href={gu(slug)}><b>{name}</b></a> : <b>{name}</b>} — {desc}</span></li>
               ))}
             </ul>
           </article>
         ))}
+      </div>
+
+      <!-- the window -->
+      <div class="shead rv" style="margin:3.25rem 0 1.75rem">
+        <span class="eyebrow"><span class="dot"></span> Framing the stats</span>
+        <h2>Same signal, a different slice of time.</h2>
+        <p>Rolling, a completed period, or a frozen snapshot — the window sets which orders count.</p>
+      </div>
+      <div class="win rv" id="win" data-mode="rolling">
+        <div class="win-modes" id="winModes" role="tablist">
+          <button class="win-mtab on" data-mode="rolling" role="tab">Rolling</button>
+          <button class="win-mtab" data-mode="period" role="tab">Period</button>
+          <button class="win-mtab" data-mode="snapshot" role="tab">Snapshot</button>
+          <a class="win-mtab win-go" href={`${GUIDE}/ranking-windows`}>Guide →</a>
+        </div>
+        <div class="win-stage">
+          <div class="win-band" id="winBand"><span class="win-blab" id="winBlab"></span></div>
+          <div class="win-track" id="winTrack"></div>
+          <div class="win-now"><span>TODAY</span></div>
+          {['Week 1', 'Week 2', 'Week 3', 'This week'].map((w) => <span class="win-wk">{w}</span>)}
+        </div>
+        <div class="win-cap"><b id="winHead"></b><span id="winNote"></span></div>
       </div>
     </div>
   </section>
@@ -89,17 +150,17 @@ const groups = [
       <div class="hiw-two rv">
         <div>
           <ul class="checklist">
-            <li><span set:html={check} /><span><b>Re-scored on every order.</b> Shopify order webhooks feed QSortby directly, so the ranking reflects sales within seconds — not a nightly batch.</span></li>
-            <li><span set:html={check} /><span><b>Sold-out steps aside.</b> Out-of-stock products are bucketed to the bottom automatically, and climb back to their earned spot the moment you restock.</span></li>
-            <li><span set:html={check} /><span><b>Windowed &amp; deterministic.</b> The order is a transparent function of the signal + window you chose — no mystery. You can see the exact resulting order.</span></li>
-            <li><span set:html={check} /><span><b>Preview before publish.</b> Every change shows a before/after diff — added, removed, moved — so nothing goes live until you say so.</span></li>
+            <li><span set:html={check} /><span><b>Re-scored on every order.</b> Order webhooks, not a nightly batch.</span></li>
+            <li><span set:html={check} /><span><b>Sold-out sinks.</b> Auto-bottomed, climbs back the moment you restock.</span></li>
+            <li><span set:html={check} /><span><b>Deterministic.</b> Just the signal + window you chose — nothing hidden.</span></li>
+            <li><span set:html={check} /><span><b>Preview before publish.</b> See the before/after diff first.</span></li>
           </ul>
         </div>
         <div>
           <ul class="checklist">
-            <li><span set:html={check} /><span><b>Standard Shopify collections.</b> QSortby maintains native collections and a Best&nbsp;Sellers collection — no theme code, no custom storefront work.</span></li>
-            <li><span set:html={check} /><span><b>Per-collection rules.</b> Each collection can rank on a different signal and window — trending for new launches, conversion for candles, availability for seasonal lines.</span></li>
-            <li><span set:html={check} /><span><b>Manual override.</b> Reorder or exclude specific products by hand where you want an editorial call; the rest keeps sorting itself.</span></li>
+            <li><span set:html={check} /><span><b>Native collections.</b> No theme code, no custom storefront work.</span></li>
+            <li><span set:html={check} /><span><b>Per-collection rules.</b> A different signal and window each.</span></li>
+            <li><span set:html={check} /><span><b>Manual override.</b> Pin or exclude by hand; the rest keeps sorting itself.</span></li>
           </ul>
         </div>
       </div>
@@ -112,20 +173,21 @@ const groups = [
       <div class="shead rv" style="margin-bottom:2.5rem">
         <span class="eyebrow"><span class="dot"></span> Step 2½ · Personalize</span>
         <h2>A "For You" feed per shopper.</h2>
-        <p class="lead-c">Beyond one order for everyone, QSortby can render a per-visitor feed. Visitors are classified into types you define, and each type gets a ranking that blends weighted signals — a live, personal front row.</p>
+        <p>Visitors are grouped and checked top-to-bottom — <b>first match wins</b>.</p>
       </div>
-      <div class="hiw-two rv">
-        <div>
-          <ul class="checklist">
-            <li><span set:html={check} /><span><b>Visitor types you control.</b> New, returning, loyal/VIP — each with its own weighting recipe.</span></li>
-            <li><span set:html={check} /><span><b>Blended signals.</b> Top-sellers, recently viewed, session intent, price affinity, category affinity, repeat / replenishment timing, new arrivals, return-rate.</span></li>
-          </ul>
+      <div class="per-wrap rv">
+        <div class="per-viz" aria-hidden="true" id="perViz">
+          <div class="per-row" data-r="0"><span class="per-num">1</span><b>VIP shoppers</b><span class="per-cond">2+ orders</span><span class="per-tag per-match">matched ✓</span></div>
+          <div class="per-row" data-r="1"><span class="per-num">2</span><b>Returning visitors</b><span class="per-cond">2+ visits</span><span class="per-tag per-skip">skipped</span></div>
+          <div class="per-row lock" data-r="2"><span class="per-num"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span><b>Everyone else</b><span class="per-cond">catch-all</span></div>
         </div>
         <div>
           <ul class="checklist">
-            <li><span set:html={check} /><span><b>First-party, cookieless.</b> Built from behavior on your store only — no third-party data, no cross-site tracking.</span></li>
-            <li><span set:html={check} /><span><b>Cold-start safe.</b> A brand-new visitor still gets a strong best-sellers order while the feed learns.</span></li>
+            <li><span set:html={check} /><span><b>Visitor types you set.</b> New, returning, VIP — each with its own recipe.</span></li>
+            <li><span set:html={check} /><span><b>Blended signals.</b> Intent, price &amp; category affinity, recency, replenishment.</span></li>
+            <li><span set:html={check} /><span><b>Cookieless &amp; cold-start safe.</b> First-party; a newcomer still gets bestsellers while it learns.</span></li>
           </ul>
+          <a class="sig-go2" href={`${GUIDE}/segment-matching`}>See segment matching <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </div>
       </div>
     </div>
@@ -136,46 +198,41 @@ const groups = [
     <div class="wrap">
       <div class="shead ctr rv" style="margin-bottom:2.5rem">
         <span class="eyebrow"><span class="dot"></span> Step 3 · Prove</span>
-        <h2>How we answer <em>"maximum conversion value."</em></h2>
-        <p class="lead-c">You don’t have to trust the sort. QSortby runs it as an experiment and measures the money it actually drove.</p>
+        <h2>Don’t trust the sort — <em>test it</em>.</h2>
+        <p class="lead-c">QSortby runs it as an experiment and measures the revenue it drove.</p>
       </div>
-
-      <div class="ab-panel rv">
-        <div class="ab-exp" aria-hidden="true">
-          <div class="ab-col">
-            <span class="ab-hd">A · Control</span>
-            <span class="ab-bar b1"></span><span class="ab-bar b2"></span><span class="ab-bar b3"></span>
-            <span class="ab-cvr">CVR 1.9%</span>
-          </div>
-          <div class="ab-vs">vs</div>
-          <div class="ab-col ab-b">
-            <span class="ab-hd">B · QSortby sort</span>
-            <span class="ab-bar b1 win"></span><span class="ab-bar b2"></span><span class="ab-bar b3"></span>
-            <span class="ab-cvr ab-up">CVR 2.6% <em>▲</em></span>
-          </div>
+      <div class="proof rv" aria-hidden="true">
+        <div class="proof-row">
+          <span class="proof-arm">A · Control</span>
+          <span class="proof-track"><i style="width:73%"></i></span>
+          <span class="proof-val">1.9%</span>
         </div>
-        <div class="ab-meterwrap" aria-hidden="true">
-          <span class="ab-meter"><i></i></span>
-          <span class="ab-verdict">96% significant — <b>B wins</b></span>
+        <div class="proof-row proof-win">
+          <span class="proof-arm">B · QSortby sort</span>
+          <span class="proof-track"><i style="width:100%"></i></span>
+          <span class="proof-val">2.6% <em>▲</em></span>
         </div>
-        <p class="ab-cap">Illustrative. QSortby splits visitors between your current order and the new sort, then reports the real funnel each drove.</p>
+        <div class="proof-foot">
+          <span class="proof-lift">+37% conversion</span>
+          <span class="proof-sig"><span class="proof-meter"><i></i></span> 96% significant · <b>B wins</b></span>
+        </div>
       </div>
-
+      <p class="proof-cap">Illustrative. Visitors split between your current order and the new sort; QSortby reports the real funnel each drove.</p>
       <div class="hiw-two rv" style="margin-top:2.5rem">
         <div>
           <ul class="checklist">
-            <li><span set:html={check} /><span><b>Visitor-split A/B.</b> Shoppers are deterministically split between control (your current order) and the QSortby sort — the same visitor always sees the same arm.</span></li>
-            <li><span set:html={check} /><span><b>The full funnel, per arm.</b> Impressions → clicks (CTR) → add-to-cart → orders, measured for each variant from a first-party pixel.</span></li>
+            <li><span set:html={check} /><span><b>Visitor-split A/B.</b> The same shopper always sees the same arm.</span></li>
+            <li><span set:html={check} /><span><b>Full funnel per arm.</b> Impressions → CTR → cart → orders.</span></li>
           </ul>
         </div>
         <div>
           <ul class="checklist">
-            <li><span set:html={check} /><span><b>Revenue attribution.</b> Orders are tied back to the QSortby feed a shopper interacted with, so you see <b>influenced revenue</b> per variant — not just clicks.</span></li>
-            <li><span set:html={check} /><span><b>Statistical significance.</b> QSortby won’t crown a winner on noise — it reports confidence, so you ship the sort the data actually supports.</span></li>
+            <li><span set:html={check} /><span><b>Revenue attribution.</b> Influenced revenue per variant, not just clicks.</span></li>
+            <li><span set:html={check} /><span><b>Significance-gated.</b> No winner crowned on noise.</span></li>
           </ul>
         </div>
       </div>
-      <p class="kicker" style="text-align:center;margin-top:1.75rem;max-width:64ch;margin-inline:auto">Attribution is influenced / last-touch — it shows which sort a converting shopper engaged with, an honest directional read of lift, not a lab-grade incrementality study.</p>
+      <p class="hiw-note">Attribution is influenced / last-touch — an honest directional read of lift, not a lab-grade incrementality study.</p>
     </div>
   </section>
 
@@ -189,14 +246,14 @@ const groups = [
       <div class="hiw-two rv">
         <div>
           <ul class="checklist">
-            <li><span set:html={check} /><span><b>First-party only.</b> A pixel on your storefront — no third-party cookies, no cross-site tracking, nothing sold or shared.</span></li>
-            <li><span set:html={check} /><span><b>GDPR-ready.</b> Shopify’s data-request and redaction webhooks are honored; visitor data is purged on request.</span></li>
+            <li><span set:html={check} /><span><b>First-party only.</b> No third-party cookies, nothing sold or shared.</span></li>
+            <li><span set:html={check} /><span><b>GDPR-ready.</b> Honors Shopify’s data-request and redaction webhooks.</span></li>
           </ul>
         </div>
         <div>
           <ul class="checklist">
-            <li><span set:html={check} /><span><b>Coarse by design.</b> IP addresses are anonymized before storage; profiles are behavioral, not identity.</span></li>
-            <li><span set:html={check} /><span><b>Shopify-native billing.</b> Free 7-day trial, billed through Shopify’s Billing API on your normal invoice.</span></li>
+            <li><span set:html={check} /><span><b>Coarse by design.</b> Anonymized IPs; behavioral, not identity.</span></li>
+            <li><span set:html={check} /><span><b>Shopify-native billing.</b> Free 7-day trial on your normal invoice.</span></li>
           </ul>
         </div>
       </div>
@@ -207,14 +264,202 @@ const groups = [
   <section class="sec alt" style="padding-top:0;border-block:0">
     <div class="wrap">
       <div class="cta rv">
-        <span class="eyebrow"><span class="dot"></span> Talk to the team</span>
+        <span class="eyebrow"><span class="dot"></span> Go deeper</span>
         <h2>See the engine on <em>your</em> catalog.</h2>
-        <p>Book a 15-minute demo — we’ll screen-share the dashboard and run the experiment + attribution on your real collections.</p>
+        <p>Book a 15-minute demo, or read the illustrated guides.</p>
         <div class="hero-cta" style="justify-content:center">
           <a href={DEMO_URL} class="btn btn-accent btn-lg">Book a demo <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          <a href={APP_STORE_URL} class="btn btn-ghost btn-lg">Add to Shopify</a>
+          <a href="https://guide.qsortby.com" class="btn btn-ghost btn-lg">Read the guides</a>
         </div>
       </div>
     </div>
   </section>
 </Base>
+
+<style>
+  .sig-lnk { color: inherit; text-decoration: none; border-bottom: 1.5px solid var(--green-line); transition: border-color .2s; }
+  .sig-lnk:hover { border-color: var(--green); }
+  .sig-go2 { display: inline-flex; align-items: center; gap: 7px; margin-top: 20px; font-weight: 600; font-size: 15px; color: var(--green-ink); text-decoration: none; }
+  .sig-go2 svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2.2; transition: transform .2s var(--ease); }
+  .sig-go2:hover svg { transform: translateX(3px); }
+
+  /* ---------- LIVE RANKING ENGINE (storefront + sort control) ---------- */
+  .eng { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 16px; box-shadow: var(--shadow-float); }
+  .eng-bar { display: flex; align-items: center; justify-content: space-between; padding: 4px 6px 12px; border-bottom: 1px solid var(--line); margin-bottom: 14px; }
+  .eng-brand { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 700; color: var(--ink); }
+  .eng-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+  .eng-coll { font-family: var(--mono); font-size: 11.5px; font-weight: 600; color: var(--green-ink); background: var(--green-soft); border: 1px solid var(--green-line); border-radius: 999px; padding: 5px 11px; transition: background .3s; }
+  .eng-sort { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; padding: 0 4px 16px; }
+  .eng-sort-lb { font-size: 12px; font-weight: 600; color: var(--muted); }
+  .eng-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+  .eng-tab { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--ink-2); background: var(--bg-2); border: 1px solid var(--line); border-radius: 999px; padding: 7px 13px; cursor: pointer; transition: all .25s var(--ease); }
+  .eng-tab:hover { border-color: var(--line-2); }
+  .eng-tab.on { color: #fff; background: var(--ink); border-color: var(--ink); }
+  .eng-guide { margin-left: auto; text-decoration: none; font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--green-ink); }
+  .eng-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .eng-card { position: relative; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 8px; will-change: transform; transition: border-color .3s, box-shadow .3s; }
+  .eng-thumb { display: grid; place-items: center; aspect-ratio: 7/5; border-radius: 10px; background: #f1efe9; overflow: hidden; }
+  .eng-thumb img { width: 74%; height: 74%; object-fit: contain; display: block; }
+  .eng-meta { display: flex; align-items: center; justify-content: space-between; margin-top: 9px; padding: 0 2px; }
+  .eng-nm { font-size: 12.5px; font-weight: 600; color: var(--ink); }
+  .eng-pr { font-size: 12px; font-weight: 600; color: var(--ink-2); }
+  .eng-chip { position: absolute; top: 7px; right: 7px; z-index: 3; display: none; align-items: center; background: rgba(255,255,255,.92); backdrop-filter: blur(5px); border: 1px solid var(--line); border-radius: 999px; padding: 3px 9px; font-family: var(--mono); font-weight: 700; font-size: 10.5px; color: var(--ink-2); }
+  .eng.live .eng-chip { display: inline-flex; }
+  .eng-front { position: absolute; top: 7px; left: 7px; z-index: 3; display: none; align-items: center; font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .03em; color: #fff; background: var(--green); border-radius: 999px; padding: 3px 9px; box-shadow: 0 4px 10px -3px rgba(0,163,107,.5); }
+  .eng-card.win { border-color: var(--green); box-shadow: 0 0 0 2px var(--green-line), 0 16px 34px -20px rgba(0,163,107,.4); }
+  .eng-card.win .eng-front { display: inline-flex; }
+  .eng-card.win .eng-chip { color: var(--green-ink); background: var(--green-soft); border-color: var(--green-line); }
+
+  /* ---------- PROOF (A/B result bars) ---------- */
+  .proof { max-width: 620px; margin: 0 auto; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 22px 26px; box-shadow: var(--shadow-float); }
+  .proof-row { display: grid; grid-template-columns: 148px 1fr auto; align-items: center; gap: 18px; padding: 13px 0; }
+  .proof-row + .proof-row { border-top: 1px solid var(--line); }
+  .proof-arm { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--ink-2); }
+  .proof-win .proof-arm { color: var(--green-ink); }
+  .proof-track { height: 13px; border-radius: 999px; background: var(--bg-2); overflow: hidden; }
+  .proof-track i { display: block; height: 100%; border-radius: 999px; background: var(--line-2); transform-origin: left; transform: scaleX(0); transition: transform .9s var(--ease); }
+  .proof-win .proof-track i { background: linear-gradient(90deg, var(--green), var(--green-bright)); }
+  .proof.in .proof-track i, .proof.in .proof-meter i { transform: scaleX(1); }
+  .proof-val { font-family: var(--mono); font-size: 15px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+  .proof-win .proof-val { color: var(--green-ink); }
+  .proof-val em { font-style: normal; font-size: 12px; }
+  .proof-foot { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 15px; padding-top: 16px; border-top: 1px solid var(--line); flex-wrap: wrap; }
+  .proof-lift { font-family: var(--mono); font-size: 13px; font-weight: 700; color: var(--green-ink); background: var(--green-soft); border: 1px solid var(--green-line); border-radius: 999px; padding: 6px 13px; }
+  .proof-sig { display: inline-flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .proof-sig b { color: var(--green-ink); }
+  .proof-meter { width: 88px; height: 7px; border-radius: 999px; background: var(--bg-2); overflow: hidden; }
+  .proof-meter i { display: block; height: 100%; width: 96%; border-radius: 999px; background: linear-gradient(90deg, var(--green), var(--green-bright)); transform-origin: left; transform: scaleX(0); transition: transform .9s var(--ease) .2s; }
+  .proof-cap { margin-top: 16px; font-size: .9rem; color: var(--ink-2); line-height: 1.6; max-width: 60ch; margin-inline: auto; text-align: center; }
+  .hiw-note { margin: 1.5rem 0 0; max-width: 74ch; text-align: left; font-size: .82rem; line-height: 1.6; color: var(--muted); }
+  @media (max-width: 560px) { .proof-row { grid-template-columns: 110px 1fr auto; gap: 12px; } }
+
+  /* ---------- WINDOW ---------- */
+  .win { max-width: 920px; margin: 0 auto; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 24px 30px 30px; box-shadow: var(--shadow-float); }
+  .win-modes { display: flex; align-items: center; gap: 8px; margin-bottom: 26px; }
+  .win-mtab { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--ink-2); background: var(--bg-2); border: 1px solid var(--line); border-radius: 9px; padding: 8px 15px; cursor: pointer; transition: all .25s var(--ease); }
+  .win-mtab.on { color: #04120d; background: linear-gradient(90deg, #25e39a, #39f5c0); border-color: transparent; }
+  .win-go { margin-left: auto; text-decoration: none; color: var(--green-ink); background: var(--green-soft); border-color: var(--green-line); }
+  .win-stage { position: relative; height: 150px; }
+  .win-track { position: absolute; left: 0; right: 0; bottom: 40px; height: 2px; background: var(--line); }
+  .win-track .dot { position: absolute; bottom: -5px; width: 11px; height: 11px; border-radius: 50%; background: #c6ccd4; border: 2px solid var(--surface); transform: translateX(-50%); transition: background .4s, box-shadow .4s; }
+  .win-track .dot.in { background: var(--green); box-shadow: 0 0 10px 1px rgba(0,163,107,.6); }
+  .win-band { position: absolute; bottom: 42px; height: 96px; border-radius: 11px; background: linear-gradient(180deg, rgba(37,227,154,.15), rgba(37,227,154,.04)); border: 1.5px solid var(--green-line); box-shadow: 0 0 34px -6px rgba(37,227,154,.4); transition: left .6s var(--ease), width .6s var(--ease); }
+  .win[data-mode="rolling"] .win-band { border-style: dashed; }
+  .win-blab { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--green-ink); background: var(--surface); border: 1.5px solid var(--green-line); border-radius: 7px; padding: 5px 11px; }
+  .win-now { position: absolute; bottom: 42px; height: 118px; width: 2.5px; background: var(--ink); border-radius: 2px; transition: left .6s var(--ease); }
+  .win-now span { position: absolute; top: -24px; left: 50%; transform: translateX(-50%); font-family: var(--mono); font-size: 10.5px; font-weight: 700; letter-spacing: .08em; color: #fff; background: var(--ink); border-radius: 6px; padding: 4px 8px; }
+  .win-wk { position: absolute; bottom: 14px; transform: translateX(-50%); font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--muted); }
+  .win-wk:nth-of-type(1) { left: 12.5%; } .win-wk:nth-of-type(2) { left: 37.5%; }
+  .win-wk:nth-of-type(3) { left: 62.5%; } .win-wk:nth-of-type(4) { left: 87.5%; }
+  .win-cap { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); }
+  .win-cap b { font-size: 16px; color: var(--ink); margin-right: 10px; }
+  .win-cap span { color: var(--muted); font-size: 14.5px; }
+
+  /* ---------- PERSONALIZE VIZ ---------- */
+  .per-wrap { display: grid; grid-template-columns: 1.05fr 1fr; gap: 50px; align-items: center; }
+  .per-viz { display: flex; flex-direction: column; gap: 12px; }
+  .per-row { display: flex; align-items: center; gap: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 15px 18px; transition: all .4s var(--ease); }
+  .per-row.hit { border-color: var(--green); box-shadow: 0 0 0 2px var(--green-line), 0 16px 34px -20px rgba(0,163,107,.4); }
+  .per-row.dim { opacity: .4; }
+  .per-num { width: 30px; height: 30px; border-radius: 9px; background: var(--bg-2); display: grid; place-items: center; font-family: var(--mono); font-weight: 700; font-size: 13px; color: var(--muted); transition: all .4s; }
+  .per-row.hit .per-num { background: var(--green); color: #fff; }
+  .per-num svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; }
+  .per-row b { font-size: 15px; color: var(--ink); }
+  .per-cond { font-family: var(--mono); font-size: 11.5px; color: var(--ink-2); background: var(--bg-2); border: 1px solid var(--line); border-radius: 8px; padding: 4px 9px; }
+  .per-tag { margin-left: auto; font-family: var(--mono); font-size: 11px; font-weight: 700; opacity: 0; transition: opacity .3s; }
+  .per-match { color: #fff; background: var(--green); border-radius: 999px; padding: 4px 11px; }
+  .per-skip { color: var(--muted); }
+  .per-row.hit .per-match, .per-row.show .per-skip { opacity: 1; }
+
+  @media (max-width: 900px) {
+    .per-wrap { grid-template-columns: 1fr; gap: 32px; }
+  }
+  @media (max-width: 560px) { .eng-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (prefers-reduced-motion: reduce) {
+    .eng-card, .win-band, .win-now, .per-row { transition: none !important; }
+  }
+</style>
+
+<script>
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---- LIVE RANKING ENGINE (sort → reorder) ----
+  const eng = document.getElementById('eng');
+  if (eng) {
+    const grid = document.getElementById('engGrid');
+    const cards = [...grid.children];
+    const engColl = document.getElementById('engColl');
+    const SIG = {
+      sold:  { label: 'Best selling', coll: 'Bestsellers' },
+      mom:   { label: 'Trending',     coll: 'Trending' },
+      ctr:   { label: 'Most clicked', coll: 'Most clicked' },
+      bayes: { label: 'Top rated',    coll: 'Top rated' },
+    };
+    const cap = (k) => 'chip' + k.charAt(0).toUpperCase() + k.slice(1);
+
+    function apply(key, animate = true) {
+      const s = SIG[key]; eng.dataset.sig = key; engColl.textContent = s.coll;
+      const sorted = [...cards].sort((a, b) => (+b.dataset[key]) - (+a.dataset[key]));
+      const first = animate && !reduce ? new Map(cards.map((c) => [c, c.getBoundingClientRect()])) : null;
+      sorted.forEach((c) => grid.appendChild(c));
+      sorted.forEach((c, i) => {
+        c.classList.toggle('win', i === 0);
+        c.querySelector('.eng-chip').textContent = c.dataset[cap(key)];
+      });
+      if (first) cards.forEach((c) => {
+        const f = first.get(c), l = c.getBoundingClientRect(), dx = f.left - l.left, dy = f.top - l.top;
+        if (dx || dy) { c.style.transition = 'none'; c.style.transform = `translate(${dx}px,${dy}px)`; requestAnimationFrame(() => { c.style.transition = 'transform .55s var(--ease)'; c.style.transform = ''; }); }
+      });
+      document.querySelectorAll('#engTabs .eng-tab[data-sig]').forEach((t) => { const on = t.dataset.sig === key; t.classList.toggle('on', on); t.setAttribute('aria-selected', on ? 'true' : 'false'); });
+    }
+    document.querySelectorAll('#engTabs .eng-tab[data-sig]').forEach((t) => t.addEventListener('click', () => { stop(); apply(t.dataset.sig); }));
+    const KEYS = ['sold', 'mom', 'ctr', 'bayes']; let idx = 0, timer = null;
+    const step = () => { idx = (idx + 1) % KEYS.length; apply(KEYS[idx]); timer = setTimeout(step, 3600); };
+    const stop = () => { if (timer) { clearTimeout(timer); timer = null; } };
+    eng.classList.add('live'); apply('sold', false);
+    if (!reduce) new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting && !timer) timer = setTimeout(step, 3000); else if (!e.isIntersecting) stop(); }), { threshold: .25 }).observe(eng);
+  }
+
+  // ---- WINDOW MODES ----
+  const win = document.getElementById('win');
+  if (win) {
+    const SPAN = 28, NOW = 24, ORD = [2, 4, 5, 8, 9, 11, 13, 15, 16, 18, 19, 20, 22, 23];
+    const MODES = {
+      rolling:  { s: 17, e: NOW, blab: 'LAST 7 DAYS → NOW', head: 'The last N days, up to now', note: 'Slides forward every recompute. Freshest possible.' },
+      period:   { s: 14, e: 21, blab: 'LAST COMPLETED WEEK', head: 'The last completed week', note: 'Holds steady, then jumps when the week turns.' },
+      snapshot: { s: 7,  e: 14, blab: 'A FROZEN RANGE', head: 'A frozen date range', note: 'Never moves until you change it.' },
+    };
+    const track = document.getElementById('winTrack');
+    ORD.forEach((d) => { const s = document.createElement('span'); s.className = 'dot'; s.style.left = (d / SPAN * 100) + '%'; s.dataset.d = d; track.appendChild(s); });
+    win.querySelector('.win-now').style.left = (NOW / SPAN * 100) + '%';
+    const band = document.getElementById('winBand'), blab = document.getElementById('winBlab'), head = document.getElementById('winHead'), note = document.getElementById('winNote');
+    function set(m) {
+      const c = MODES[m]; win.dataset.mode = m;
+      band.style.left = (c.s / SPAN * 100) + '%'; band.style.width = ((c.e - c.s) / SPAN * 100) + '%';
+      blab.textContent = c.blab; head.textContent = c.head; note.textContent = c.note;
+      track.querySelectorAll('.dot').forEach((d) => d.classList.toggle('in', +d.dataset.d >= c.s && +d.dataset.d < c.e));
+      win.querySelectorAll('.win-mtab[data-mode]').forEach((t) => t.classList.toggle('on', t.dataset.mode === m));
+    }
+    win.querySelectorAll('.win-mtab[data-mode]').forEach((t) => t.addEventListener('click', () => { stopW(); set(t.dataset.mode); }));
+    set('rolling');
+    const WK = ['rolling', 'period', 'snapshot']; let wi = 0, wt = null;
+    const stepW = () => { wi = (wi + 1) % WK.length; set(WK[wi]); wt = setTimeout(stepW, 3400); };
+    const stopW = () => { if (wt) { clearTimeout(wt); wt = null; } };
+    if (!reduce) new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting && !wt) wt = setTimeout(stepW, 2800); else if (!e.isIntersecting) stopW(); }), { threshold: .3 }).observe(win);
+  }
+
+  // ---- SEGMENT MATCHING (first match wins) ----
+  const per = document.getElementById('perViz');
+  if (per && !reduce) {
+    const rows = [...per.children];
+    let on = false;
+    const play = () => {
+      rows.forEach((r) => r.classList.remove('hit', 'dim', 'show'));
+      rows.forEach((r) => r.classList.add('show'));
+      setTimeout(() => rows[0].classList.add('hit'), 400);
+      rows.forEach((r, j) => { if (j > 0 && j < 2) setTimeout(() => r.classList.add('dim'), 900); });
+      setTimeout(() => { on = false; }, 3000);
+    };
+    new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting && !on) { on = true; play(); } }), { threshold: .4 }).observe(per);
+  }
+</script>
