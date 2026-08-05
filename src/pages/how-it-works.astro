@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { APP_STORE_URL, DEMO_URL } from '../consts';
+import { REVERSE_TRIAL_DAYS } from '../plans';
 
 const title = 'How the ranking engine works — QSortby';
 const description =
@@ -38,10 +39,17 @@ const groups = [
   },
   {
     kicker: 'Catalog',
-    title: 'Rank by product quality',
+    title: 'Rank by catalog position',
+    // Was 'Rank by product quality' with two entries. 'Top rated' (Bayesian review
+    // average) is built but ships DISABLED — `collections/new.tsx` renders it as
+    // "Top rated (coming soon)" — and had stayed advertised here after being switched
+    // off. Removing it left "quality" describing nothing but recency, hence the
+    // retitle. Restore BOTH the entry and the old title the day the option is enabled;
+    // a merchant who installs on the strength of it and then can't pick it is a
+    // support ticket at best and a listing-accuracy failure at worst.
     items: [
-      ['Top rated', 'Bayesian review average, so a 5.0 from three reviews doesn’t outrank a 4.8 from three hundred.'],
       ['Newest arrivals', 'Freshness — give launches their moment.'],
+      ['Manual order', 'Your own sequence, kept in place while everything else re-sorts around it.'],
     ],
   },
 ];
@@ -98,7 +106,7 @@ const groups = [
         <div>
           <ul class="checklist">
             <li><span set:html={check} /><span><b>Standard Shopify collections.</b> QSortby maintains native collections and a Best&nbsp;Sellers collection — no theme code, no custom storefront work.</span></li>
-            <li><span set:html={check} /><span><b>Per-collection rules.</b> Each collection can rank on a different signal and window — trending for new launches, conversion for candles, availability for seasonal lines.</span></li>
+            <li><span set:html={check} /><span><b>Per-collection rules.</b> Each collection can rank on a different signal and window — trending for new launches, conversion for a wide core range, availability for seasonal lines.</span></li>
             <li><span set:html={check} /><span><b>Manual override.</b> Reorder or exclude specific products by hand where you want an editorial call; the rest keeps sorting itself.</span></li>
           </ul>
         </div>
@@ -128,6 +136,37 @@ const groups = [
           </ul>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ===== 3½. EMOTIONAL LAYER =====
+       A whole tier (Growth, $199) rests on this, so the deep-dive page has to
+       explain it. The shadow (Pro) vs live-apply (Growth) split is the Pro→Growth
+       upgrade hook — keep both sides spelled out here. -->
+  <section class="sec alt">
+    <div class="wrap">
+      <div class="shead rv" style="margin-bottom:2.5rem">
+        <span class="eyebrow"><span class="dot"></span> Step 2¾ · Read the session</span>
+        <h2>Not who they've been — who they are <em>right now</em>.</h2>
+        <p class="lead-c">Recommendation engines rank on purchase history, so a first-time visitor gets nothing and a returning one gets last year's taste. QSortby reads the <b>session in progress</b> — pace, dwell, revisits, comparisons, hesitation — and infers the state the shopper is in before they've bought anything.</p>
+      </div>
+      <div class="hiw-two rv">
+        <div>
+          <ul class="checklist">
+            <li><span set:html={check} /><span><b>Passive signals only.</b> Nothing is asked of the shopper — no quiz, no login, no survey. The read comes from behaviour your storefront already generates.</span></li>
+            <li><span set:html={check} /><span><b>Two axes, not a label.</b> Sessions are placed on arousal (calm ↔ activated) and valence (negative ↔ positive), then mapped to a state and a copy tone. Profiles stay behavioral vectors — never a note saying "this person is sad".</span></li>
+            <li><span set:html={check} /><span><b>Confidence-gated.</b> A low-confidence read falls back to your standard best-sellers order rather than guessing at a shopper.</span></li>
+          </ul>
+        </div>
+        <div>
+          <ul class="checklist">
+            <li><span set:html={check} /><span><b>Shadow first (Pro).</b> The layer classifies and reports but changes <i>nothing</i> on your storefront. You see the state mix across your sessions and the ranking it <i>would</i> have served — a read-only preview, zero risk.</span></li>
+            <li><span set:html={check} /><span><b>Live apply (Growth).</b> The inferred state reorders that shopper's feed in real time, and the same A/B + attribution machinery from Step 3 measures whether it actually paid.</span></li>
+            <li><span set:html={check} /><span><b>Cost-capped by design.</b> Per-session inference has a real running cost, so sessions are sampled rather than all inferred, classifications and product embeddings are cached, and every store has a daily ceiling. Hit the cap and it falls back to rule-based ranking — never to a broken feed.</span></li>
+          </ul>
+        </div>
+      </div>
+      <p class="kicker" style="text-align:center;margin-top:1.75rem;max-width:64ch;margin-inline:auto">Personalization is never used to manufacture pressure — no false urgency, no exploiting a low mood. The point is relevance, not leverage.</p>
     </div>
   </section>
 
@@ -196,10 +235,40 @@ const groups = [
         <div>
           <ul class="checklist">
             <li><span set:html={check} /><span><b>Coarse by design.</b> IP addresses are anonymized before storage; profiles are behavioral, not identity.</span></li>
-            <li><span set:html={check} /><span><b>Shopify-native billing.</b> Free 7-day trial, billed through Shopify’s Billing API on your normal invoice.</span></li>
+            <li><span set:html={check} /><span><b>Shopify-native billing.</b> A permanent <b>Free</b> plan, {REVERSE_TRIAL_DAYS} days of full access on install, and paid plans billed through Shopify’s Billing API on your normal invoice.</span></li>
           </ul>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ===== WHAT'S ON WHICH PLAN =====
+       This page describes every capability as if it were all available. Without
+       this pointer a merchant reads the whole deep-dive and then hits a paywall
+       they didn't expect — say it here instead. -->
+  <section class="sec" style="padding-top:0">
+    <div class="narrow">
+      <div class="ps rv">
+        <div class="ps-col good">
+          <span class="tag">Included on every plan, including Free</span>
+          <ul>
+            <li><span class="mk" set:html={check} /> Real-time ranking on the signals above, in-stock first</li>
+            <li><span class="mk" set:html={check} /> Sold-out demotion and restock promotion</li>
+            <li><span class="mk" set:html={check} /> A/B testing and revenue attribution — the whole Step 3 loop</li>
+            <li><span class="mk" set:html={check} /> Manual override and before/after preview</li>
+          </ul>
+        </div>
+        <div class="ps-col bad">
+          <span class="tag">Needs a paid plan</span>
+          <ul>
+            <li><span class="mk" set:html={check} /> More than one managed collection — Starter and up</li>
+            <li><span class="mk" set:html={check} /> Per-shopper "For You" feed and a tunable window — Starter and up</li>
+            <li><span class="mk" set:html={check} /> Customer-event analytics and AI authoring — Pro and up</li>
+            <li><span class="mk" set:html={check} /> Emotional layer: shadow preview on Pro, applied live on Growth</li>
+          </ul>
+        </div>
+      </div>
+      <p class="kicker" style="text-align:center;margin-top:1.5rem"><a href="/pricing" style="text-decoration:underline">See the full plan comparison →</a></p>
     </div>
   </section>
 
@@ -207,12 +276,12 @@ const groups = [
   <section class="sec alt" style="padding-top:0;border-block:0">
     <div class="wrap">
       <div class="cta rv">
-        <span class="eyebrow"><span class="dot"></span> Talk to the team</span>
+        <span class="eyebrow"><span class="dot"></span> Get started</span>
         <h2>See the engine on <em>your</em> catalog.</h2>
-        <p>Book a 15-minute demo — we’ll screen-share the dashboard and run the experiment + attribution on your real collections.</p>
+        <p>Install free and run it on one collection — or book a 15-minute demo and we’ll screen-share the experiment + attribution on your real collections.</p>
         <div class="hero-cta" style="justify-content:center">
-          <a href={DEMO_URL} class="btn btn-accent btn-lg">Book a demo <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          <a href={APP_STORE_URL} class="btn btn-ghost btn-lg">Add to Shopify</a>
+          <a href={APP_STORE_URL} class="btn btn-accent btn-lg">Install free <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a href={DEMO_URL} class="btn btn-ghost btn-lg">Book a demo</a>
         </div>
       </div>
     </div>

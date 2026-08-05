@@ -1,0 +1,46 @@
+---
+// Lead-card visual: the SAME four products, ranked two different ways at the
+// same moment — one feed for a first-time visitor, one for a returning VIP.
+//
+// This replaces an animated two-row list that swapped positions. That version
+// only made its point if you happened to be watching the swap; a still frame
+// showed two identical grey bars. A side-by-side diff makes the same argument
+// instantly and survives a screenshot, which is how most people meet this page.
+//
+// HERO is the product that moves furthest between the two orders — it carries
+// the accent in both columns plus a rank-delta badge, so the eye links them
+// without needing a drawn connector across the grid.
+const CATALOG = {
+  tee:        'Everyday Tee',
+  sneaker:    'Trail Runner',
+  headphones: 'Studio Headphones',
+  watch:      'Field Watch',
+};
+const NEW_VISITOR = ['tee', 'sneaker', 'headphones', 'watch'];
+const VIP         = ['watch', 'headphones', 'tee', 'sneaker'];
+const HERO = 'watch';
+
+const feeds = [
+  { label: 'First-time visitor', order: NEW_VISITOR, accent: false },
+  { label: 'Returning VIP',      order: VIP,         accent: true  },
+];
+const rankIn = (order: string[], slug: string) => order.indexOf(slug) + 1;
+---
+<div class="pfeeds" aria-hidden="true">
+  {feeds.map((feed) => (
+    <div class="pf-col">
+      <span class={feed.accent ? 'pf-h pf-h-b' : 'pf-h'}>{feed.label}</span>
+      {feed.order.map((slug, i) => (
+        <div class={slug === HERO ? 'pf-row on' : 'pf-row'}>
+          <span class="pf-r">{i + 1}</span>
+          <span class="gthumb"><img src={`/products/${slug}.svg`} alt="" loading="lazy" decoding="async" /></span>
+          <span class="pf-n">{CATALOG[slug as keyof typeof CATALOG]}</span>
+          {slug === HERO && feed.accent && (
+            <span class="pf-move">▲{rankIn(NEW_VISITOR, HERO) - rankIn(VIP, HERO)}</span>
+          )}
+        </div>
+      ))}
+    </div>
+  ))}
+</div>
+<p class="pf-cap">Same catalog, same moment — two different front rows.</p>

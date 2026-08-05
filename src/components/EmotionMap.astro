@@ -1,0 +1,61 @@
+---
+// The 12-state emotional model, plotted on its two real axes:
+//   x = valence  (negative → positive)
+//   y = arousal  (calm → activated)   [y is inverted in CSS: 0% = top = activated]
+//
+// FORM: this is 12 classes that all carry meaning, so it is deliberately NOT
+// color-coded — 12 hues would be indistinguishable under colorblindness and would
+// bury the one state that matters. It uses the EMPHASIS form instead: every state
+// is a neutral chip, and exactly one (`now`) carries the accent. Identity comes
+// from the text label, never from color alone.
+//
+// Percentages are layout positions for a concept diagram, not measured data.
+// Positions are hand-tuned so no two chips collide and none overflows the field
+// at its SMALLEST allowed size (the 300px square floor). Longer names sit further
+// from the edges because the chip grows with the label. If you rename a state or
+// move one, re-run the collision check before shipping.
+const states = [
+  { name: 'Stressed',    x: 17, y: 25 },
+  { name: 'Anxious',     x: 26, y: 10, now: true },
+  { name: 'Excited',     x: 70, y: 17 },
+  { name: 'Celebratory', x: 78, y: 28 },
+  { name: 'Curious',     x: 66, y: 41 },
+  { name: 'Bored',       x: 19, y: 50 },
+  { name: 'Focused',     x: 46, y: 52 },
+  { name: 'Grateful',    x: 84, y: 59 },
+  { name: 'Sad',         x: 13, y: 74 },
+  { name: 'Nostalgic',   x: 62, y: 82 },
+  { name: 'Tired',       x: 32, y: 88 },
+  { name: 'Content',     x: 80, y: 93 },
+];
+---
+<figure class="emap">
+  <div class="emap-plot">
+    <span class="emap-ax ax-t">Activated</span>
+    <span class="emap-ax ax-b">Calm</span>
+    <span class="emap-ax ax-l">Negative</span>
+    <span class="emap-ax ax-r">Positive</span>
+
+    <div class="emap-field">
+      {/* recessive quadrant guides — structure, not data */}
+      <span class="emap-cross" aria-hidden="true"></span>
+      {states.map((s) => (
+        <span
+          class={s.now ? 'est est-now' : 'est'}
+          style={`--x:${s.x}%;--y:${s.y}%`}
+        >{s.name}</span>
+      ))}
+    </div>
+  </div>
+
+  {/* The readout doubles as the accessible text: it names the emphasised state,
+      so the diagram never depends on spotting a green chip. */}
+  <figcaption class="emap-read">
+    <span class="emap-k">This session reads</span>
+    <b>Anxious</b>
+    <span class="emap-arrow">→</span>
+    <span class="emap-k">tone</span>
+    <b>Reassuring</b>
+    <span class="emap-note">reviews and returns first, no upsell pressure</span>
+  </figcaption>
+</figure>

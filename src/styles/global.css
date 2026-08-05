@@ -150,6 +150,22 @@
   .plan li { @apply flex gap-2.5 text-sm text-ink-2; }
   .plan li svg { @apply w-4 h-4 mt-0.5 shrink-0 fill-none; stroke:var(--green); stroke-width:2.6; }
 
+  /* 4-tier layout (Free / Starter / Pro / Growth). The 2-up `.plans` grid above
+     is capped at max-w-3xl for the homepage teaser; the full pricing table needs
+     the wrapper's full width and a 4th column at lg. */
+  .plans.plans-4 { @apply md:grid-cols-2 lg:grid-cols-4 gap-3.5 max-w-none; }
+  .plans-4 .plan { @apply p-6 md:p-6; }
+  .plans-4 .plan .price b { @apply text-4xl; }
+  .plans-4 .plan .pdesc { @apply mb-5 pb-5; min-height:3.9rem; }
+  .plans-4 .plan ul { @apply gap-2.5 mb-6; }
+  /* At 4-up the cards are too narrow for a floating corner ribbon — it collides
+     with the plan name. Pin the badge into the flow above the name instead.
+     This also fixes a positioning bug: `.plan .badge` is absolute but only
+     `.plan.feat` sets `relative`, so a badge on a non-feat card (Growth) would
+     escape to the nearest positioned ancestor. */
+  .plans-4 .plan .badge { @apply static top-auto right-auto self-start mb-2.5 inline-block; }
+  .plans-4 .plan:not(.feat) .badge { background:var(--ink-2); }
+
   /* ---- faq ---- */
   .faq { @apply max-w-3xl mx-auto; }
   .faq details { @apply border-b; border-color:var(--line); }
@@ -301,6 +317,13 @@
   .matrix .yes { color:var(--green-ink); font-weight:700; }
   .matrix .no { color:var(--faint); }
   .matrix .colhi { background:var(--green-soft); }
+  /* 4-plan matrix: tighter padding + a floor on the feature column so the label
+     never wraps to three lines while the value columns sit half-empty. The table
+     is inside an overflow-x:auto wrapper, so narrow screens scroll it. */
+  .matrix-4 { min-width:680px; }
+  .matrix-4 th, .matrix-4 td { @apply py-3.5 px-3; }
+  .matrix-4 tbody th { min-width:15rem; }
+  .matrix-4 thead th:not(:first-child) { @apply text-center; }
 
   /* ---- sticky mobile CTA ---- */
   .stickycta { @apply lg:hidden fixed inset-x-0 bottom-0 z-40 flex items-center gap-3 px-4 py-3; background:rgba(255,255,255,.94); backdrop-filter:blur(10px); border-top:1px solid var(--line); }
@@ -439,6 +462,21 @@ body.nav-open .menu-btn .ic-close { display:block; }
   .fb.wide { display:grid; grid-template-columns:1.05fr .95fr; align-items:center; gap:22px; }
   .fb.wide .fb-viz { margin-top:0; }
 }
+/* `.fb.lead` — the ONE card that carries the buying reason. Full-width and a
+   larger type scale so the eye lands here first instead of treating all seven
+   bento cards as equally important. Use exactly one per grid.
+   NOTE: keep the card's background inherited — a later block paints every `.fb`
+   dark (#15171c) with white type, so overriding only the background here would
+   put white text on a light panel. Dominance comes from span + type scale. */
+.fb.lead { grid-column:span 3; padding:28px; }
+.fb.lead h3 { font-size:1.55rem; line-height:1.18; margin-bottom:11px; }
+.fb.lead p { font-size:1rem; max-width:48ch; }
+@media (min-width:768px){
+  .fb.lead { display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:30px; }
+  .fb.lead .fb-viz { margin-top:0; }
+}
+@media (max-width:880px){ .fb.lead { grid-column:span 2; } }
+@media (max-width:560px){ .fb.lead { grid-column:span 1; display:flex; padding:22px; } .fb.lead h3 { font-size:1.3rem; } }
 .fb .chips { display:flex; flex-wrap:wrap; gap:7px; margin-top:14px; }
 .fb .ch { font-family:var(--mono); font-size:11px; font-weight:600; padding:5px 10px; border-radius:999px; background:var(--bg-2); border:1px solid var(--line); color:var(--muted); }
 .fb .ch.on { background:var(--green-soft); border-color:var(--green-line); color:var(--green-ink); }
@@ -451,21 +489,41 @@ body.nav-open .menu-btn .ic-close { display:block; }
 .fb-viz > div { position:relative; background:var(--grad-mint); border:1px solid var(--w-line); border-radius:13px; padding:16px; }
 
 /* ---- signature: auto-sort (rows reorder) ---- */
-.anim-sort { height:128px; }
-.anim-sort .asr { position:absolute; left:16px; right:16px; height:36px; display:flex; align-items:center; gap:10px; padding:0 12px; background:#fff; border:1px solid var(--line); border-radius:10px; box-shadow:0 1px 2px rgba(16,24,40,.04); }
+/* position:relative so the absolutely-positioned rows anchor to THIS box. Without
+   it they resolved against `.fb-viz > div` (the padded panel), which put their
+   slot offsets in a different coordinate space than the 128px they assume. */
+.anim-sort { height:128px; position:relative; }
+/* left/right:0 and top:0 because the anchor is now .anim-sort itself, which
+   already sits inside the panel's 16px padding — the old 16px insets would
+   double it. top:0 gives the translateY() slots (0 / 44 / 88px) a fixed base
+   instead of each row's static position. */
+.anim-sort .asr { position:absolute; left:0; right:0; top:0; height:36px; display:flex; align-items:center; gap:10px; padding:0 12px; background:#fff; border:1px solid var(--line); border-radius:10px; box-shadow:0 1px 2px rgba(16,24,40,.04); }
 .anim-sort .asr .th { width:22px; height:22px; border-radius:6px; flex:none; background:linear-gradient(140deg,#dbe8ff,#bcd4ff); }
 .anim-sort .asr .ln { flex:1; height:7px; border-radius:4px; background:#eef0f2; }
 .anim-sort .asr b { font-family:var(--mono); font-size:12px; font-weight:700; color:var(--ink); font-variant-numeric:tabular-nums; }
-.anim-sort .asr-c { border-color:var(--green-line); background:var(--green-soft); }
-.anim-sort .asr-c .th { background:linear-gradient(140deg,var(--green-bright),var(--green)); }
-.anim-sort .asr-c .ln { background:#bfe6d6; }
-.anim-sort .asr-c b { color:var(--green-ink); }
+/* The accent marks the row that ENDS at #1, and it must be the one whose number
+   is actually highest — the old version highlighted the 97 and floated it above
+   the 142, i.e. a card about sorting that displayed an unsorted list. */
+.anim-sort .asr-a { border-color:var(--green-line); background:var(--green-soft); }
+.anim-sort .asr-a .ln { background:#bfe6d6; }
+.anim-sort .asr-a b { color:var(--green-ink); }
+
+/* fixed rank gutter: the slots stay put and the products move between them,
+   which is literally what the product does to a collection */
+.anim-sort .asr-rank { position:absolute; left:0; width:16px; height:36px; display:grid;
+  place-items:center; font-family:var(--mono); font-size:11px; font-weight:700;
+  color:var(--faint); font-variant-numeric:tabular-nums; }
+.anim-sort .r1 { top:0; } .anim-sort .r2 { top:44px; } .anim-sort .r3 { top:88px; }
+.anim-sort .asr { left:26px; }
+
 .anim-sort .asr-a { animation:sortA 6s var(--ease) infinite; }
 .anim-sort .asr-b { animation:sortB 6s var(--ease) infinite; }
 .anim-sort .asr-c { animation:sortC 6s var(--ease) infinite; }
-@keyframes sortA { 0%,14%{transform:translateY(0)} 32%,68%{transform:translateY(44px)} 86%,100%{transform:translateY(0)} }
-@keyframes sortB { 0%,14%{transform:translateY(44px)} 32%,68%{transform:translateY(88px)} 86%,100%{transform:translateY(44px)} }
-@keyframes sortC { 0%,14%{transform:translateY(88px)} 32%,68%{transform:translateY(0)} 86%,100%{transform:translateY(88px)} }
+/* scrambled → sorted → scrambled, and it RESTS in the sorted state (36–86%) so a
+   screenshot or a reduced-motion reader sees a correctly ordered list */
+@keyframes sortA { 0%,18%{transform:translateY(44px)} 36%,86%{transform:translateY(0)} 100%{transform:translateY(44px)} }
+@keyframes sortB { 0%,18%{transform:translateY(88px)} 36%,86%{transform:translateY(44px)} 100%{transform:translateY(88px)} }
+@keyframes sortC { 0%,18%{transform:translateY(0)}    36%,86%{transform:translateY(88px)} 100%{transform:translateY(0)} }
 
 /* ---- signature: real-time (sparkline draw + live tick) ---- */
 .anim-live { min-height:96px; display:flex; flex-direction:column; justify-content:center; }
@@ -667,8 +725,8 @@ a:focus-visible, .btn:focus-visible, summary:focus-visible, input:focus-visible,
   html { scroll-behavior:auto; }
   *, *::before, *::after { animation:none !important; transition:none !important; }
   .rv, .appshot { opacity:1; transform:none; }
-  .anim-sort .asr-a, .anim-sort .asr-b { transform:none; }
-  .anim-sort .asr-c { transform:translateY(0); }
+  /* park in the SORTED state (142 / 118 / 97), matching the animation's rest pose */
+  .anim-sort .asr { transform:none; }
   .anim-sort .asr-a { top:0; } .anim-sort .asr-b { top:44px; } .anim-sort .asr-c { top:88px; }
   .anim-live .spark path { stroke-dashoffset:0; }
   .anim-bars span { transform:scaleY(1); }
@@ -826,7 +884,12 @@ body { background:#fcfcfa; }
 /* header → real glass */
 header.site { background:rgba(252,252,250,.62); -webkit-backdrop-filter:blur(16px) saturate(150%); backdrop-filter:blur(16px) saturate(150%); }
 
-/* bento product panel → 3D-tilted glass */
+/* bento product panel → 3D-tilted glass.
+   `overflow:hidden` is load-bearing, not cosmetic: the mini-UI rows inside are
+   absolutely positioned at hardcoded offsets and popped toward the viewer with
+   translateZ. Perspective is a fixed 1500px while the panel width varies from
+   ~230px (1-unit card) to ~600px (.lead), so on a wide panel the pop projects
+   children past the panel's own box — they escaped over the text column. Clip. */
 .fb-viz { perspective:1500px; }
 .fb-viz > div {
   transform:rotateY(-5deg) rotateX(1.5deg);
@@ -834,6 +897,7 @@ header.site { background:rgba(252,252,250,.62); -webkit-backdrop-filter:blur(16p
   background:rgba(255,255,255,.05);
   border-color:rgba(255,255,255,.12);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.07);
+  overflow:hidden;
 }
 .fb:hover .fb-viz > div { transform:rotateY(-2.5deg) rotateX(1deg); }
 
@@ -863,7 +927,7 @@ header.site { background:rgba(252,252,250,.62); -webkit-backdrop-filter:blur(16p
 .gcard { background:rgba(255,255,255,.84); -webkit-backdrop-filter:blur(7px) saturate(150%); backdrop-filter:blur(7px) saturate(150%); border:1px solid rgba(255,255,255,.72); border-radius:11px; box-shadow:0 10px 18px -10px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.7); }
 .gthumb { width:28px; height:28px; border-radius:8px; overflow:hidden; background:#f1efe9; flex:none; }
 .gthumb img { width:100%; height:100%; object-fit:cover; display:block; }
-.anim-rt .rt-nm, .anim-aud .rt-nm, .anim-int .rt-nm { font-weight:600; font-size:12px; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.anim-rt .rt-nm { font-weight:600; font-size:12px; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
 /* --- Real-time: orders land → the product re-scores live --- */
 .anim-rt { position:relative; min-height:118px; display:flex; flex-direction:column; justify-content:center; gap:11px; }
@@ -879,21 +943,6 @@ header.site { background:rgba(252,252,250,.62); -webkit-backdrop-filter:blur(16p
 @keyframes rtPulse { 0%,100%{box-shadow:0 10px 18px -10px rgba(0,0,0,.45)} 50%{box-shadow:0 14px 26px -10px rgba(0,163,107,.45)} }
 @keyframes rtGrow { 0%{width:42%} 30%{width:58%} 60%{width:74%} 88%,100%{width:88%} }
 
-/* --- Segments: one collection, re-sorted per audience --- */
-.anim-aud { display:flex; flex-direction:column; gap:11px; min-height:118px; justify-content:center; }
-.aud-tabs { display:flex; gap:6px; }
-.atab { font-size:10px; font-weight:700; padding:4px 11px; border-radius:999px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); color:rgba(255,255,255,.55); }
-.atab.a1 { animation:audTab1 5s steps(1,end) infinite; }
-.atab.a2 { animation:audTab2 5s steps(1,end) infinite; }
-@keyframes audTab1 { 0%,46%{ background:#fff; border-color:#fff; color:var(--ink); } 50%,100%{ background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.16); color:rgba(255,255,255,.55); } }
-@keyframes audTab2 { 0%,46%{ background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.16); color:rgba(255,255,255,.55); } 50%,100%{ background:#fff; border-color:#fff; color:var(--ink); } }
-.aud-list { position:relative; height:97px; }
-.arow { position:absolute; left:0; right:0; display:flex; align-items:center; gap:10px; padding:8px 11px; transform:translateZ(12px); }
-.arow .gthumb { width:26px; height:26px; }
-.arow.ra { animation:audA 5s var(--ease) infinite; }
-.arow.rb { animation:audB 5s var(--ease) infinite; }
-@keyframes audA { 0%,44%{transform:translate3d(0,0,12px)} 56%,96%{transform:translate3d(0,53px,12px)} 100%{transform:translate3d(0,0,12px)} }
-@keyframes audB { 0%,44%{transform:translate3d(0,53px,12px)} 56%,96%{transform:translate3d(0,0,12px)} 100%{transform:translate3d(0,53px,12px)} }
 
 /* --- Insights: the why-funnel (views → cart → purchases) --- */
 .anim-why { display:flex; align-items:stretch; gap:7px; min-height:122px; }
@@ -906,37 +955,20 @@ header.site { background:rgba(252,252,250,.62); -webkit-backdrop-filter:blur(16p
 @keyframes whyFill { 0%{transform:scaleX(0)} 28%,82%{transform:scaleX(1)} 100%{transform:scaleX(0)} }
 .why-flow { align-self:center; width:13px; height:2px; flex:none; background-image:linear-gradient(90deg,var(--green) 55%, transparent 0); background-size:7px 2px; background-repeat:repeat-x; animation:flow 1.1s linear infinite; }
 
-/* --- Emotional AI: signals → intent rises → recommend --- */
-.anim-int { position:relative; min-height:120px; display:flex; flex-direction:column; gap:8px; justify-content:center; }
-.int-sigs { display:flex; gap:6px; }
-.sig { font-size:9px; font-weight:700; padding:3px 8px; border-radius:999px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.14); color:rgba(255,255,255,.5); }
-.sig.sg1 { animation:sigOn 4.5s var(--ease) infinite 0s; }
-.sig.sg2 { animation:sigOn 4.5s var(--ease) infinite .28s; }
-.sig.sg3 { animation:sigOn 4.5s var(--ease) infinite .56s; }
-@keyframes sigOn { 0%,4%{ background:rgba(255,255,255,.08); color:rgba(255,255,255,.5); border-color:rgba(255,255,255,.14) } 14%,42%{ background:var(--green-soft); color:var(--green-ink); border-color:var(--green-line) } 58%,100%{ background:rgba(255,255,255,.08); color:rgba(255,255,255,.5); border-color:rgba(255,255,255,.14) } }
-.int-meter { height:7px; border-radius:4px; background:rgba(255,255,255,.1); overflow:hidden; }
-.int-fill { display:block; height:100%; border-radius:4px; background:linear-gradient(90deg,var(--green),var(--green-bright)); transform-origin:left; transform:scaleX(.08); animation:intFill 4.5s var(--ease) infinite; }
-@keyframes intFill { 0%,10%{transform:scaleX(.08)} 46%{transform:scaleX(.46)} 70%,100%{transform:scaleX(.94)} }
-.int-lbl { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--green-ink); opacity:0; animation:intLbl 4.5s var(--ease) infinite; }
-@keyframes intLbl { 0%,56%{opacity:0} 70%,100%{opacity:1} }
-.int-rec { display:flex; align-items:center; gap:9px; padding:8px 9px; transform:translateZ(20px); opacity:.5; animation:intRec 4.5s var(--ease) infinite; }
-.int-tag { margin-left:auto; font-size:9px; font-weight:700; color:#fff; background:var(--green); padding:2px 7px; border-radius:999px; flex:none; opacity:0; transform:scale(.85); animation:intTag 4.5s var(--ease) infinite; }
-@keyframes intRec { 0%,56%{opacity:.5} 74%,100%{opacity:1} }
-@keyframes intTag { 0%,60%{opacity:0; transform:scale(.85)} 76%{opacity:1; transform:scale(1)} 100%{opacity:1} }
 
 @media (prefers-reduced-motion: reduce) {
   .rt-bar i { width:84%; } .rt-pip { opacity:0; }
-  .arow.ra { transform:translate3d(0,0,12px); } .arow.rb { transform:translate3d(0,53px,12px); }
-  .atab.a1 { background:#fff; border-color:#fff; color:var(--ink); }
   .why-bar i { transform:scaleX(1); }
-  .int-fill { transform:scaleX(.94); } .int-lbl, .int-tag { opacity:1; } .int-rec { opacity:1; transform:translateZ(20px); }
-  .sig.sg2 { background:var(--green-soft); color:var(--green-ink); border-color:var(--green-line); }
 }
 
 /* fine-tune: the wide insights cell has discrete side-by-side stages, so the
    panel rotateY foreshortens them unevenly — ease its tilt for a clean funnel. */
 .fb.wide .fb-viz > div { transform:rotateY(-2.5deg) rotateX(1deg); }
 .fb.wide:hover .fb-viz > div { transform:rotateY(-1.5deg) rotateX(.6deg); }
+/* The lead panel is the widest of all, so the fixed 1500px perspective distorts
+   it hardest — ease the tilt further still, matching the .wide correction above. */
+.fb.lead .fb-viz > div { transform:rotateY(-2deg) rotateX(.7deg); }
+.fb.lead:hover .fb-viz > div { transform:rotateY(-1deg) rotateX(.4deg); }
 
 /* =====================================================================
    SOLUTIONS PAGE — per-category narrative animations. Each vertical's
@@ -1075,3 +1107,185 @@ header.site { background:rgba(252,252,250,.62); -webkit-backdrop-filter:blur(16p
    keep the tick top-aligned with the first line. */
 .hiw-grid .checklist, .hiw-two .checklist { margin-top:0; }
 .hiw-grid .fb .checklist { margin-top:14px; }
+
+/* =====================================================================
+   EMOTIONAL STATE MAP + emotion spotlight section.
+   The map plots the 12-state model on arousal × valence. It is a concept
+   diagram, so: no per-state colour (12 hues would be indistinguishable under
+   CVD and would bury the one state that matters), recessive quadrant guides,
+   and the EMPHASIS form — neutral chips plus exactly one accent chip, whose
+   identity is also stated in words in the caption below.
+   ===================================================================== */
+.emap { margin:0; }
+.emap-plot { position:relative; padding:26px 30px; }
+.emap-ax { position:absolute; font-family:var(--mono); font-size:10px; font-weight:600;
+  text-transform:uppercase; letter-spacing:.14em; color:var(--faint); white-space:nowrap; }
+.emap-ax.ax-t { top:2px; left:50%; transform:translateX(-50%); }
+.emap-ax.ax-b { bottom:2px; left:50%; transform:translateX(-50%); }
+.emap-ax.ax-l { left:-14px; top:50%; transform:rotate(-90deg) translateX(-50%); transform-origin:left center; }
+.emap-ax.ax-r { right:-14px; top:50%; transform:rotate(90deg) translateX(-50%); transform-origin:right center; }
+
+.emap-field { position:relative; aspect-ratio:1/1; min-height:300px;
+  border:1px solid var(--line); border-radius:14px; background:var(--surface); }
+/* quadrant guides: 1px, recessive — they orient the reader, they aren't data */
+.emap-cross { position:absolute; inset:0; border-radius:14px; pointer-events:none;
+  background:
+    linear-gradient(to right, transparent calc(50% - .5px), var(--line) calc(50% - .5px), var(--line) calc(50% + .5px), transparent calc(50% + .5px)),
+    linear-gradient(to bottom, transparent calc(50% - .5px), var(--line) calc(50% - .5px), var(--line) calc(50% + .5px), transparent calc(50% + .5px)); }
+
+/* state chips — identity by LABEL, colour carries only emphasis */
+.est { position:absolute; left:var(--x); top:var(--y); transform:translate(-50%,-50%);
+  font-family:var(--mono); font-size:11px; font-weight:600; line-height:1; white-space:nowrap;
+  padding:6px 10px; border-radius:999px; background:var(--paper);
+  border:1px solid var(--line-2); color:var(--muted); }
+.est-now { background:var(--green-ink); border-color:var(--green-ink); color:#fff;
+  box-shadow:0 0 0 4px rgba(0,163,107,.16); z-index:2; }
+/* one calm pulse so the eye finds the emphasised state without a legend */
+@media (prefers-reduced-motion:no-preference){
+  .est-now { animation:estPulse 2.8s var(--ease) infinite; }
+  @keyframes estPulse {
+    0%,100% { box-shadow:0 0 0 4px rgba(0,163,107,.16); }
+    50%     { box-shadow:0 0 0 9px rgba(0,163,107,.06); }
+  }
+}
+
+.emap-read { display:flex; flex-wrap:wrap; align-items:center; gap:8px;
+  margin-top:16px; padding:13px 16px; border:1px solid var(--line);
+  border-radius:12px; background:var(--paper); }
+.emap-read .emap-k { font-family:var(--mono); font-size:10px; font-weight:600;
+  text-transform:uppercase; letter-spacing:.12em; color:var(--muted); }
+.emap-read b { font-family:'Inter',sans-serif; font-weight:600; font-size:.95rem; color:var(--ink); }
+.emap-read .emap-arrow { color:var(--faint); }
+.emap-read .emap-note { flex-basis:100%; font-size:.85rem; color:var(--ink-2); }
+
+/* Below the square's comfortable size the 12 absolutely-positioned labels start
+   to collide, so drop the plot entirely and wrap the states as a plain list.
+   The axes stop being readable at that width anyway. */
+@media (max-width:620px){
+  .emap-plot { padding:0; }
+  .emap-ax { display:none; }
+  .emap-field { aspect-ratio:auto; min-height:0; display:flex; flex-wrap:wrap; gap:7px;
+    padding:16px; background:transparent; border-style:dashed; }
+  .emap-cross { display:none; }
+  .est { position:static; left:auto; top:auto; transform:none; }
+}
+
+/* ---- emotion spotlight section ---- */
+.espot { display:grid; gap:34px; align-items:center; }
+@media (min-width:900px){ .espot { grid-template-columns:1.02fr .98fr; gap:52px; } }
+.espot .ladder { list-style:none; display:flex; flex-direction:column; gap:14px; margin-top:26px; }
+.espot .ladder li { display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:start; }
+.espot .ladder .n { display:grid; place-items:center; width:26px; height:26px; flex:none;
+  border-radius:50%; background:var(--paper); border:1px solid var(--line-2);
+  font-family:var(--mono); font-size:11px; font-weight:700; color:var(--ink-2); }
+.espot .ladder b { display:block; font-family:'Inter',sans-serif; font-weight:600;
+  font-size:1rem; color:var(--ink); margin-bottom:3px; }
+.espot .ladder p { font-size:.93rem; color:var(--ink-2); line-height:1.6; }
+
+/* Pro (look) → Growth (apply) — the upgrade hook, stated as two tiers */
+.etiers { display:grid; gap:12px; margin-top:28px; }
+@media (min-width:560px){ .etiers { grid-template-columns:1fr 1fr; } }
+.etier { padding:17px 18px; border-radius:14px; border:1px solid var(--line); background:var(--surface); }
+.etier.on { border-color:var(--green-line); background:var(--green-soft); }
+.etier .et-h { display:flex; align-items:baseline; gap:8px; margin-bottom:7px; }
+.etier .et-p { font-family:var(--mono); font-size:10px; font-weight:700; text-transform:uppercase;
+  letter-spacing:.1em; color:var(--muted); }
+.etier.on .et-p { color:var(--green-ink); }
+.etier .et-pr { font-family:var(--mono); font-size:11px; color:var(--faint); }
+.etier b { display:block; font-family:'Inter',sans-serif; font-weight:600; font-size:.97rem;
+  color:var(--ink); margin-bottom:4px; }
+.etier p { font-size:.88rem; color:var(--ink-2); line-height:1.55; }
+
+/* =====================================================================
+   BENTO — break the dark slab.
+   Six identically dark cells read as one black block and gave the grid no
+   hierarchy: the lead card was the same weight as "Sold-out steps aside".
+   Now only `.fb.lead` keeps the dark treatment (it IS the hero statement) and
+   the rest return to the page's warm editorial surface.
+
+   Scoped to `.fbento` on purpose — `.hiw-grid .fb` on /how-it-works is a
+   different context (four equal signal-group cards, no lead) and stays dark.
+
+   The mini-UI pieces inside each viz were already authored in light-surface
+   tokens (#fff rows, --ink text, --green-soft pills); the frosted-glass block
+   above only re-skinned them translucent so they'd read on a dark panel. On a
+   light panel that translucency washes out, so it is reverted here.
+   ===================================================================== */
+.fbento .fb:not(.lead) {
+  background:var(--surface); border-color:var(--line); color:var(--ink);
+  box-shadow:0 1px 2px rgba(16,24,40,.04);
+}
+.fbento .fb:not(.lead):hover { border-color:var(--line-2); box-shadow:var(--shadow-float); }
+.fbento .fb:not(.lead) .kicker { color:var(--muted); }
+.fbento .fb:not(.lead) h3 { color:var(--ink); }
+.fbento .fb:not(.lead) p { color:var(--ink-2); }
+.fbento .fb:not(.lead) .ch { background:var(--paper); border-color:var(--line); color:var(--muted); }
+.fbento .fb:not(.lead) .ch.on { background:var(--green-soft); border-color:var(--green-line); color:var(--green-ink); }
+
+/* the inner panel: warm neutral instead of the white-on-dark wash */
+.fbento .fb:not(.lead) .fb-viz > div {
+  background:var(--grad-mint); border-color:var(--w-line);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
+}
+
+/* mini-UI rows: solid with a real edge, not frosted glass */
+.fbento .fb:not(.lead) .asr,
+.fbento .fb:not(.lead) .drow,
+.fbento .fb:not(.lead) .grow,
+.fbento .fb:not(.lead) .gcard {
+  background:#fff; border-color:var(--line);
+  -webkit-backdrop-filter:none; backdrop-filter:none;
+  box-shadow:0 1px 2px rgba(16,24,40,.05), 0 8px 18px -14px rgba(16,24,40,.3);
+}
+.fbento .fb:not(.lead) .asr-c { background:var(--green-soft); border-color:var(--green-line); }
+
+/* The tilt was tuned to make a dark glass panel catch light. On a light panel it
+   just skews the mock, so flatten it and let the content read straight. */
+.fbento .fb:not(.lead) .fb-viz > div,
+.fbento .fb:not(.lead):hover .fb-viz > div { transform:none; }
+
+/* =====================================================================
+   LEAD-CARD VISUAL — two visitor feeds over one catalog.
+   Lives inside `.fb.lead`, which is the only bento cell that stays dark, so
+   these are dark-surface values. The accent rows are the same product at two
+   very different ranks; the rank-delta badge does the job a connector line
+   would, without depending on cross-column geometry that breaks on resize.
+   ===================================================================== */
+.pfeeds { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.pf-h { display:block; padding-left:2px; margin-bottom:10px; font-family:var(--mono);
+  font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:.12em;
+  color:rgba(255,255,255,.42); white-space:nowrap; }
+.pf-h-b { color:var(--green-bright); }
+.pf-row { display:flex; align-items:center; gap:8px; padding:6px 9px; margin-bottom:6px;
+  border-radius:9px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.07); }
+.pf-row:last-child { margin-bottom:0; }
+.pf-r { flex:none; width:8px; font-family:var(--mono); font-size:10px; font-weight:700;
+  color:rgba(255,255,255,.32); font-variant-numeric:tabular-nums; }
+.pf-row .gthumb { width:22px; height:22px; border-radius:6px; }
+.pf-n { min-width:0; font-size:11.5px; font-weight:600; color:rgba(255,255,255,.78);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.pf-row.on { background:rgba(0,163,107,.18); border-color:rgba(43,217,150,.4); }
+.pf-row.on .pf-n { color:#fff; }
+.pf-row.on .pf-r { color:var(--green-bright); }
+.pf-move { flex:none; margin-left:auto; padding:2px 6px; border-radius:999px;
+  font-family:var(--mono); font-size:9px; font-weight:800; color:#0a2c20;
+  background:var(--green-bright); font-variant-numeric:tabular-nums; }
+.pf-cap { margin-top:13px; text-align:center; font-family:var(--mono); font-size:9.5px;
+  font-weight:600; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.34); }
+
+/* one slow breath so the eye pairs the two accent rows across the columns */
+@media (prefers-reduced-motion:no-preference){
+  .pf-row.on { animation:pfLink 3.6s var(--ease) infinite; }
+  @keyframes pfLink {
+    0%,100% { border-color:rgba(43,217,150,.4);  background:rgba(0,163,107,.18); }
+    50%     { border-color:rgba(43,217,150,.85); background:rgba(0,163,107,.3); }
+  }
+}
+/* two 4-row columns get tight before the card goes single-column — shed the
+   thumbnail first, the rank + name still carry the comparison */
+@media (max-width:900px){
+  .pfeeds { gap:9px; }
+  .pf-row { padding:6px 7px; gap:6px; }
+  .pf-row .gthumb { display:none; }
+  .pf-n { font-size:11px; }
+}

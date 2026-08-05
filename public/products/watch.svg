@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 420" fill="none">
+  <defs>
+    <linearGradient id="wa-f" x1="164" y1="164" x2="256" y2="256" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#31475C"/><stop offset="1" stop-color="#1B2836"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="210" cy="356" rx="76" ry="14" fill="#191a12" opacity=".10"/>
+  <!-- strap -->
+  <rect x="180" y="86" width="60" height="112" rx="14" fill="#A87B4E"/>
+  <rect x="180" y="222" width="60" height="112" rx="14" fill="#A87B4E"/>
+  <path d="M188 104h44M188 128h44M188 292h44M188 316h44" stroke="#191a12" stroke-opacity=".16" stroke-width="4" stroke-linecap="round"/>
+  <!-- case -->
+  <circle cx="210" cy="210" r="66" fill="#CBD2D8"/>
+  <circle cx="210" cy="210" r="56" fill="url(#wa-f)"/>
+  <!-- hands -->
+  <path d="M210 210v-32M210 210l24 14" stroke="#F6EFE2" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="210" cy="210" r="6" fill="#0e9d63"/>
+  <!-- crown -->
+  <rect x="274" y="200" width="14" height="20" rx="5" fill="#CBD2D8"/>
+</svg>

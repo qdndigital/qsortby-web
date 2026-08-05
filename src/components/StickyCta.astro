@@ -1,7 +1,10 @@
 ---
-import { DEMO_URL } from '../consts';
+// Mobile-only sticky bar. Mirrors the header: install is primary (self-serve,
+// $0 entry tier), demo is the secondary path — see Header.astro.
+import { APP_STORE_URL } from '../consts';
+import { REVERSE_TRIAL_DAYS } from '../plans';
 ---
 <div class="stickycta">
-  <span class="lbl">See it on your store</span>
-  <a href={DEMO_URL} class="btn btn-accent">Book a demo</a>
+  <span class="lbl">{REVERSE_TRIAL_DAYS} days full access</span>
+  <a href={APP_STORE_URL} class="btn btn-accent">Install free</a>
 </div>

@@ -1,0 +1,258 @@
+---
+// Interactive "live sort" showcase — the storefront re-ranks itself as you pick
+// a signal (or a shopper). Replaces the old static feature-bento grid: one living
+// object that demonstrates auto-sort + real-time + inventory-aware + personalization.
+// Rows/chips are built client-side; styles are is:global (namespaced under
+// .sortconsole) so dynamically-created nodes are still styled. Numbers are
+// illustrative. Signals mirror the ones selectable in the app.
+---
+<div class="sortconsole">
+  <div class="sc-grid">
+    <div class="sc-copy rv">
+      <p class="sc-eyebrow"><span class="dot"></span> The engine, live</p>
+      <h2 class="sc-title">Choose what <em>"best"</em> means. The storefront rearranges itself.</h2>
+      <p class="sc-lead">Same catalog, every angle. Pick a signal — or a shopper — and watch QSortby re-rank the collection in real time.</p>
+
+      <div class="sc-seg" id="sc-seg" role="group" aria-label="Audience">
+        <button data-mode="all" aria-pressed="true"><span class="av">◍</span> Store-wide</button>
+        <button data-mode="vip" aria-pressed="false"><span class="av">★</span> Returning VIP</button>
+      </div>
+
+      <span class="sc-clabel">Sort by</span>
+      <div class="sc-chips" id="sc-chips" role="tablist" aria-label="Ranking signal"></div>
+
+      <p class="sc-now"><span class="nd"></span><span id="sc-nowtxt">Ranked by best sellers</span></p>
+    </div>
+
+    <div class="sc-stagewrap rv">
+      <div class="sc-stage">
+        <div class="sc-stop">
+          <span class="sc-shop"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 010 18M12 3a15 15 0 000 18"/></svg> your-store.com · <b>Bestsellers</b></span>
+          <span class="sc-livetag"><i></i> live</span>
+        </div>
+        <div class="sc-sub" id="sc-sub">Ranked by <b>Best sellers</b> · rolling 24h</div>
+        <div class="sc-list" id="sc-list"></div>
+        <div class="sc-foot">
+          <div class="sc-kpi"><span class="k">Conversion rate</span><span class="v">2.6<em>▲ +0.7</em></span></div>
+          <svg class="sc-spark" viewBox="0 0 150 34" preserveAspectRatio="none">
+            <path class="base" d="M2 27 L32 26 L62 27 L92 25 L122 26 L148 25"/>
+            <path class="rise" d="M2 29 L32 27 L62 25 L92 18 L122 11 L148 5"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sc-proof rv">
+    <span class="sc-pk">Proof</span>
+    <span class="sc-pt"><b>Every sort is A/B-tested.</b> QSortby splits traffic and reports the revenue each order actually drove — not clicks.</span>
+    <div class="sc-abmini" aria-hidden="true"><i class="a"></i><i class="b"></i></div>
+    <span class="sc-win">B wins · +37% revenue</span>
+  </div>
+</div>
+
+<style is:global>
+  .sortconsole .sc-grid { display:grid; gap:40px; align-items:center; }
+  @media (min-width:940px){ .sortconsole .sc-grid { grid-template-columns:0.92fr 1.08fr; gap:52px; } }
+
+  .sortconsole .sc-eyebrow { font-family:var(--mono); font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--green-ink); display:inline-flex; align-items:center; gap:9px; margin:0; }
+  .sortconsole .sc-eyebrow .dot { width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 0 4px var(--green-soft); }
+  .sortconsole .sc-title { font-family:"Playfair Display",Georgia,serif; font-weight:600; letter-spacing:-.015em; font-size:clamp(28px,4.4vw,44px); line-height:1.05; text-wrap:balance; margin:16px 0 14px; color:var(--ink); }
+  .sortconsole .sc-title em { font-style:italic; color:var(--green-ink); }
+  .sortconsole .sc-lead { color:var(--ink-2); font-size:16.5px; max-width:48ch; margin:0 0 24px; line-height:1.6; }
+
+  .sortconsole .sc-seg { display:inline-flex; background:var(--surface); border:1px solid var(--line); border-radius:999px; padding:4px; margin-bottom:16px; }
+  .sortconsole .sc-seg button { font-family:var(--mono); font-size:12px; font-weight:600; letter-spacing:.02em; color:var(--ink-2); background:none; border:0; border-radius:999px; padding:8px 15px; cursor:pointer; transition:all .25s var(--ease,ease); display:flex; align-items:center; gap:7px; }
+  .sortconsole .sc-seg button[aria-pressed="true"] { background:var(--ink); color:var(--bg); }
+  .sortconsole .sc-seg .av { width:16px; height:16px; border-radius:50%; background:var(--line); display:inline-grid; place-items:center; font-size:9px; color:var(--muted); }
+  .sortconsole .sc-seg button[aria-pressed="true"] .av { background:var(--green); color:#fff; }
+
+  .sortconsole .sc-clabel { display:block; font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:2px 0 10px; }
+  .sortconsole .sc-chips { display:flex; flex-wrap:wrap; gap:8px; }
+  .sortconsole .sc-chip { font-family:var(--mono); font-size:12.5px; font-weight:600; color:var(--ink-2); background:var(--surface); border:1px solid var(--line); border-radius:999px; padding:8px 15px; cursor:pointer; transition:all .2s var(--ease,ease); white-space:nowrap; }
+  .sortconsole .sc-chip:hover { border-color:var(--green-line); color:var(--green-ink); }
+  .sortconsole .sc-chip[aria-selected="true"] { background:var(--green-soft); border-color:var(--green); color:var(--green-ink); }
+  .sortconsole .sc-chip:focus-visible { outline:2px solid var(--green); outline-offset:2px; }
+  .sortconsole .sc-chips.dim .sc-chip[aria-selected="true"] { background:var(--surface); border-color:var(--line); color:var(--ink-2); }
+
+  .sortconsole .sc-now { margin-top:22px; font-family:var(--mono); font-size:12.5px; color:var(--ink-2); display:flex; align-items:center; gap:9px; min-height:20px; }
+  .sortconsole .sc-now .nd { width:7px; height:7px; border-radius:50%; background:var(--green); flex:none; animation:scPulse 1.8s infinite; }
+  .sortconsole .sc-now b { color:var(--green-ink); }
+  @keyframes scPulse { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+  .sortconsole .sc-stage { background:linear-gradient(168deg,#1A1D24,#101217); border:1px solid rgba(255,255,255,.09); border-radius:22px; padding:20px; box-shadow:0 50px 100px -55px rgba(20,18,16,.75); position:relative; overflow:hidden; }
+  .sortconsole .sc-stage::before { content:""; position:absolute; inset:0; background:radial-gradient(85% 55% at 85% -8%,rgba(43,217,150,.16),transparent 62%); pointer-events:none; }
+  .sortconsole .sc-stop { display:flex; align-items:center; justify-content:space-between; position:relative; margin-bottom:4px; }
+  .sortconsole .sc-shop { font-family:var(--mono); font-size:12px; color:rgba(255,255,255,.6); display:flex; align-items:center; gap:8px; }
+  .sortconsole .sc-shop b { color:#fff; font-weight:600; }
+  .sortconsole .sc-livetag { font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--green-bright); display:inline-flex; align-items:center; gap:6px; }
+  .sortconsole .sc-livetag i { width:7px; height:7px; border-radius:50%; background:var(--green-bright); animation:scPulse 1.8s infinite; }
+  .sortconsole .sc-sub { font-family:var(--mono); font-size:11px; color:rgba(255,255,255,.5); margin:2px 0 14px; position:relative; }
+  .sortconsole .sc-sub b { color:var(--green-bright); }
+
+  .sortconsole .sc-list { position:relative; display:flex; flex-direction:column; gap:8px; }
+  .sortconsole .sc-row { position:relative; display:grid; grid-template-columns:24px 44px 1fr auto; align-items:center; gap:13px; background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.07); border-radius:13px; padding:11px 14px; will-change:transform; }
+  .sortconsole .sc-row:first-child { background:linear-gradient(100deg,rgba(43,217,150,.14),rgba(255,255,255,.03)); border-color:rgba(43,217,150,.38); }
+  .sortconsole .sc-row.hot { box-shadow:0 0 0 1px rgba(43,217,150,.4),0 12px 34px -14px rgba(43,217,150,.55); }
+  .sortconsole .sc-row.out { opacity:.45; }
+  .sortconsole .sc-rank { font-family:var(--mono); font-size:15px; font-weight:700; color:rgba(255,255,255,.4); text-align:center; font-variant-numeric:tabular-nums; }
+  .sortconsole .sc-row:first-child .sc-rank { color:var(--green-bright); }
+  .sortconsole .sc-thumb { width:44px; height:44px; border-radius:10px; background:rgba(255,255,255,.06); display:grid; place-items:center; }
+  .sortconsole .sc-thumb svg { width:25px; height:25px; stroke:rgba(255,255,255,.85); stroke-width:1.6; fill:none; }
+  .sortconsole .sc-nm { color:#fff; font-weight:600; font-size:14.5px; letter-spacing:-.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .sortconsole .sc-track { height:6px; border-radius:3px; background:rgba(255,255,255,.09); margin-top:7px; overflow:hidden; }
+  .sortconsole .sc-fill { display:block; height:100%; border-radius:3px; background:linear-gradient(90deg,var(--green),var(--green-bright)); width:0; transition:width .55s cubic-bezier(.22,.61,.36,1); }
+  .sortconsole .sc-val { font-family:var(--mono); font-size:13.5px; font-weight:700; color:#fff; text-align:right; min-width:70px; font-variant-numeric:tabular-nums; }
+  .sortconsole .sc-val small { display:block; font-weight:500; font-size:9.5px; letter-spacing:.05em; text-transform:uppercase; color:rgba(255,255,255,.4); }
+  .sortconsole .sc-pip { position:absolute; left:50px; top:-7px; font-family:var(--mono); font-size:10px; font-weight:700; color:#052; background:var(--green-bright); padding:2px 8px; border-radius:999px; opacity:0; transform:translateY(4px); transition:all .3s; z-index:3; }
+  .sortconsole .sc-row.hot .sc-pip { opacity:1; transform:translateY(0); }
+  .sortconsole .sc-outtag { font-family:var(--mono); font-size:9.5px; font-weight:700; color:#F0A487; background:rgba(210,96,63,.16); padding:3px 8px; border-radius:999px; }
+
+  .sortconsole .sc-foot { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:15px; padding-top:14px; border-top:1px solid rgba(255,255,255,.08); position:relative; }
+  .sortconsole .sc-kpi .k { font-family:var(--mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.42); display:block; }
+  .sortconsole .sc-kpi .v { font-size:20px; font-weight:700; color:#fff; font-variant-numeric:tabular-nums; }
+  .sortconsole .sc-kpi .v em { font-style:normal; color:var(--green-bright); font-size:13px; margin-left:5px; }
+  .sortconsole .sc-spark { width:150px; height:34px; }
+  .sortconsole .sc-spark path { fill:none; stroke-width:2.4; stroke-linecap:round; }
+  .sortconsole .sc-spark .base { stroke:rgba(255,255,255,.16); }
+  .sortconsole .sc-spark .rise { stroke:var(--green-bright); stroke-dasharray:230; stroke-dashoffset:230; animation:scDraw 1.5s ease forwards; }
+  @keyframes scDraw { to{stroke-dashoffset:0} }
+
+  .sortconsole .sc-proof { margin-top:28px; display:flex; flex-wrap:wrap; align-items:center; gap:14px 22px; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:16px 20px; }
+  .sortconsole .sc-pk { font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--green-ink); }
+  .sortconsole .sc-pt { font-size:14.5px; color:var(--ink-2); flex:1; min-width:220px; line-height:1.5; }
+  .sortconsole .sc-pt b { color:var(--ink); }
+  .sortconsole .sc-abmini { display:flex; align-items:flex-end; gap:6px; height:40px; }
+  .sortconsole .sc-abmini i { width:16px; border-radius:4px 4px 0 0; background:var(--line); }
+  .sortconsole .sc-abmini i.a { height:22px; }
+  .sortconsole .sc-abmini i.b { height:40px; background:linear-gradient(180deg,var(--green-bright),var(--green)); }
+  .sortconsole .sc-win { font-family:var(--mono); font-size:12px; font-weight:700; color:var(--green-ink); }
+
+  @media (prefers-reduced-motion:reduce){ .sortconsole *{ animation:none!important; transition:none!important; } }
+</style>
+
+<script>
+  const ICON = {
+    tee:'<path d="M6 4l3-1a3 3 0 006 0l3 1 3 4-3 2v9H6v-9L3 8z"/>',
+    sneaker:'<path d="M2 16h13l5-2c2-1 2 3 2 3H2zM2 16v-3l4-1 2-4 3 3 4 1"/>',
+    headphones:'<path d="M4 13v-1a8 8 0 0116 0v1M4 13h3v6H5a1 1 0 01-1-1zM20 13h-3v6h2a1 1 0 001-1z"/>',
+    watch:'<circle cx="12" cy="12" r="6"/><path d="M12 9v3l2 2M9 4l1-2h4l1 2M9 20l1 2h4l1-2"/>',
+    tote:'<path d="M5 8h14l-1 12H6zM9 8V6a3 3 0 016 0v2"/>',
+    bottle:'<path d="M10 2h4v3l1 3v13H9V8l1-3z"/>',
+  };
+  const P = [
+    {id:'tee', name:'Everyday Tee',      icon:'tee',        units:142,rev:2100,margin:28,cvr:2.4,trend:4, days:120,stock:40,vip:40},
+    {id:'run', name:'Trail Runner',      icon:'sneaker',    units:118,rev:4100,margin:42,cvr:2.0,trend:31,days:40, stock:12,vip:58},
+    {id:'hp',  name:'Studio Headphones', icon:'headphones', units:97, rev:6200,margin:61,cvr:3.2,trend:12,days:20, stock:8, vip:90},
+    {id:'watch',name:'Field Watch',      icon:'watch',      units:46, rev:8400,margin:68,cvr:2.9,trend:-6,days:9,  stock:5, vip:100},
+    {id:'tote',name:'Canvas Tote',       icon:'tote',       units:88, rev:2600,margin:54,cvr:1.6,trend:48,days:3,  stock:22,vip:64},
+    {id:'btl', name:'Steel Bottle',      icon:'bottle',     units:60, rev:1900,margin:50,cvr:1.2,trend:8, days:60, stock:0, vip:30},
+  ];
+  const SIG = [
+    {key:'best',   label:'Best sellers',get:(p)=>p.units, fmt:(p)=>[p.units,'sold'], win:'rolling 24h'},
+    {key:'revenue',label:'Revenue',     get:(p)=>p.rev,   fmt:(p)=>['$'+(p.rev/1000).toFixed(1)+'k','GMV'], win:'last 30 days'},
+    {key:'margin', label:'Margin',      get:(p)=>p.margin,fmt:(p)=>[p.margin+'%','margin'], win:'per product'},
+    {key:'conv',   label:'Conversion',  get:(p)=>p.cvr,   fmt:(p)=>[p.cvr.toFixed(1)+'%','CVR'], win:'last 7 days'},
+    {key:'trend',  label:'Trending',    get:(p)=>p.trend, fmt:(p)=>[(p.trend>=0?'▲':'▼')+Math.abs(p.trend)+'%','vs prev'], win:'week / week'},
+    {key:'newest', label:'Newest',      get:(p)=>-p.days, fmt:(p)=>[p.days+'d','ago'], win:'by launch'},
+  ];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let sig = SIG[0], mode = 'all', rowEl = {}, prev = [];
+
+  const chips = document.getElementById('sc-chips');
+  SIG.forEach((s, i) => {
+    const b = document.createElement('button');
+    b.className = 'sc-chip'; b.textContent = s.label; b.setAttribute('role','tab');
+    b.setAttribute('aria-selected', String(i === 0));
+    b.onclick = () => { mode = 'all'; syncSeg(); select(s); pause(); };
+    s.el = b; chips.appendChild(b);
+  });
+
+  document.querySelectorAll('#sc-seg button').forEach((b) => {
+    b.onclick = () => { mode = b.dataset.mode; syncSeg(); render(true); narrate(); pause(); };
+  });
+  function syncSeg(){
+    document.querySelectorAll('#sc-seg button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === mode)));
+    chips.classList.toggle('dim', mode === 'vip');
+  }
+
+  const list = document.getElementById('sc-list');
+  P.forEach((p) => {
+    const el = document.createElement('div');
+    el.className = 'sc-row'; el.dataset.id = p.id;
+    el.innerHTML = '<span class="sc-rank"></span><span class="sc-thumb"><svg viewBox="0 0 24 24">'+ICON[p.icon]+'</svg></span><span class="sc-main" style="min-width:0"><span class="sc-nm">'+p.name+'</span><span class="sc-track"><i class="sc-fill"></i></span></span><span class="sc-val"></span><span class="sc-pip">+1 order</span>';
+    rowEl[p.id] = el; list.appendChild(el);
+  });
+
+  const keyOf = (p) => (mode === 'vip' ? p.vip : sig.get(p));
+  const ordered = () => [...P].sort((a,b) => {
+    if ((a.stock===0) !== (b.stock===0)) return a.stock===0 ? 1 : -1;
+    return keyOf(b) - keyOf(a);
+  });
+  const maxVal = () => Math.max(...P.filter((p) => p.stock>0).map((p) => Math.abs(keyOf(p))));
+
+  function render(animate){
+    const order = ordered(), first = {};
+    if (animate && !reduce) Object.values(rowEl).forEach((el) => first[el.dataset.id] = el.getBoundingClientRect().top);
+    order.forEach((p) => list.appendChild(rowEl[p.id]));
+    const mx = maxVal();
+    order.forEach((p) => {
+      const el = rowEl[p.id];
+      el.querySelector('.sc-rank').textContent = order.indexOf(p) + 1;
+      if (p.stock === 0) {
+        el.querySelector('.sc-val').innerHTML = '<span class="sc-outtag">Sold out</span>';
+      } else {
+        const pair = mode === 'vip' ? [Math.round(p.vip), 'match'] : sig.fmt(p);
+        el.querySelector('.sc-val').innerHTML = pair[0] + '<small>' + pair[1] + '</small>';
+      }
+      const w = p.stock === 0 ? 0 : Math.max(7, Math.round(Math.abs(keyOf(p)) / mx * 100));
+      el.querySelector('.sc-fill').style.width = w + '%';
+      el.classList.toggle('out', p.stock === 0);
+    });
+    if (animate && !reduce) order.forEach((p) => {
+      const el = rowEl[p.id];
+      const dy = first[p.id] - el.getBoundingClientRect().top;
+      if (dy) {
+        el.style.transition = 'none'; el.style.transform = 'translateY(' + dy + 'px)';
+        requestAnimationFrame(() => { el.style.transition = 'transform .55s cubic-bezier(.22,.61,.36,1)'; el.style.transform = ''; });
+      }
+    });
+    prev = order.map((p) => p.id);
+  }
+  function select(s){
+    sig = s;
+    SIG.forEach((x) => x.el.setAttribute('aria-selected', String(x === s)));
+    document.getElementById('sc-sub').innerHTML = 'Ranked by <b>' + s.label + '</b> · ' + s.win;
+    render(true); narrate();
+  }
+  function narrate(){
+    const lead = ordered()[0];
+    document.getElementById('sc-nowtxt').innerHTML = mode === 'vip'
+      ? 'Personalized feed — <b>' + lead.name + '</b> leads for a returning VIP'
+      : 'Sorted by ' + sig.label + ' — <b>' + lead.name + '</b> is #1';
+  }
+
+  function liveOrder(){
+    const pool = P.filter((p) => p.stock>0);
+    const p = pool[prev.length % pool.length];
+    p.units += 6 + (p.units % 7); p.rev += Math.round(p.rev * .03); p.trend += 4; p.cvr = Math.min(9, p.cvr + .1);
+    const el = rowEl[p.id]; el.classList.add('hot'); render(true);
+    document.getElementById('sc-nowtxt').innerHTML = '<b>+1 order</b> · ' + p.name + ' → #' + (ordered().indexOf(p) + 1);
+    setTimeout(() => { el.classList.remove('hot'); narrate(); }, 1700);
+  }
+
+  let paused = false, idx = 0, ptimer;
+  function pause(){ paused = true; clearTimeout(ptimer); ptimer = setTimeout(() => { paused = false; }, 15000); }
+  function play(){
+    if (reduce) return;
+    setInterval(() => {
+      if (paused) return;
+      if (idx % 5 === 4) { mode = mode === 'all' ? 'vip' : 'all'; syncSeg(); render(true); narrate(); }
+      else { mode = 'all'; syncSeg(); select(SIG[idx % SIG.length]); }
+      idx++;
+    }, 3600);
+    setInterval(() => { if (!paused && mode === 'all') liveOrder(); }, 6000);
+  }
+
+  render(false); narrate(); play();
+</script>

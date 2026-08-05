@@ -4,94 +4,94 @@ import { APP_STORE_URL, DEMO_URL } from '../consts';
 
 const title = 'Solutions — QSortby for Shopify';
 const description =
-  'Every fragrance catalog moves differently. QSortby merchandises each one by the signal that matters most — trending velocity for new launches, shopper intent for signature scents, conversion for candles, live inventory for home fragrance, auto-curation for gift sets.';
+  'Every catalog moves on a different signal. QSortby merchandises each one by the signal that matters — trending velocity for fast launches, shopper intent for discovery catalogs, conversion for lookalike ranges, live inventory for limited stock, auto-curation at scale.';
 const check = '<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>';
 ---
 <Base title={title} description={description}>
   <section class="phero">
     <div class="wrap">
       <div class="crumb"><a href="/">~</a> / solutions</div>
-      <h1>Merchandised by what matters to <em>your</em> scents.</h1>
-      <p>New launches live on momentum. Signature scents live on discovery. Candles on proof. Home fragrance on availability. Gift sets on scale. QSortby sorts each catalog by the one signal that moves it — automatically.</p>
+      <h1>Merchandised by what actually moves <em>your</em> catalog.</h1>
+      <p>Fast launches live on momentum. Discovery catalogs live on intent. Lookalike ranges live on proof. Limited stock lives on availability. Big catalogs live on scale. QSortby sorts each one by the signal that moves it — automatically.</p>
     </div>
   </section>
 
   <section class="sec">
     <div class="wrap ucs">
 
-      <!-- ===== PERFUME — trending velocity + sold-out sizes ===== -->
+      <!-- ===== FAST LAUNCHES — trending velocity + sold-out variants ===== -->
       <article class="uc rv">
         <div class="uc-copy">
-          <span class="tag">Perfume &amp; eau de parfum</span>
-          <h3>Catch the scent trending this launch — not last season.</h3>
-          <p>Fragrance lives and dies on momentum. QSortby ranks by <b>trending velocity</b>, so the scent catching fire rises to the front the moment it moves — and the size that just sold out steps aside before it kills a click.</p>
+          <span class="tag">Fast-moving launches</span>
+          <h3>Lead with what's trending this week — not last season.</h3>
+          <p>Drops and new arrivals live and die on momentum. QSortby ranks by <b>trending velocity</b>, so the product catching fire rises to the front the moment it moves — and the variant that just sold out steps aside before it kills a click.</p>
           <ul>
-            <li><span set:html={check} /> Trending velocity, not all-time sales</li>
-            <li><span set:html={check} /> Sold-out sizes demoted instantly</li>
+            <li><span set:html={check} /> Trending velocity over a window you set</li>
+            <li><span set:html={check} /> Sold-out variants demoted instantly</li>
             <li><span set:html={check} /> A fresh front row every launch</li>
           </ul>
         </div>
         <div class="uc-panel">
           <span class="uc-cap" data-c="trend">Trending this launch</span>
           <div class="uc-stage uc-trend">
-            <div class="gcard tr-row tr-a"><span class="gthumb"><img src="/products/perfume-noir.svg" alt="" /></span><span class="tr-nm">Noir Eau de Parfum</span><span class="tr-tag sold">Sold out · 100ml</span></div>
-            <div class="gcard tr-row tr-b"><span class="gthumb"><img src="/products/perfume-rose.svg" alt="" /></span><span class="tr-nm">Rose Velvet</span><span class="tr-tag up">▲ Trending</span></div>
-            <div class="gcard tr-row tr-c"><span class="gthumb"><img src="/products/oud-attar.svg" alt="" /></span><span class="tr-nm">Amber Oud</span></div>
+            <div class="gcard tr-row tr-a"><span class="gthumb"><img src="/products/sneaker.svg" alt="" /></span><span class="tr-nm">Trail Runner</span><span class="tr-tag sold">Sold out · size M</span></div>
+            <div class="gcard tr-row tr-b"><span class="gthumb"><img src="/products/cap.svg" alt="" /></span><span class="tr-nm">Canvas Cap</span><span class="tr-tag up">▲ Trending</span></div>
+            <div class="gcard tr-row tr-c"><span class="gthumb"><img src="/products/headphones.svg" alt="" /></span><span class="tr-nm">Studio Headphones</span></div>
           </div>
         </div>
       </article>
 
-      <!-- ===== SIGNATURE SCENTS — Emotional AI / intent ===== -->
+      <!-- ===== DISCOVERY CATALOGS — Emotional AI / intent ===== -->
       <article class="uc rev rv">
         <div class="uc-copy">
-          <span class="tag">Signature &amp; niche scents <span class="soon">Beta</span></span>
+          <span class="tag">Discovery-driven catalogs</span>
           <h3>Turn browsing into discovery.</h3>
-          <p>Scent is bought on feeling, and most shoppers don't know the name of what they want. QSortby reads <b>on-site intent</b> — what they linger on, revisit, compare — and surfaces the scent they're most likely to fall for.</p>
+          <p>In some categories shoppers buy on feel and can't name what they want. QSortby reads <b>on-site intent</b> — what they linger on, revisit, compare — and surfaces the product they're most likely to fall for.</p>
           <ul>
             <li><span set:html={check} /> Reads passive intent signals</li>
-            <li><span set:html={check} /> Surfaces the right scent per shopper</li>
-            <li><span set:html={check} /> Per-family bestsellers stay fresh</li>
+            <li><span set:html={check} /> Surfaces a different order per shopper</li>
+            <li><span set:html={check} /> Per-category bestsellers stay fresh</li>
           </ul>
         </div>
         <div class="uc-panel">
           <span class="uc-cap" data-c="intent">Reading intent</span>
           <div class="uc-stage uc-int">
-            <div class="bi-sigs"><span class="bi-sig s1">gifting</span><span class="bi-sig s2">evening</span><span class="bi-sig s3">warm</span></div>
+            <div class="bi-sigs"><span class="bi-sig s1">gifting</span><span class="bi-sig s2">comparing</span><span class="bi-sig s3">returning</span></div>
             <div class="bi-meter"><i></i></div>
             <span class="bi-lbl">Match found</span>
-            <div class="gcard bi-rec"><span class="gthumb"><img src="/products/oud-attar.svg" alt="" /></span><span class="tr-nm">Midnight Oud</span><span class="bi-tag">Surface</span></div>
+            <div class="gcard bi-rec"><span class="gthumb"><img src="/products/headphones.svg" alt="" /></span><span class="tr-nm">Studio Headphones</span><span class="bi-tag">Surface</span></div>
           </div>
         </div>
       </article>
 
-      <!-- ===== CANDLES — velocity / conversion ===== -->
+      <!-- ===== LOOKALIKE RANGES — velocity / conversion ===== -->
       <article class="uc rv">
         <div class="uc-copy">
-          <span class="tag">Candles</span>
+          <span class="tag">Wide, lookalike ranges</span>
           <h3>Lead with proven sellers, not a flat grid.</h3>
-          <p>Candle catalogs are wide, similar and scent-driven. QSortby sorts by <b>sales velocity and conversion</b> — so the scents that actually close move to the front, and the lookalikes that don't quietly sink.</p>
+          <p>When forty products look near-identical on a grid, position decides the sale. QSortby sorts by <b>sales velocity and conversion rate</b> — so the variants that actually close move to the front, and the lookalikes that don't quietly sink.</p>
           <ul>
             <li><span set:html={check} /> Sort by sales velocity or conversion</li>
-            <li><span set:html={check} /> Proven scents &amp; gift sets up front</li>
+            <li><span set:html={check} /> Proven sellers &amp; bundles up front</li>
             <li><span set:html={check} /> Insights on what truly converts</li>
           </ul>
         </div>
         <div class="uc-panel">
           <span class="uc-cap" data-c="rev">Sort · Bestselling</span>
           <div class="uc-stage uc-rev">
-            <div class="rv-row rv-a gcard"><span class="gthumb"><img src="/products/candle-tin.svg" alt="" /></span><span class="tr-nm">Travel Tin</span><span class="rv-bar"><i style="--w:38%"></i></span><span class="rv-amt">$2.1k</span></div>
-            <div class="rv-row rv-b gcard win"><span class="gthumb"><img src="/products/candle-amber.svg" alt="" /></span><span class="tr-nm">Amber Noir</span><span class="rv-bar"><i style="--w:100%"></i></span><span class="rv-amt">$8.4k</span><span class="rv-cvr">3.2× CVR</span></div>
-            <div class="rv-row rv-c gcard"><span class="gthumb"><img src="/products/pillar-candle.svg" alt="" /></span><span class="tr-nm">3-Wick Pillar</span><span class="rv-bar"><i style="--w:62%"></i></span><span class="rv-amt">$4.7k</span></div>
+            <div class="rv-row rv-a gcard"><span class="gthumb"><img src="/products/mug.svg" alt="" /></span><span class="tr-nm">Ceramic Mug</span><span class="rv-bar"><i style="--w:38%"></i></span><span class="rv-amt">$2.1k</span></div>
+            <div class="rv-row rv-b gcard win"><span class="gthumb"><img src="/products/tee.svg" alt="" /></span><span class="tr-nm">Everyday Tee</span><span class="rv-bar"><i style="--w:100%"></i></span><span class="rv-amt">$8.4k</span><span class="rv-cvr">3.2× CVR</span></div>
+            <div class="rv-row rv-c gcard"><span class="gthumb"><img src="/products/tote.svg" alt="" /></span><span class="tr-nm">Canvas Tote</span><span class="rv-bar"><i style="--w:62%"></i></span><span class="rv-amt">$4.7k</span></div>
           </div>
         </div>
       </article>
 
-      <!-- ===== HOME FRAGRANCE — inventory-aware ===== -->
+      <!-- ===== LIMITED / SEASONAL STOCK — inventory-aware ===== -->
       <article class="uc rev rv">
         <div class="uc-copy">
-          <span class="tag">Home fragrance &amp; diffusers</span>
+          <span class="tag">Limited &amp; seasonal stock</span>
           <h3>Only feature what's actually buyable.</h3>
-          <p>Seasonal blends and small-batch runs mean availability matters as much as popularity. QSortby pairs sales velocity with <b>live inventory</b>: when stock runs low it demotes before it sells out, and promotes the moment you restock.</p>
+          <p>Seasonal ranges and small-batch runs mean availability matters as much as popularity. QSortby pairs sales velocity with <b>live inventory</b>: when stock runs low it demotes before it sells out, and promotes the moment you restock.</p>
           <ul>
             <li><span set:html={check} /> Inventory-aware ranking</li>
             <li><span set:html={check} /> Low stock demotes before it's gone</li>
@@ -101,18 +101,18 @@ const check = '<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>';
         <div class="uc-panel">
           <span class="uc-cap" data-c="stock">Live inventory</span>
           <div class="uc-stage uc-stock">
-            <div class="st-row st-a gcard"><span class="gthumb"><img src="/products/diffuser-reed.svg" alt="" /></span><span class="tr-nm">Reed Diffuser</span><span class="st-bar"><i class="ok"></i></span><span class="st-pill ok">In stock</span></div>
-            <div class="st-row st-b gcard"><span class="gthumb"><img src="/products/room-mist.svg" alt="" /></span><span class="tr-nm">Linen Room Mist</span><span class="st-bar"><i class="low"></i></span><span class="st-pill no">Low → out</span></div>
+            <div class="st-row st-a gcard"><span class="gthumb"><img src="/products/bottle.svg" alt="" /></span><span class="tr-nm">Steel Water Bottle</span><span class="st-bar"><i class="ok"></i></span><span class="st-pill ok">In stock</span></div>
+            <div class="st-row st-b gcard"><span class="gthumb"><img src="/products/jar.svg" alt="" /></span><span class="tr-nm">Daily Moisturizer</span><span class="st-bar"><i class="low"></i></span><span class="st-pill no">Low → out</span></div>
           </div>
         </div>
       </article>
 
-      <!-- ===== GIFT SETS — auto-curation at scale ===== -->
+      <!-- ===== LARGE CATALOGS — auto-curation at scale ===== -->
       <article class="uc rv">
         <div class="uc-copy">
-          <span class="tag">Gift sets &amp; bundles</span>
+          <span class="tag">Large catalogs &amp; bundles</span>
           <h3>Make a huge catalog feel hand-picked.</h3>
-          <p>Big gifting catalogs are impossible to merchandise by hand. QSortby <b>auto-curates at scale</b> — every collection arranges itself by what's actually selling, so hundreds of sets look like someone hand-picked the front row.</p>
+          <p>Thousands of SKUs are impossible to merchandise by hand. QSortby <b>auto-curates at scale</b> — every collection arranges itself by what's actually selling, so hundreds of products look like someone hand-picked the front row.</p>
           <ul>
             <li><span set:html={check} /> Hands-off curation at scale</li>
             <li><span set:html={check} /> Per-collection rules</li>
@@ -122,12 +122,12 @@ const check = '<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>';
         <div class="uc-panel">
           <span class="uc-cap" data-c="curate">Auto-curated</span>
           <div class="uc-stage uc-curate">
-            <span class="cu-tile c1"><img src="/products/wax-melts.svg" alt="" /></span>
-            <span class="cu-tile c2"><img src="/products/candle-tin.svg" alt="" /></span>
-            <span class="cu-tile c3"><img src="/products/soap-bar.svg" alt="" /></span>
-            <span class="cu-tile c4"><img src="/products/diffuser-reed.svg" alt="" /></span>
-            <span class="cu-tile c5"><img src="/products/pillar-candle.svg" alt="" /></span>
-            <span class="cu-tile c6"><img src="/products/candle-amber.svg" alt="" /></span>
+            <span class="cu-tile c1"><img src="/products/box.svg" alt="" /></span>
+            <span class="cu-tile c2"><img src="/products/mug.svg" alt="" /></span>
+            <span class="cu-tile c3"><img src="/products/watch.svg" alt="" /></span>
+            <span class="cu-tile c4"><img src="/products/bottle.svg" alt="" /></span>
+            <span class="cu-tile c5"><img src="/products/tote.svg" alt="" /></span>
+            <span class="cu-tile c6"><img src="/products/tee.svg" alt="" /></span>
           </div>
         </div>
       </article>
@@ -140,10 +140,10 @@ const check = '<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>';
       <div class="cta rv">
         <span class="eyebrow"><span class="dot"></span> Get started</span>
         <h2>Sorted for <em>your</em> catalog.</h2>
-        <p>Book a 15-minute demo and see QSortby merchandise your real collections — by the signal that matters most to you.</p>
+        <p>Install free and point QSortby at one collection — by the signal that matters most to you.</p>
         <div class="hero-cta" style="justify-content:center">
-          <a href={DEMO_URL} class="btn btn-accent btn-lg">Book a demo <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          <a href={APP_STORE_URL} class="btn btn-ghost btn-lg">Add to Shopify</a>
+          <a href={APP_STORE_URL} class="btn btn-accent btn-lg">Install free <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a href={DEMO_URL} class="btn btn-ghost btn-lg">Book a demo</a>
         </div>
       </div>
     </div>

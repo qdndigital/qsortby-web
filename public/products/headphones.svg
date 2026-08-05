@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 420" fill="none">
+  <defs>
+    <linearGradient id="hp-c" x1="112" y1="196" x2="308" y2="316" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4A4E58"/><stop offset="1" stop-color="#23262C"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="210" cy="356" rx="98" ry="16" fill="#191a12" opacity=".10"/>
+  <!-- headband -->
+  <path d="M124 258v-52a86 86 0 0 1 172 0v52" stroke="url(#hp-c)" stroke-width="26" stroke-linecap="round"/>
+  <path d="M136 240v-34a74 74 0 0 1 148 0v34" stroke="#fff" stroke-opacity=".14" stroke-width="6" stroke-linecap="round"/>
+  <!-- ear cups -->
+  <rect x="96" y="240" width="66" height="94" rx="26" fill="url(#hp-c)"/>
+  <rect x="258" y="240" width="66" height="94" rx="26" fill="url(#hp-c)"/>
+  <rect x="110" y="256" width="38" height="62" rx="18" fill="#F6EFE2" opacity=".9"/>
+  <rect x="272" y="256" width="38" height="62" rx="18" fill="#F6EFE2" opacity=".9"/>
+  <!-- brand dot -->
+  <circle cx="129" cy="287" r="8" fill="#0e9d63"/>
+  <circle cx="291" cy="287" r="8" fill="#0e9d63"/>
+</svg>

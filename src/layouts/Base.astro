@@ -29,9 +29,13 @@ const jsonld = {
       operatingSystem: 'Shopify',
       description:
         'Smart collection sorting for Shopify: auto-sort by sales, revenue, trending, inventory and more; manual drag-and-drop ordering with preview; per-segment rules; and shopper insights — fully Shopify-native.',
+      // Keep in sync with src/plans.ts — this is what search engines quote as
+      // the app's price, so a stale tier here misprices us in results.
       offers: [
+        { '@type': 'Offer', name: 'Free', price: '0', priceCurrency: 'USD' },
         { '@type': 'Offer', name: 'Starter', price: '29', priceCurrency: 'USD' },
         { '@type': 'Offer', name: 'Pro', price: '99', priceCurrency: 'USD' },
+        { '@type': 'Offer', name: 'Growth', price: '199', priceCurrency: 'USD' },
       ],
       publisher: { '@id': 'https://qsortby.com/#org' },
     },

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 420" fill="none">
+  <defs>
+    <linearGradient id="sn-b" x1="96" y1="180" x2="330" y2="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FBF7F0"/><stop offset="1" stop-color="#DFD5C6"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="210" cy="356" rx="104" ry="16" fill="#191a12" opacity=".10"/>
+  <!-- upper -->
+  <path d="M112 296V214c0-12 10-22 22-22h36l30 34 44 10c34 6 58 22 68 44 6 12-2 22-16 22H124a12 12 0 0 1-12-12z" fill="url(#sn-b)"/>
+  <!-- toe cap -->
+  <path d="M244 240c30 6 50 20 58 36H244z" fill="#191a12" opacity=".07"/>
+  <!-- laces -->
+  <path d="M150 214h34M156 232h34M162 250h32" stroke="#B79B7E" stroke-width="6" stroke-linecap="round"/>
+  <!-- swoosh accent -->
+  <path d="M182 288c26-6 50-18 70-36" stroke="#0e9d63" stroke-width="10" stroke-linecap="round"/>
+  <!-- sole -->
+  <path d="M108 296h206c8 0 12 6 12 14v8a14 14 0 0 1-14 14H112a14 14 0 0 1-14-14v-8c0-8 4-14 10-14z" fill="#3A3327"/>
+  <path d="M104 318h216" stroke="#fff" stroke-opacity=".22" stroke-width="4"/>
+</svg>

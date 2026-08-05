@@ -1,79 +1,106 @@
 ---
 import Base from '../layouts/Base.astro';
 import { APP_STORE_URL, DEMO_URL } from '../consts';
+import { PLANS, MATRIX, REVERSE_TRIAL_DAYS, PAYMENT_TRIAL_DAYS } from '../plans';
 
 const title = 'Pricing — QSortby for Shopify';
-const description = 'Simple pricing with a 7-day free trial, billed through Shopify. Plans and prices shown are placeholders pending launch.';
+const description = `Four plans from $0. Every install gets ${REVERSE_TRIAL_DAYS} days of full access, then drops to the Free plan — the app keeps running, it never locks. Billed through Shopify.`;
 
 const check = '<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>';
-const starter = ['Real-time top-sellers ranking', 'Sold-out auto-demotion', 'Auto-syncing collections + Best Sellers', 'Personalized "For You" feed', 'Manual order, preview & CSV export', 'Klaviyo & Google Analytics', 'Email support'];
-const pro = ['Everything in Starter, unlimited', 'Customer events & analytics', 'AI authoring (taxonomy + logic)', 'Emotional analytics (beta)', 'Priority refresh & throughput', 'Priority support'];
+
+// Turn a matrix cell into the right markup: ✓ / — get the yes/no treatment,
+// everything else is literal text (a count, a window, "Docs"…).
+const cellClass = (v: string) => (v === '✓' ? 'yes' : v === '—' ? 'no' : '');
 ---
 <Base title={title} description={description}>
   <section class="phero">
     <div class="wrap">
       <div class="crumb"><a href="/">~</a> / pricing</div>
-      <h1>Simple pricing. Free for 7 days.</h1>
-      <p>Every plan starts with a 7-day free trial and is billed directly through Shopify, on your normal invoice. <strong style="color:var(--green-ink)">Plans and prices below are placeholders</strong> while we finalize launch pricing.</p>
+      <h1>Start free. Stay free until it pays for itself.</h1>
+      <p>
+        Every install opens with <strong>{REVERSE_TRIAL_DAYS} days of full access</strong> — every feature,
+        no card. After that you drop to the <strong>Free plan and keep running</strong>: real-time ranking,
+        sold-out demotion and revenue attribution never switch off. Upgrade when the numbers in your own
+        dashboard say it's worth it.
+      </p>
     </div>
   </section>
 
-  <section class="sec">
+  <section class="sec" style="padding-top:2rem">
     <div class="wrap">
-      <div class="plans">
-        <div class="plan rv">
-          <span class="ptag">Starter</span>
-          <div class="price"><b>$29</b><span>/ month</span></div>
-          <p class="pdesc">For solo &amp; small stores that want a storefront that sorts and personalizes itself.</p>
-          <ul>
-            {starter.map((f) => <li><span set:html={check} /> {f}</li>)}
-          </ul>
-          <a href={APP_STORE_URL} class="btn btn-line w-full">Start free trial</a>
-        </div>
-
-        <div class="plan feat rv">
-          <span class="badge">Most popular</span>
-          <span class="ptag">Pro</span>
-          <div class="price"><b>$99</b><span>/ month</span></div>
-          <p class="pdesc">For growing brands &amp; teams that need unlimited scale, analytics and AI.</p>
-          <ul>
-            {pro.map((f) => <li><span set:html={check} /> {f}</li>)}
-          </ul>
-          <a href={DEMO_URL} class="btn btn-accent w-full">Book a demo</a>
-        </div>
+      <div class="plans plans-4">
+        {PLANS.map((p) => (
+          <div class={p.feat ? 'plan feat rv' : 'plan rv'}>
+            {p.badge && <span class="badge">{p.badge}</span>}
+            <span class="ptag">{p.name}</span>
+            <div class="price"><b>{p.price}</b><span>/ month</span></div>
+            <p class="pdesc">{p.desc}</p>
+            <ul>
+              {p.features.map((f) => <li><span set:html={check} /> {f}</li>)}
+            </ul>
+            {p.cta === 'demo' ? (
+              <a href={DEMO_URL} class="btn btn-accent w-full">Talk to us</a>
+            ) : (
+              <a href={APP_STORE_URL} class={p.feat ? 'btn btn-accent w-full' : 'btn btn-line w-full'}>
+                {p.price === '$0' ? 'Install free' : 'Start free'}
+              </a>
+            )}
+          </div>
+        ))}
       </div>
 
-      <p class="kicker" style="text-align:center;margin-top:2rem">Placeholder pricing · billed via Shopify · cancel anytime</p>
+      <p class="kicker" style="text-align:center;margin-top:2rem">
+        Billed via Shopify · cancel anytime · paid plans include a {PAYMENT_TRIAL_DAYS}-day Shopify trial
+      </p>
     </div>
   </section>
 
   <!-- comparison matrix -->
   <section class="sec" style="padding-top:0">
-    <div class="narrow">
+    <div class="wrap">
       <div class="shead ctr rv" style="margin-bottom:2rem">
         <span class="eyebrow" style="justify-content:center"><span class="dot"></span> Compare</span>
         <h2>What's in each plan</h2>
       </div>
       <div class="rv" style="overflow-x:auto">
-        <table class="matrix">
+        <table class="matrix matrix-4">
           <thead>
-            <tr><th>Feature</th><th>Starter</th><th class="colhi">Pro</th></tr>
+            <tr>
+              <th>Feature</th>
+              {PLANS.map((p) => <th class={p.feat ? 'colhi' : ''}>{p.name}</th>)}
+            </tr>
           </thead>
           <tbody>
-            <tr><th>Real-time top-sellers ranking</th><td class="yes">✓</td><td class="yes colhi">✓</td></tr>
-            <tr><th>Sold-out auto-demotion</th><td class="yes">✓</td><td class="yes colhi">✓</td></tr>
-            <tr><th>Manual order, preview & CSV export</th><td class="yes">✓</td><td class="yes colhi">✓</td></tr>
-            <tr><th>Personalized "For You" feed</th><td class="yes">✓</td><td class="yes colhi">✓</td></tr>
-            <tr><th>Klaviyo & Google Analytics</th><td class="yes">✓</td><td class="yes colhi">✓</td></tr>
-            <tr><th>Managed collections</th><td>Up to 5</td><td class="colhi">Unlimited</td></tr>
-            <tr><th>Customer events & analytics</th><td class="no">—</td><td class="yes colhi">✓</td></tr>
-            <tr><th>AI authoring (taxonomy + logic)</th><td class="no">—</td><td class="yes colhi">✓</td></tr>
-            <tr><th>Emotional analytics</th><td class="no">—</td><td class="colhi">Beta</td></tr>
-            <tr><th>Refresh & throughput</th><td>Standard</td><td class="colhi">Priority</td></tr>
-            <tr><th>Support</th><td>Email</td><td class="colhi">Priority</td></tr>
-            <tr><th>Free trial</th><td class="yes">7 days</td><td class="yes colhi">7 days</td></tr>
+            {MATRIX.map((row) => (
+              <tr>
+                <th>{row.label}</th>
+                {row.cells.map((c, i) => (
+                  <td class={[cellClass(c), PLANS[i].feat ? 'colhi' : ''].filter(Boolean).join(' ')}>{c}</td>
+                ))}
+              </tr>
+            ))}
           </tbody>
         </table>
+      </div>
+      <p class="kicker" style="margin-top:1.25rem">
+        * Order limits are a nudge, not a wall. Cross them and ranking keeps running exactly as before —
+        you'll just see an upgrade prompt in the dashboard. We never break a live storefront to sell a plan.
+      </p>
+    </div>
+  </section>
+
+  <!-- which plan -->
+  <section class="sec" style="padding-top:0">
+    <div class="narrow">
+      <div class="shead ctr rv" style="margin-bottom:2rem">
+        <span class="eyebrow" style="justify-content:center"><span class="dot"></span> Which one</span>
+        <h2>Pick by what you're trying to fix</h2>
+      </div>
+      <div class="faq rv">
+        <details open><summary>“My collections are stale and I sort them by hand.”<span class="pm"></span></summary><div class="ans"><b>Free.</b> One collection that ranks itself in real time, demotes sold-out products, and reports the revenue it influenced. If that one collection lifts, you'll see it before you've paid anything.</div></details>
+        <details><summary>“Different collections need different logic.”<span class="pm"></span></summary><div class="ans"><b>Starter — $29.</b> Five managed collections, per-category rankings, and a window you control (24 hours for trend-catching, up to 30 days for stability).</div></details>
+        <details><summary>“I need to prove the lift to someone.”<span class="pm"></span></summary><div class="ans"><b>Pro — $99.</b> Unlimited collections plus full customer-event analytics and attribution reporting, so every sort comes with a funnel and a revenue figure. Also unlocks AI authoring — it drafts your taxonomy and sort logic for you.</div></details>
+        <details><summary>“I want each shopper to see a different storefront.”<span class="pm"></span></summary><div class="ans"><b>Growth — $199.</b> The Emotional AI layer applied live: each visitor's session signals are classified in real time and the feed reorders for them, with the same A/B and attribution reporting behind it so you can see what it earned. Pro gets the same layer as a read-only preview first if you'd rather look before you apply.</div></details>
       </div>
     </div>
   </section>
@@ -85,10 +112,26 @@ const pro = ['Everything in Starter, unlimited', 'Customer events & analytics', 
         <h2>How billing works</h2>
       </div>
       <div class="faq rv">
-        <details><summary>How am I charged?<span class="pm"></span></summary><div class="ans">Through Shopify's Billing API. The subscription appears on your regular Shopify bill — there's no separate payment method to set up and no off-platform charging.</div></details>
-        <details><summary>What happens after the trial?<span class="pm"></span></summary><div class="ans">After 7 days, your chosen plan begins. Cancel any time before then at no charge, directly from the app.</div></details>
-        <details><summary>Can I switch plans?<span class="pm"></span></summary><div class="ans">Yes — move between plans at any time. Changes take effect on your next billing cycle.</div></details>
-        <details><summary>What if I uninstall?<span class="pm"></span></summary><div class="ans">Billing stops on uninstall. Any collections QSortby created stay in your store; it simply stops updating them.</div></details>
+        <details><summary>What actually happens after the {REVERSE_TRIAL_DAYS} days?<span class="pm"></span></summary><div class="ans">Your plan becomes <b>Free</b> — automatically, with no card and no interruption. Ranking keeps running, your collections keep updating, attribution keeps reporting. You lose the paid features (extra collections, personalization, analytics), not the app. Nothing is deleted and nothing is switched off.</div></details>
+        <details><summary>So there are two trials?<span class="pm"></span></summary><div class="ans">Yes, and they do different jobs. The <b>{REVERSE_TRIAL_DAYS}-day full-access window</b> starts the moment you install — no card, no plan chosen. Separately, when you pick a <i>paid</i> plan, Shopify adds its standard <b>{PAYMENT_TRIAL_DAYS}-day trial</b> before the first charge, so you can cancel a paid plan free too.</div></details>
+        <details><summary>How am I charged?<span class="pm"></span></summary><div class="ans">Through Shopify's Billing API. The subscription appears on your regular Shopify invoice — no separate payment method, no off-platform charging. The Free plan never goes through billing at all.</div></details>
+        <details><summary>What if I go over the order limit on Free or Starter?<span class="pm"></span></summary><div class="ans">Nothing breaks. The limit is a soft nudge: you'll see an upgrade prompt in the dashboard, and ranking continues serving your storefront untouched. Hard-capping orders would degrade a live collection your shoppers are browsing — we won't do that.</div></details>
+        <details><summary>Can I switch plans?<span class="pm"></span></summary><div class="ans">Any time, up or down, from inside the app. Changes take effect on your next billing cycle.</div></details>
+        <details><summary>What if I uninstall?<span class="pm"></span></summary><div class="ans">Billing stops immediately. Any collections QSortby created stay in your store as normal Shopify collections — they simply stop updating.</div></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="cta rv">
+        <span class="eyebrow"><span class="dot"></span> Get started</span>
+        <h2>Install free. Decide with <em>your own numbers.</em></h2>
+        <p>{REVERSE_TRIAL_DAYS} days of everything, then Free forever. No card to start.</p>
+        <div class="hero-cta" style="justify-content:center">
+          <a href={APP_STORE_URL} class="btn btn-accent btn-lg">Install free <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a href={DEMO_URL} class="btn btn-ghost btn-lg">Book a demo</a>
+        </div>
       </div>
     </div>
   </section>
