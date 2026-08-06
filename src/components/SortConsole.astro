@@ -80,8 +80,8 @@
   .sortconsole .sc-now b { color:var(--green-ink); }
   @keyframes scPulse { 0%,100%{opacity:1} 50%{opacity:.25} }
 
-  .sortconsole .sc-stage { background:linear-gradient(168deg,#1A1D24,#101217); border:1px solid rgba(255,255,255,.09); border-radius:22px; padding:20px; box-shadow:0 50px 100px -55px rgba(20,18,16,.75); position:relative; overflow:hidden; }
-  .sortconsole .sc-stage::before { content:""; position:absolute; inset:0; background:radial-gradient(85% 55% at 85% -8%,rgba(43,217,150,.16),transparent 62%); pointer-events:none; }
+  .sortconsole .sc-stage { background:linear-gradient(165deg,#123227,#08160F); border:1px solid rgba(120,220,170,.16); border-radius:22px; padding:20px; box-shadow:0 50px 100px -55px rgba(8,22,15,.8); position:relative; overflow:hidden; }
+  .sortconsole .sc-stage::before { content:""; position:absolute; inset:0; background:radial-gradient(85% 55% at 85% -8%,rgba(43,217,150,.22),transparent 60%); pointer-events:none; }
   .sortconsole .sc-stop { display:flex; align-items:center; justify-content:space-between; position:relative; margin-bottom:4px; }
   .sortconsole .sc-shop { font-family:var(--mono); font-size:12px; color:rgba(255,255,255,.6); display:flex; align-items:center; gap:8px; }
   .sortconsole .sc-shop b { color:#fff; font-weight:600; }
@@ -91,14 +91,14 @@
   .sortconsole .sc-sub b { color:var(--green-bright); }
 
   .sortconsole .sc-list { position:relative; display:flex; flex-direction:column; gap:8px; }
-  .sortconsole .sc-row { position:relative; display:grid; grid-template-columns:24px 44px 1fr auto; align-items:center; gap:13px; background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.07); border-radius:13px; padding:11px 14px; will-change:transform; }
-  .sortconsole .sc-row:first-child { background:linear-gradient(100deg,rgba(43,217,150,.14),rgba(255,255,255,.03)); border-color:rgba(43,217,150,.38); }
+  .sortconsole .sc-row { position:relative; display:grid; grid-template-columns:24px 44px 1fr auto; align-items:center; gap:13px; background:rgba(255,255,255,.045); border:1px solid rgba(120,220,170,.12); border-radius:13px; padding:11px 14px; will-change:transform; }
+  .sortconsole .sc-row:first-child { background:linear-gradient(100deg,rgba(43,217,150,.2),rgba(255,255,255,.03)); border-color:rgba(43,217,150,.5); }
   .sortconsole .sc-row.hot { box-shadow:0 0 0 1px rgba(43,217,150,.4),0 12px 34px -14px rgba(43,217,150,.55); }
   .sortconsole .sc-row.out { opacity:.45; }
   .sortconsole .sc-rank { font-family:var(--mono); font-size:15px; font-weight:700; color:rgba(255,255,255,.4); text-align:center; font-variant-numeric:tabular-nums; }
   .sortconsole .sc-row:first-child .sc-rank { color:var(--green-bright); }
-  .sortconsole .sc-thumb { width:44px; height:44px; border-radius:10px; background:rgba(255,255,255,.06); display:grid; place-items:center; }
-  .sortconsole .sc-thumb svg { width:25px; height:25px; stroke:rgba(255,255,255,.85); stroke-width:1.6; fill:none; }
+  .sortconsole .sc-thumb { width:44px; height:44px; border-radius:10px; background:rgba(120,220,170,.1); display:grid; place-items:center; }
+  .sortconsole .sc-thumb svg { width:25px; height:25px; stroke:rgba(230,250,240,.9); stroke-width:1.6; fill:none; }
   .sortconsole .sc-nm { color:#fff; font-weight:600; font-size:14.5px; letter-spacing:-.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .sortconsole .sc-track { height:6px; border-radius:3px; background:rgba(255,255,255,.09); margin-top:7px; overflow:hidden; }
   .sortconsole .sc-fill { display:block; height:100%; border-radius:3px; background:linear-gradient(90deg,var(--green),var(--green-bright)); width:0; transition:width .55s cubic-bezier(.22,.61,.36,1); }
@@ -106,7 +106,7 @@
   .sortconsole .sc-val small { display:block; font-weight:500; font-size:9.5px; letter-spacing:.05em; text-transform:uppercase; color:rgba(255,255,255,.4); }
   .sortconsole .sc-pip { position:absolute; left:50px; top:-7px; font-family:var(--mono); font-size:10px; font-weight:700; color:#052; background:var(--green-bright); padding:2px 8px; border-radius:999px; opacity:0; transform:translateY(4px); transition:all .3s; z-index:3; }
   .sortconsole .sc-row.hot .sc-pip { opacity:1; transform:translateY(0); }
-  .sortconsole .sc-outtag { font-family:var(--mono); font-size:9.5px; font-weight:700; color:#F0A487; background:rgba(210,96,63,.16); padding:3px 8px; border-radius:999px; }
+  .sortconsole .sc-outtag { font-family:var(--mono); font-size:9.5px; font-weight:700; color:#FFC79A; background:rgba(255,180,120,.16); padding:3px 8px; border-radius:999px; }
 
   .sortconsole .sc-foot { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:15px; padding-top:14px; border-top:1px solid rgba(255,255,255,.08); position:relative; }
   .sortconsole .sc-kpi .k { font-family:var(--mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.42); display:block; }
