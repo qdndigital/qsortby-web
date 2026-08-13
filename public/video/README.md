@@ -14,8 +14,25 @@ file costs the section rather than shipping a broken player.
 ## What's shipped right now
 
 `qsortby-intro.mp4` — 1920×1080, H.264 High, AAC, **1:37**, 14 MB (≈1.1 Mbps),
-faststart enabled. Subtitles burned in. `qsortby-intro.jpg` is a frame from
-0:05 (the storefront grid) at 1600×900.
+faststart enabled. Subtitles burned in.
+
+`qsortby-intro.jpg` is the frame at **0:23** — the floating rule panels — scaled
+to 1600×900. Picked over the storefront grid at 0:05 for three reasons: it carries
+no burned-in subtitle (they cover the lower third from roughly 0:20 to the end,
+and 0:23 lands in a gap), it's dark so the frame reads as a video rather than as
+another screenshot of the page, and the home page already shows light storefront
+grids twice above it (StorefrontHero and SortConsole) — a third would be
+redundant.
+
+To swap it for the storefront grid instead:
+
+```bash
+ffmpeg -ss 5 -i qsortby-intro.mp4 -frames:v 1 -vf "scale=1600:900" -q:v 3 \
+  qsortby-intro.jpg -y
+```
+
+Any other timestamp works too, but check it against the subtitle band first —
+after 0:20 most frames have text burned across the bottom third.
 
 Two notes on this file, neither worth a re-encode on its own:
 
