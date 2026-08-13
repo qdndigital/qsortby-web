@@ -134,6 +134,12 @@ export const MATRIX: { label: string; cells: string[] }[] = [
   // AOV surfaces. One surface is added per tier; the cap is on how many of ONE
   // kind you can run (a different cart offer in the drawer than on the cart
   // page). Keep in sync with DEFAULT_PLAN_FEATURES `upsell` in the app.
+  //
+  // CAREFUL with the "Upsells per type" row below: the app stores the cap PER
+  // TYPE (`cart_max`, `fbt_max`, …), not as one shared number. Every type on a
+  // given plan currently carries the same figure, which is the only reason a
+  // single cell is honest here. If a plan is ever set to, say, 3 cart offers but
+  // 1 bundle, this row starts lying and has to become one row per type.
   { label: 'Cart upsell + free-shipping bar', cells: ['✓', '✓', '✓', '✓'] },
   { label: 'Bought-together + thank-you upsells', cells: ['—', '✓', '✓', '✓'] },
   { label: 'Popup upsells (any page)', cells: ['—', '—', '✓', '✓'] },
