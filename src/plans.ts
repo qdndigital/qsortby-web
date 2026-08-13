@@ -36,7 +36,13 @@ export interface Plan {
   /** Who it's for — one line, sits under the price. */
   desc: string;
   /**
-   * Bullets. Keep to 6 max; anything longer belongs in the matrix.
+   * Bullets. Keep to 8 max; anything longer belongs in the matrix.
+   *
+   * Track the App Store listing's "Top features" for the same plan — that's the
+   * list a merchant most likely read first, and a site that says LESS than the
+   * listing reads as an older, thinner version of the product. The quantified
+   * lines (how many sort rules, how many upsells of a type) are the ones worth
+   * carrying: they're what a merchant actually compares.
    *
    * ORDER MATTERS BEYOND READABILITY: the home-page teaser renders only the
    * first few (TEASER_BULLETS in pages/index.astro), so the leading bullets are
@@ -78,6 +84,11 @@ export const PLANS: Plan[] = [
       'Up to 5 managed collections',
       'Personalized “For You” feed',
       'Bought-together + thank-you upsells',
+      // Quantified limits, matching the listing. `personalize` grants
+      // maxLogics: 3 / maxVisitorTypes: 5 on this plan — enforced, so it's safe
+      // to print.
+      '3 sort rules, 5 visitor types each',
+      '3 upsells of each type',
       'Per-category rankings',
       'Configurable window — 24h to 30 days',
       'Manual order, preview & CSV export',
@@ -91,6 +102,8 @@ export const PLANS: Plan[] = [
     features: [
       'Everything in Starter, unlimited',
       'Popup upsells + AND/OR display rules',
+      'Unlimited sort rules and visitor types',
+      'Unlimited upsells of each type',
       'Customer events & analytics',
       'AI authoring — taxonomy + sort logic',
       'Emotional preview (read-only)',
@@ -112,7 +125,8 @@ export const PLANS: Plan[] = [
       // already run gets smarter".
       'Emotional re-rank inside every upsell',
       'In-checkout upsell (Shopify Plus)',
-      'Emotional Insights dashboard',
+      'Per-shopper real-time reranking',
+      'Emotional heatmap, journey + AI summaries',
       'Highest AI limits',
     ],
     badge: 'Most advanced',
@@ -130,6 +144,11 @@ export const MATRIX: { label: string; cells: string[] }[] = [
   { label: 'Managed collections', cells: ['1', '5', 'Unlimited', 'Unlimited'] },
   { label: 'Ranking window', cells: ['7 days', '24h – 30d', 'Any', 'Any'] },
   { label: 'Personalized “For You” feed', cells: ['—', '✓', '✓', '✓'] },
+  // The `personalize` caps (maxLogics / maxVisitorTypes in the app). These were
+  // on the App Store listing but nowhere on the site, which made Starter look
+  // thinner here than in the place most merchants read first.
+  { label: 'Sort rules', cells: ['—', '3', 'Unlimited', 'Unlimited'] },
+  { label: 'Visitor types per sort rule', cells: ['—', '5', 'Unlimited', 'Unlimited'] },
   { label: 'Per-category rankings', cells: ['—', '✓', '✓', '✓'] },
   // AOV surfaces. One surface is added per tier; the cap is on how many of ONE
   // kind you can run (a different cart offer in the drawer than on the cart
@@ -151,7 +170,7 @@ export const MATRIX: { label: string; cells: string[] }[] = [
   { label: 'Emotional AI — preview only', cells: ['—', '—', '✓', '✓'] },
   { label: 'Emotional AI — live per shopper', cells: ['—', '—', '—', '✓'] },
   { label: 'Emotional re-rank inside upsells', cells: ['—', '—', '—', '✓'] },
-  { label: 'Emotional Insights dashboard', cells: ['—', '—', '—', '✓'] },
+  { label: 'Emotional Insights — heatmap, journey, AI summaries', cells: ['—', '—', '—', '✓'] },
   { label: 'Orders / month', cells: ['200*', '2,000*', 'Unlimited', 'Unlimited'] },
   { label: 'Support', cells: ['Docs', 'Email', 'Priority', 'Priority'] },
 ];
