@@ -3,17 +3,22 @@ import Base from '../layouts/Base.astro';
 import StorefrontHero from '../components/StorefrontHero.astro';
 import EmotionMap from '../components/EmotionMap.astro';
 import SortConsole from '../components/SortConsole.astro';
+import IntroVideo from '../components/IntroVideo.astro';
 import { APP_STORE_URL, DEMO_URL } from '../consts';
 import { PLANS, REVERSE_TRIAL_DAYS } from '../plans';
 
 const title = 'QSortby — Smart Collection Sorting for Shopify';
 const description =
-  'QSortby reorders every Shopify collection in real time, gives each shopper their own feed, and A/B-tests every sort against your current order — so you see the attributed revenue instead of taking it on faith.';
+  'QSortby reorders every Shopify collection in real time, gives each shopper their own feed, and raises the order with cart, bundle and checkout upsells fed by the same live ranking — every sort A/B-tested against your current order, so you see the attributed revenue instead of taking it on faith.';
 
 // Teaser shows the whole four-tier LADDER, not two anchors — the point of the
-// section is that each step adds one thing, which two cards can't show. Three
-// bullets per card is enough to read the progression; the full matrix is /pricing.
-const TEASER_BULLETS = 3;
+// section is that each step adds one thing, which two cards can't show. The full
+// matrix is /pricing.
+//
+// FOUR bullets, not three: each tier's upsell line is its 3rd or 4th bullet, and
+// at three Free lost the "cart upsell + free-shipping bar" line — the one tier
+// where proving an upsell is included at $0 does the most work.
+const TEASER_BULLETS = 4;
 
 const mk = '<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>';
 const x = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M6 18L18 6"/></svg>';
@@ -55,6 +60,16 @@ const x = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M6 18L18 6"/></svg>';
       </div>
     </div>
   </section>
+
+  <!-- ===================== INTRO VIDEO =====================
+       High on the page — right after the trust bar, before the first wall of
+       argument — because a visitor who would rather be shown than told should
+       not have to hunt for it. The hero keeps its own trust bar directly beneath
+       it; the video takes the next slot.
+
+       Renders only when the asset exists (see public/video/README.md), so the
+       page is complete with or without it. -->
+  <IntroVideo duration="2 min" />
 
   <!-- ===================== WHY NOT THE BUILT-IN SORT ===================== -->
   <!-- This section exists to answer the objection that kills most installs:
@@ -235,6 +250,69 @@ const x = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M6 18L18 6"/></svg>';
     </div>
   </section>
 
+  <!-- ===================== UPSELL SURFACES =====================
+       Ranking decides WHICH products a shopper meets; these decide what else
+       goes in the basket once they've chosen. Placed after the ranking engine
+       because that's the order the value arrives in — and kept as its own
+       section rather than a bullet in pricing, because six surfaces is a second
+       reason to install, not a plan detail.
+
+       Every claim here is gated per tier (docs/PRICING.md § 4a in the app repo);
+       the badges say which, so the section can't over-promise what Free gets. -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="shead ctr rv" style="margin-bottom:2.5rem">
+        <span class="eyebrow" style="justify-content:center"><span class="dot"></span> Raise the order</span>
+        <h2>Sorting decides what they find. These decide <em>what else goes in the bag.</em></h2>
+        <p class="lead-c">Six offer surfaces across the journey, all fed by the same live ranking — so what gets suggested is what's actually selling and actually in stock, never a static list you have to maintain.</p>
+      </div>
+
+      <div class="steps rv">
+        <div class="step">
+          <div class="sn">Cart drawer + cart page</div>
+          <h3>Cart upsell</h3>
+          <p>Suggests what's selling fastest right now, skipping anything already in the cart. Ranked from your real orders, not a hand-picked list that goes stale.</p>
+          <span class="utag on">On every plan</span>
+        </div>
+        <div class="step">
+          <div class="sn">Cart drawer + cart page</div>
+          <h3>Free-shipping progress</h3>
+          <p>Shows how far the cart is from the threshold — and suggests a product that actually closes the gap, never a $5 item against $40 missing.</p>
+          <span class="utag on">On every plan</span>
+        </div>
+        <div class="step">
+          <div class="sn">Product page</div>
+          <h3>Frequently bought together</h3>
+          <p>Real co-purchase pairs from your own order history. Until there's enough pair data it falls back to your best sellers, so the block is never empty.</p>
+          <span class="utag">Starter</span>
+        </div>
+        <div class="step">
+          <div class="sn">Order-status page</div>
+          <h3>Thank-you upsell</h3>
+          <p>The order is already placed, so an offer here can't cost you the conversion. Works on every payment method and every Shopify plan.</p>
+          <span class="utag">Starter</span>
+        </div>
+        <div class="step">
+          <div class="sn">Any page</div>
+          <h3>Popup upsell</h3>
+          <p>Fires on a moment you choose — after an add to cart, on exit intent, or once the cart is near free shipping. Gated by AND/OR rules so it doesn't fire at everyone.</p>
+          <span class="utag">Pro</span>
+        </div>
+        <div class="step">
+          <div class="sn">Inside checkout</div>
+          <h3>In-checkout upsell</h3>
+          <p>Runs before payment, so an accepted offer joins the <i>same</i> order instead of starting a second one. Shopify limits this surface to Plus stores.</p>
+          <span class="utag">Growth · Plus</span>
+        </div>
+      </div>
+
+      <p class="kicker rv" style="text-align:center;margin-top:2.25rem;max-width:64ch;margin-inline:auto">
+        On <b>Growth</b>, the emotional read reaches inside these too — an anxious shopper and a celebratory
+        one get different suggestions from the same cart.
+      </p>
+    </div>
+  </section>
+
   <!-- ===================== SETUP ===================== -->
   <section class="sec">
     <div class="wrap">
@@ -295,6 +373,8 @@ const x = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M6 18L18 6"/></svg>';
         <details><summary>What can QSortby sort by?<span class="pm"></span></summary><div class="ans">10+ live signals: sales velocity, revenue (GMV), margin, conversion rate, trending momentum, selling-fast (velocity vs. remaining stock), repeat-purchase rate, engagement (clicks / CTR / dwell / add-to-cart), or newest — over a rolling or fixed window you choose. Per-visitor "For You" ranking blends weighted signals per shopper. Or order any collection by hand.</div></details>
         <details><summary>How do I know it actually lifts sales?<span class="pm"></span></summary><div class="ans">QSortby runs an A/B test between the new sort and your current order, then attributes downstream orders (last-touch) to the feed a shopper interacted with — reporting click-through, add-to-cart and influenced revenue per variant with a significance verdict. You see the lift on your own store, you're not taking it on faith.</div></details>
         <details><summary>What is the Emotional AI layer?<span class="pm"></span></summary><div class="ans">It classifies a shopper's current session — dwell time, revisits, comparisons, hesitation — into an emotional and intent state, then reorders their feed to match. Two levels: <b>Pro</b> gets it as a read-only preview (you see the state mix across your sessions and the ranking it <i>would</i> serve, while your storefront stays exactly as it is), and <b>Growth</b> applies it live per shopper. Cost is capped per store — sessions are sampled, classifications cached, and if a daily ceiling is hit it falls back to your standard ranking rather than degrading the feed.</div></details>
+        <details><summary>Is this a sorting app or an upsell app?<span class="pm"></span></summary><div class="ans">Both, and they run off the same engine — that's the point. The ranking decides which products a shopper meets; the upsell surfaces decide what else goes in the basket. Because the offers are fed by the same live signals, they suggest what's <b>actually selling and actually in stock</b> instead of a static list you have to keep updating. Six surfaces: cart drawer and cart page, a free-shipping progress bar, frequently-bought-together on the product page, a thank-you-page offer, popups with AND/OR rules, and an offer inside checkout itself. The first two are on the <b>Free</b> plan.</div></details>
+        <details><summary>Will the upsells slow my storefront down?<span class="pm"></span></summary><div class="ans">No. Suggestions are served from a pre-ranked cache rather than computed per shopper, and nothing is added to your theme's critical path — the widgets render after the cart, not before it. If a request fails, the section simply doesn't appear; a cart never blocks on an offer.</div></details>
         <details><summary>Do I need to edit my theme?<span class="pm"></span></summary><div class="ans">No. QSortby maintains standard Shopify collections — add them like any other. No custom code.</div></details>
         <details><summary>What happens when a product sells out?<span class="pm"></span></summary><div class="ans">It drops to the bottom automatically, and returns to its earned spot once restocked.</div></details>
       </div>

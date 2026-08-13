@@ -1,0 +1,207 @@
+---
+/**
+ * Intro video — click-to-play, self-hosted.
+ *
+ * ── Drop-in contract ────────────────────────────────────────────────────────
+ * Put the files at:
+ *   public/video/qsortby-intro.mp4     (required — the video)
+ *   public/video/qsortby-intro.webm    (optional — smaller, served first)
+ *   public/video/qsortby-intro.jpg     (optional — poster frame, 16:9)
+ *   public/video/qsortby-intro.vtt     (optional — captions, English)
+ *
+ * Nothing else to wire up: this component checks for the MP4 at BUILD time and
+ * renders NOTHING when it's absent. That's deliberate — the alternative is a
+ * hard-coded <video> that ships a broken player the moment the asset is missing
+ * or renamed, on the most-viewed section of the site. A missing file should cost
+ * a section, not a first impression.
+ *
+ * ── Why click-to-play, not autoplay ────────────────────────────────────────
+ * An intro video has narration, so it can't autoplay with sound (browsers block
+ * it) and autoplaying it muted throws away the first sentence. `preload="none"`
+ * means a visitor who never presses play downloads zero bytes of it — the whole
+ * point of a poster.
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+
+const PUBLIC_DIR = path.join(process.cwd(), 'public', 'video');
+const BASE = 'qsortby-intro';
+
+const has = (ext: string) => fs.existsSync(path.join(PUBLIC_DIR, `${BASE}.${ext}`));
+
+// MP4 is the gate: it's the format every browser can play, so without it there
+// is no video to show regardless of what else is present.
+const hasVideo = has('mp4');
+const hasWebm = has('webm');
+const hasPoster = has('jpg');
+const hasCaptions = has('vtt');
+
+interface Props {
+  /** Section eyebrow. */
+  eyebrow?: string;
+  /** Heading above the player. */
+  heading?: string;
+  /** One line under the heading. */
+  lead?: string;
+  /** Shown on the play button, e.g. "2 min". Omit if you'd rather not commit. */
+  duration?: string;
+}
+
+const {
+  eyebrow = 'Watch',
+  heading = 'See it reorder a collection in real time.',
+  lead = 'Two minutes, no signup: how QSortby ranks a collection, personalizes it per shopper, and reports what the sort earned.',
+  duration,
+} = Astro.props;
+---
+
+{hasVideo && (
+  <section class="sec alt">
+    <div class="wrap">
+      <div class="shead ctr rv" style="margin-bottom:2rem">
+        <span class="eyebrow" style="justify-content:center"><span class="dot"></span> {eyebrow}</span>
+        <h2>{heading}</h2>
+        <p class="lead-c">{lead}</p>
+      </div>
+
+      <div class="vplayer rv">
+        {/* `poster` is only set when the file exists — pointing at a missing
+            image would render the browser's broken-image state inside the frame,
+            which looks worse than the plain gradient the CSS falls back to. */}
+        <video
+          id="introVideo"
+          controls
+          preload="none"
+          playsinline
+          poster={hasPoster ? `/video/${BASE}.jpg` : undefined}
+          aria-label="QSortby product introduction"
+        >
+          {hasWebm && <source src={`/video/${BASE}.webm`} type="video/webm" />}
+          <source src={`/video/${BASE}.mp4`} type="video/mp4" />
+          {hasCaptions && (
+            <track
+              kind="captions"
+              src={`/video/${BASE}.vtt`}
+              srclang="en"
+              label="English"
+              default
+            />
+          )}
+          {/* Reached only when the browser can play neither source. A download
+              link is more use than the default empty box. */}
+          <p>
+            Your browser can't play this video.
+            <a href={`/video/${BASE}.mp4`}>Download it instead</a>.
+          </p>
+        </video>
+
+        {/* Overlay lives OUTSIDE the video element so it can be removed from the
+            DOM on play; a child of <video> would be treated as fallback content
+            and never rendered by a browser that can play the file. */}
+        <button type="button" class="vplay" data-for="introVideo" aria-label="Play the QSortby introduction">
+          <span class="vplay-ring">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+          </span>
+          <span class="vplay-txt">Watch the intro{duration ? ` · ${duration}` : ''}</span>
+        </button>
+      </div>
+    </div>
+  </section>
+)}
+
+{hasVideo && (
+  <script is:inline>
+    // Plain inline JS, no framework: this is one click handler and the section
+    // must work before any hydration would have happened.
+    (() => {
+      const btn = document.querySelector('.vplay');
+      if (!btn) return;
+      const video = document.getElementById(btn.getAttribute('data-for'));
+      if (!video) return;
+      btn.addEventListener('click', () => {
+        // Remove the overlay FIRST so the controls are reachable even if play()
+        // is rejected (a blocked or unsupported source shouldn't leave the
+        // visitor stuck behind a dead button).
+        btn.remove();
+        video.play().catch(() => {});
+      });
+    })();
+  </script>
+)}
+
+<style>
+  /* Sized by aspect ratio rather than a fixed height so the frame can't shift
+     layout while the poster loads. */
+  .vplayer {
+    position: relative;
+    max-width: 900px;
+    margin-inline: auto;
+    aspect-ratio: 16 / 9;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--grad-mint);
+    box-shadow: 0 30px 60px -40px rgba(16, 24, 40, 0.35);
+  }
+  .vplayer video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: transparent;
+  }
+
+  /* The overlay covers the whole frame: the entire poster is the play target,
+     not just the 52px circle. */
+  .vplay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
+    color: var(--ink);
+  }
+  .vplay-ring {
+    display: grid;
+    place-items: center;
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid var(--green-line);
+    box-shadow: 0 10px 24px -12px rgba(16, 24, 40, 0.4);
+    transition: transform 0.18s ease;
+  }
+  .vplay-ring svg {
+    width: 26px;
+    height: 26px;
+    fill: var(--green);
+    margin-left: 3px;
+  }
+  .vplay-txt {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+  .vplay:hover .vplay-ring,
+  .vplay:focus-visible .vplay-ring {
+    transform: scale(1.06);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .vplay-ring {
+      transition: none;
+    }
+    .vplay:hover .vplay-ring,
+    .vplay:focus-visible .vplay-ring {
+      transform: none;
+    }
+  }
+</style>
