@@ -218,6 +218,44 @@ const groups = [
     </div>
   </section>
 
+  <!-- ===== 4½. RAISE THE ORDER =====
+       Sits after "Prove" because it's the same engine pointed at a different
+       question: ranking decides which products a shopper meets, these decide
+       what else joins the basket. Uses the same ranked pool, so nothing here is
+       a second list to maintain. Tier badges match docs/PRICING.md § 4a. -->
+  <section class="sec alt">
+    <div class="wrap">
+      <div class="shead ctr rv" style="margin-bottom:2.5rem">
+        <span class="eyebrow"><span class="dot"></span> Step 4 · Raise the order</span>
+        <h2>The same ranking, pointed at <em>the basket.</em></h2>
+        <p class="lead-c">Once a shopper has chosen, the question changes from "what should they find" to "what else belongs in this order". QSortby answers it from the same live signals — so every suggestion is something that's selling and in stock, never a static list you maintain by hand.</p>
+      </div>
+
+      <div class="hiw-two rv">
+        <div>
+          <ul class="checklist">
+            <li><span set:html={check} /><span><b>Cart drawer &amp; cart page.</b> Suggests what's selling fastest right now, skipping anything already in the cart. <i>Free plan.</i></span></li>
+            <li><span set:html={check} /><span><b>Free-shipping progress.</b> Shows the gap to your threshold and suggests a product that actually closes it — never a $5 item against $40 missing. <i>Free plan.</i></span></li>
+            <li><span set:html={check} /><span><b>Frequently bought together.</b> Real co-purchase pairs from your own orders; falls back to best sellers until there's enough pair data, so the block is never empty. <i>Starter.</i></span></li>
+          </ul>
+        </div>
+        <div>
+          <ul class="checklist">
+            <li><span set:html={check} /><span><b>Thank-you page.</b> The order is already placed, so an offer here can't cost the conversion. Every payment method, every Shopify plan. <i>Starter.</i></span></li>
+            <li><span set:html={check} /><span><b>Popups, any page.</b> Fire on add-to-cart, exit intent, or a cart near free shipping — gated by AND/OR rules so they don't fire at everyone. <i>Pro.</i></span></li>
+            <li><span set:html={check} /><span><b>Inside checkout.</b> Runs before payment, so an accepted offer joins the <i>same</i> order rather than starting a second one. Shopify restricts this surface to Plus. <i>Growth.</i></span></li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="kicker" style="text-align:center;margin-top:1.75rem;max-width:64ch;margin-inline:auto">
+        Sold-out and already-in-cart products are filtered out of every surface, and a failed request hides the
+        section rather than blocking the cart. On <b>Growth</b>, the emotional read chooses between the
+        candidates — same cart, different suggestions for an anxious shopper and a celebratory one.
+      </p>
+    </div>
+  </section>
+
   <!-- ===== 5. PRIVACY & DATA ===== -->
   <section class="sec">
     <div class="wrap">

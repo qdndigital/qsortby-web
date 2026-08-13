@@ -136,6 +136,14 @@
   .step h3 { @apply font-display text-h3 font-semibold tracking-tight2 mt-3 mb-2; }
   .step p { @apply text-sm text-ink-2 leading-relaxed; }
 
+  /* ---- plan tag inside a step card ----
+     Names the tier a feature starts on. Muted by default and green only for the
+     "on every plan" case, so the eye lands on what's already included rather
+     than on the paywall. */
+  .utag { @apply inline-block mt-4 font-mono text-label uppercase px-2 py-1 rounded-md;
+          color:var(--muted); background:var(--paper,#f6f6f4); border:1px solid var(--line); }
+  .utag.on { color:var(--green-ink); background:var(--green-soft); border-color:var(--green-line); }
+
   /* ---- pricing ---- */
   .plans { @apply grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto; }
   .plan { @apply flex flex-col bg-surface border rounded-xl2 p-7 md:p-8; border-color:var(--line); }

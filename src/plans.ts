@@ -17,8 +17,16 @@
 
 /** Full-access window on install, before auto-downgrade to Free. */
 export const REVERSE_TRIAL_DAYS = 10;
-/** Shopify Billing API trial on paid plans, before the first charge. */
-export const PAYMENT_TRIAL_DAYS = 7;
+/**
+ * Shopify Billing API trial on paid plans, before the first charge.
+ *
+ * Deliberately the SAME number as the reverse trial: the app sets
+ * `trialDays: 10` on all three paid plans (apps/dashboard/app/shopify.server.ts)
+ * so every merchant-facing surface quotes one figure. They still stack —
+ * subscribing on day 10 of the reverse trial means free through day 20 — which
+ * is why the two are separate constants rather than one.
+ */
+export const PAYMENT_TRIAL_DAYS = 10;
 
 export interface Plan {
   /** Plan name as shown to merchants — matches ALL_PLAN_NAMES in the app. */
@@ -27,7 +35,14 @@ export interface Plan {
   price: string;
   /** Who it's for — one line, sits under the price. */
   desc: string;
-  /** Bullets. Keep to 6 max; anything longer belongs in the matrix. */
+  /**
+   * Bullets. Keep to 6 max; anything longer belongs in the matrix.
+   *
+   * ORDER MATTERS BEYOND READABILITY: the home-page teaser renders only the
+   * first few (TEASER_BULLETS in pages/index.astro), so the leading bullets are
+   * the ones most visitors ever see. Lead each tier with the thing that tier
+   * adds, not with what it inherits.
+   */
   features: string[];
   /** Ribbon text, or null. Only one plan should carry one. */
   badge?: string;
@@ -47,9 +62,11 @@ export const PLANS: Plan[] = [
       '1 managed collection',
       'Real-time best-sellers ranking',
       'Sold-out auto-demotion',
+      // The AOV surfaces start on Free deliberately: a merchant has to see an
+      // upsell working before a tier that adds more of them means anything.
+      'Cart upsell + free-shipping bar',
       'A/B testing + revenue attribution',
       '7-day ranking window',
-      'Klaviyo & Google Analytics',
     ],
     cta: 'install',
   },
@@ -60,10 +77,10 @@ export const PLANS: Plan[] = [
     features: [
       'Up to 5 managed collections',
       'Personalized “For You” feed',
+      'Bought-together + thank-you upsells',
       'Per-category rankings',
       'Configurable window — 24h to 30 days',
       'Manual order, preview & CSV export',
-      'Email support',
     ],
     cta: 'install',
   },
@@ -73,11 +90,11 @@ export const PLANS: Plan[] = [
     desc: 'For growing brands that want the numbers behind every sort.',
     features: [
       'Everything in Starter, unlimited',
+      'Popup upsells + AND/OR display rules',
       'Customer events & analytics',
       'AI authoring — taxonomy + sort logic',
       'Emotional preview (read-only)',
       'Priority refresh & throughput',
-      'Priority support',
     ],
     badge: 'Most popular',
     feat: true,
@@ -90,9 +107,13 @@ export const PLANS: Plan[] = [
     features: [
       'Everything in Pro',
       'Live shopper personalization (Emotional AI)',
+      // Says out loud that the AI reaches INTO the upsells. Without this line
+      // Growth reads as "buy another AI feature" instead of "everything you
+      // already run gets smarter".
+      'Emotional re-rank inside every upsell',
+      'In-checkout upsell (Shopify Plus)',
       'Emotional Insights dashboard',
       'Highest AI limits',
-      'Onboarding & tuning support',
     ],
     badge: 'Most advanced',
     cta: 'install',
@@ -110,10 +131,20 @@ export const MATRIX: { label: string; cells: string[] }[] = [
   { label: 'Ranking window', cells: ['7 days', '24h – 30d', 'Any', 'Any'] },
   { label: 'Personalized “For You” feed', cells: ['—', '✓', '✓', '✓'] },
   { label: 'Per-category rankings', cells: ['—', '✓', '✓', '✓'] },
+  // AOV surfaces. One surface is added per tier; the cap is on how many of ONE
+  // kind you can run (a different cart offer in the drawer than on the cart
+  // page). Keep in sync with DEFAULT_PLAN_FEATURES `upsell` in the app.
+  { label: 'Cart upsell + free-shipping bar', cells: ['✓', '✓', '✓', '✓'] },
+  { label: 'Bought-together + thank-you upsells', cells: ['—', '✓', '✓', '✓'] },
+  { label: 'Popup upsells (any page)', cells: ['—', '—', '✓', '✓'] },
+  { label: 'Upsell display rules (AND/OR)', cells: ['—', '—', '✓', '✓'] },
+  { label: 'In-checkout upsell (Shopify Plus)', cells: ['—', '—', '—', '✓'] },
+  { label: 'Upsells per type', cells: ['1', '3', 'Unlimited', 'Unlimited'] },
   { label: 'Customer events & analytics', cells: ['—', '—', '✓', '✓'] },
   { label: 'AI authoring (taxonomy + logic)', cells: ['—', '—', '✓', '✓'] },
   { label: 'Emotional AI — preview only', cells: ['—', '—', '✓', '✓'] },
   { label: 'Emotional AI — live per shopper', cells: ['—', '—', '—', '✓'] },
+  { label: 'Emotional re-rank inside upsells', cells: ['—', '—', '—', '✓'] },
   { label: 'Emotional Insights dashboard', cells: ['—', '—', '—', '✓'] },
   { label: 'Orders / month', cells: ['200*', '2,000*', 'Unlimited', 'Unlimited'] },
   { label: 'Support', cells: ['Docs', 'Email', 'Priority', 'Priority'] },
