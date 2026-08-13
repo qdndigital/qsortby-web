@@ -4,8 +4,14 @@ import Footer from '../components/Footer.astro';
 import StickyCta from '../components/StickyCta.astro';
 import '../styles/global.css';
 
-const { title, description, noindex = false } = Astro.props;
+const { title, description, noindex = false, image } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+// Social share card. Every link to this site — a Slack paste, a tweet, a DM to a
+// colleague — rendered as a bare text row before this existed, because og:image was
+// absent entirely. Defaults to the intro video's poster: it's already 1600×900, above
+// the 1200×630 minimum, and it's the most representative single frame we have.
+const shareImage = new URL(image ?? '/video/qsortby-intro.jpg', Astro.site).href;
 
 const jsonld = {
   '@context': 'https://schema.org',
@@ -17,18 +23,22 @@ const jsonld = {
       url: 'https://qsortby.com/',
       email: 'support@qsortby.com',
       description:
-        'QSortby is a Shopify app for smart collection sorting — it turns live store signals (sales velocity, trends, inventory, shopper intent) into collections that sort themselves, so your storefront always leads with what converts.',
+        'QSortby is a Shopify merchandising app: collections that rank themselves on live demand, emotional AI that adapts the order to each shopper, and cart, bundle and checkout upsells drawn from the same ranking.',
       logo: 'https://qsortby.com/favicon.svg',
       areaServed: 'Worldwide',
     },
     {
       '@type': 'SoftwareApplication',
       '@id': 'https://qsortby.com/#app',
-      name: 'QSortby — Smart Collection Sorting',
+      name: 'QSortby — Collection Merchandising & Upsells',
       applicationCategory: 'BusinessApplication',
       operatingSystem: 'Shopify',
+      // Kept in step with the page titles and meta descriptions: this is the entity
+      // blurb search engines quote, so an out-of-date one misdescribes the product
+      // everywhere at once. It used to omit the emotional layer and the upsell
+      // surfaces entirely — the two things that justify the top two tiers.
       description:
-        'Smart collection sorting for Shopify: auto-sort by sales, revenue, trending, inventory and more; manual drag-and-drop ordering with preview; per-segment rules; and shopper insights — fully Shopify-native.',
+        'Merchandising for Shopify: auto-rank collections by sales, revenue, margin, conversion or trending; emotional AI that reorders each shopper\'s feed with no purchase history; cart, bundle, popup, thank-you and in-checkout upsells; A/B tests with revenue attribution.',
       // Keep in sync with src/plans.ts — this is what search engines quote as
       // the app's price, so a stale tier here misprices us in results.
       offers: [
@@ -71,7 +81,14 @@ const jsonld = {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={shareImage} />
+    <meta property="og:image:width" content="1600" />
+    <meta property="og:image:height" content="900" />
+    <meta property="og:image:alt" content={title} />
+    {/* large, not summary: a 16:9 card earns far more of the eye in a feed, and we
+        have an image worth the space. */}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={shareImage} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />
