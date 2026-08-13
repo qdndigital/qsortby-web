@@ -5,7 +5,7 @@ import EmotionMap from '../components/EmotionMap.astro';
 import SortConsole from '../components/SortConsole.astro';
 import IntroVideo from '../components/IntroVideo.astro';
 import { APP_STORE_URL, DEMO_URL } from '../consts';
-import { PLANS, REVERSE_TRIAL_DAYS } from '../plans';
+import { PLANS, REVERSE_TRIAL_DAYS, TEASER_BULLETS } from '../plans';
 
 const title = 'QSortby — Smart Collection Sorting for Shopify';
 const description =
@@ -13,12 +13,12 @@ const description =
 
 // Teaser shows the whole four-tier LADDER, not two anchors — the point of the
 // section is that each step adds one thing, which two cards can't show. The full
-// matrix is /pricing.
+// list per plan is on /pricing.
 //
-// FOUR bullets, not three: each tier's upsell line is its 3rd or 4th bullet, and
-// at three Free lost the "cart upsell + free-shipping bar" line — the one tier
-// where proving an upsell is included at $0 does the most work.
-const TEASER_BULLETS = 4;
+// The count itself lives in plans.ts next to the lists it slices, because each
+// `features` array is ORDERED so that its first TEASER_BULLETS entries are the
+// teaser set (marked with a comment at the boundary). Keeping the number here
+// let an inserted bullet change the home page without anyone touching this file.
 
 const mk = '<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>';
 const x = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M6 18L18 6"/></svg>';

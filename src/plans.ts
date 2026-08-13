@@ -65,13 +65,15 @@ export const PLANS: Plan[] = [
     price: '$0',
     desc: 'Real ranking, running forever. Not a trial.',
     features: [
-      '1 managed collection',
-      'Real-time best-sellers ranking',
+      // Value first, allowance second — "1 managed collection" as the opening
+      // line leads with the limit. Same phrasing as the listing.
+      'Real-time best-sellers ranking, 1 collection',
       'Sold-out auto-demotion',
       // The AOV surfaces start on Free deliberately: a merchant has to see an
       // upsell working before a tier that adds more of them means anything.
       'Cart upsell + free-shipping bar',
       'A/B testing + revenue attribution',
+      // ─── below here: /pricing only, not the home teaser ───
       '7-day ranking window',
     ],
     cta: 'install',
@@ -81,13 +83,14 @@ export const PLANS: Plan[] = [
     price: '$29',
     desc: 'For stores ready to sort by more than one signal.',
     features: [
-      'Up to 5 managed collections',
+      'Everything in Free, 5 collections',
       'Personalized “For You” feed',
       'Bought-together + thank-you upsells',
       // Quantified limits, matching the listing. `personalize` grants
       // maxLogics: 3 / maxVisitorTypes: 5 on this plan — enforced, so it's safe
       // to print.
       '3 sort rules, 5 visitor types each',
+      // ─── below here: /pricing only, not the home teaser ───
       '3 upsells of each type',
       'Per-category rankings',
       'Configurable window — 24h to 30 days',
@@ -100,12 +103,16 @@ export const PLANS: Plan[] = [
     price: '$99',
     desc: 'For growing brands that want the numbers behind every sort.',
     features: [
+      // Analytics and AI authoring are what Pro IS — they stay in the teaser's
+      // four. The "unlimited …" lines are detail: they say more of the same
+      // rather than something new, so they sit below the fold on /pricing.
       'Everything in Starter, unlimited',
       'Popup upsells + AND/OR display rules',
-      'Unlimited sort rules and visitor types',
-      'Unlimited upsells of each type',
       'Customer events & analytics',
       'AI authoring — taxonomy + sort logic',
+      // ─── below here: /pricing only, not the home teaser ───
+      'Unlimited sort rules and visitor types',
+      'Unlimited upsells of each type',
       'Emotional preview (read-only)',
       'Priority refresh & throughput',
     ],
@@ -125,6 +132,7 @@ export const PLANS: Plan[] = [
       // already run gets smarter".
       'Emotional re-rank inside every upsell',
       'In-checkout upsell (Shopify Plus)',
+      // ─── below here: /pricing only, not the home teaser ───
       'Per-shopper real-time reranking',
       'Emotional heatmap, journey + AI summaries',
       'Highest AI limits',
@@ -133,6 +141,29 @@ export const PLANS: Plan[] = [
     cta: 'install',
   },
 ];
+
+/**
+ * How many bullets the HOME-PAGE teaser shows per card. `/pricing` shows all of
+ * them, so this number is the only thing that makes the two sections differ.
+ *
+ * It lives here rather than in pages/index.astro because it's a property of the
+ * lists above: bullets 1..TEASER_BULLETS are the teaser, and every `features`
+ * array is ordered with that boundary marked by a comment. Inserting a line
+ * above the marker silently rewrites the home page — which is exactly what
+ * happened when the quantified limits went in and pushed analytics and AI
+ * authoring out of Pro's four.
+ */
+export const TEASER_BULLETS = 4;
+
+// Build-time guard: every plan must have at least the teaser's worth of bullets,
+// or a card renders short on the home page while looking complete on /pricing.
+for (const p of PLANS) {
+  if (p.features.length < TEASER_BULLETS) {
+    throw new Error(
+      `Plan "${p.name}" has ${p.features.length} bullets; the home teaser needs ${TEASER_BULLETS}.`,
+    );
+  }
+}
 
 /** Feature-comparison matrix. `cells` is [Free, Starter, Pro, Growth].
  *  '✓' / '—' render as yes/no marks; anything else renders as literal text. */
