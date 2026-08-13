@@ -47,10 +47,14 @@ interface Props {
   duration?: string;
 }
 
+// Defaults describe what the shipped file actually shows — it walks the whole
+// journey (auto-sorted collection → bought-together → cart upsell + shipping bar
+// → popup → checkout → thank-you), not just the ranking. Copy that promised only
+// a re-ranked collection would undersell the second half of its own video.
 const {
   eyebrow = 'Watch',
-  heading = 'See it reorder a collection in real time.',
-  lead = 'Two minutes, no signup: how QSortby ranks a collection, personalizes it per shopper, and reports what the sort earned.',
+  heading = 'Watch it sort the collection — then grow the order.',
+  lead = 'A minute and a half, no signup: the collection re-ranks itself on live demand, then the same engine goes to work on the basket — bought-together on the product page, a free-shipping nudge in the cart, and an offer at checkout and after it.',
   duration,
 } = Astro.props;
 ---

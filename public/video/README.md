@@ -9,7 +9,24 @@ file costs the section rather than shipping a broken player.
 | `qsortby-intro.mp4` | **yes** | H.264 / AAC. This file is the gate — no MP4, no section. |
 | `qsortby-intro.webm` | no | VP9. Served first when present; roughly 30–40% smaller. |
 | `qsortby-intro.jpg` | no | Poster frame, 1600×900. Without it the frame shows a plain gradient until play. |
-| `qsortby-intro.vtt` | no | English captions. Add them — most sound-off viewers read rather than listen. |
+| `qsortby-intro.vtt` | no | English captions. **Not needed for the current file** — its subtitles are burned into the picture, so they show for everyone (and can't be switched off or translated). Only add a VTT if the video is ever re-cut without them. |
+
+## What's shipped right now
+
+`qsortby-intro.mp4` — 1920×1080, H.264 High, AAC, **1:37**, 14 MB (≈1.1 Mbps),
+faststart enabled. Subtitles burned in. `qsortby-intro.jpg` is a frame from
+0:05 (the storefront grid) at 1600×900.
+
+Two notes on this file, neither worth a re-encode on its own:
+
+- **40 fps.** Harmless but non-standard; 30 would have been slightly smaller.
+- **Colour is signalled as full-range with a `bt470bg` matrix** (`color_range=pc`,
+  `color_space=bt470bg`) rather than the usual limited-range `bt709`. Browsers
+  guess when primaries/transfer are absent, so colours can land slightly
+  differently across Chrome and Safari. Fixing it properly means re-encoding,
+  which would cost quality at this bitrate — worth doing only on the next re-cut,
+  by adding `-color_range tv -colorspace bt709 -color_primaries bt709 -color_trc bt709`
+  to the encode below.
 
 Renaming any of these breaks the match: the base name `qsortby-intro` is
 hard-coded in the component.
