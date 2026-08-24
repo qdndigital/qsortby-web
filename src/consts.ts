@@ -24,7 +24,7 @@ const DEMO_TEST_MODE =
 export const DEMO_PRODUCT_KEY = DEMO_TEST_MODE
   ? "pk_test_890b77deb4f206bde3e28fc1"
   : "fp_ab49994270d17cd686485bfd";
-export const DEMO_EVENT = "toan";
+export const DEMO_EVENT = "demo";
 
 // User guide — canonical page lives at /guide; also served on the guide.qsortby.com
 // subdomain (same Netlify site, see netlify.toml). Point links at the subdomain.
