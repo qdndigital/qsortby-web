@@ -239,6 +239,25 @@
   .plans-4 .plan .badge { @apply static top-auto right-auto self-start mb-2.5 inline-block; }
   .plans-4 .plan:not(.feat) .badge { background:var(--ink-2); }
 
+  /* Only Pro and Growth carry a badge, and in the 4-up layout the badge is a
+     STATIC block (see above) — so those two cards pushed their entire body down
+     by exactly the badge's height plus its margin, and the price, the divider
+     rule and the first bullet sat 29px lower than on Free and Starter. The card
+     heights and the buttons already lined up; it was only the top half that read
+     ragged across the row.
+
+     So the badge-less cards reserve the same slot. Measured, not guessed: the
+     badge box is 19px tall with a 10px bottom margin at every breakpoint the
+     4-up grid is used, because both come from fixed token values (text-label
+     line-height 1 + py-1, and mb-2.5).
+
+     `:has()` keeps the placeholder out of the markup — nothing for a screen
+     reader to announce and nothing to keep in sync in two page templates. Where
+     it is unsupported the cards simply fall back to the previous ragged-but-
+     working layout, so this is a safe enhancement rather than a dependency. */
+  :root { --badge-slot:29px; }
+  .plans-4 .plan:not(:has(.badge)) { padding-top:calc(1.5rem + var(--badge-slot)); }
+
   /* ---- faq ---- */
   .faq { @apply max-w-3xl mx-auto; }
   .faq details { @apply border-b; border-color:var(--line); }
