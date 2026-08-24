@@ -12,7 +12,7 @@ export const APP_STORE_URL = "https://apps.shopify.com/qsortby";
 // DEMO_URL is therefore both the no-JS fallback and what a cmd-click or a
 // copied link resolves to, so it has to stay a real page: it's the server-
 // rendered booking page for the same event, not a marketing URL.
-export const DEMO_URL = "https://qdn.qone.work/desk/qsortby/book/toan";
+export const DEMO_URL = "https://qdn.qone.work/desk/qsortby/book/demo";
 export const DEMO_SCRIPT_URL = "https://qdn.qone.work/book.js";
 // Test mode swaps in the product's test key, which books against the same
 // event without touching the real calendar. On automatically in `astro dev`;
