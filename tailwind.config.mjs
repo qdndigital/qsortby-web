@@ -1,8 +1,12 @@
 /**
  * QSortby — "Polaris Pro" design tokens.
  * 50% Shopify Polaris · 30% Linear · 20% Apple.
- * White ground, Shopify green accent, Inter, light borders, minimal shadow,
+ * White ground, Shopify green accent, light borders, minimal shadow,
  * no decorative gradients. The product dashboard is the hero.
+ *
+ * Type: ONE family, Schibsted Grotesk, named once in `--font-sans`
+ * (src/styles/global.css) so a swap touches a single declaration. See the
+ * switching note at the top of src/styles/fonts.css.
  */
 export default {
   content: ["./src/**/*.{astro,html,js,jsx,ts,tsx,md,mdx}"],
@@ -24,12 +28,14 @@ export default {
         down: "#c4392f",
       },
       fontFamily: {
-        // Two families only. `display` + `mono` both map to Inter so existing
-        // utility classes keep working; `serif` (Playfair) is the only display face.
-        sans: ["Inter", "system-ui", "-apple-system", "sans-serif"],
-        display: ["Inter", "system-ui", "-apple-system", "sans-serif"],
-        serif: ['"Playfair Display"', "Georgia", "Times New Roman", "serif"],
-        mono: ["Inter", "system-ui", "-apple-system", "sans-serif"],
+        // Every role resolves to the same token. `display` and `mono` are kept
+        // as aliases so the existing utility classes across the pages keep
+        // working, and `serif` is deliberately aliased too — a stray
+        // `font-serif` should stay in family rather than falling back to Times.
+        sans: ["var(--font-sans)"],
+        display: ["var(--font-sans)"],
+        serif: ["var(--font-sans)"],
+        mono: ["var(--font-sans)"],
       },
       fontSize: {
         label: ["0.6875rem", { lineHeight: "1", letterSpacing: "0.08em" }],

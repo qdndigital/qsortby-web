@@ -10,7 +10,7 @@ const description = 'How QSortby collects, uses, retains, and protects merchant 
     <div class="wrap">
       <div class="crumb"><a href="/">~</a> / privacy</div>
       <h1>Privacy Policy</h1>
-      <p class="upd font-mono">Last updated: 21 June 2026</p>
+      <p class="upd font-mono">Last updated: 22 August 2026</p>
     </div>
   </section>
 
@@ -26,8 +26,10 @@ const description = 'How QSortby collects, uses, retains, and protects merchant 
         <p>To rank products by sales velocity and keep your storefront updated, QSortby accesses, via the permissions you grant at install:</p>
         <ul>
           <li><strong>Orders &amp; refunds</strong> — used to compute real-time sales velocity.</li>
-          <li><strong>Products</strong> — titles, identifiers, and segment attributes (e.g. category) used to build rankings and write ranking metafields.</li>
+          <li><strong>Products</strong> — titles, identifiers, and catalog attributes (category, margin, launch date) used to build rankings. QSortby also creates metafield definitions on your products so you can supply those attributes.</li>
           <li><strong>Inventory levels</strong> — used to demote sold-out products.</li>
+          <li><strong>Customers &amp; customer events</strong> — customer id and order history, used to rank for returning shoppers and to join purchases back to the ranking that produced them.</li>
+          <li><strong>Write access</strong> — QSortby writes collection membership, order tags, and product metafield definitions. It never edits your product content, prices or inventory.</li>
           <li><strong>Store &amp; account details</strong> — shop domain and an access token needed to call the Shopify Admin API. Access tokens are encrypted at rest.</li>
         </ul>
 
@@ -37,14 +39,18 @@ const description = 'How QSortby collects, uses, retains, and protects merchant 
           <li>Page views, products viewed, and recently-viewed history</li>
           <li>Scroll, hover, search, and cart interaction signals</li>
           <li>Session metadata such as referrer, device type, and timestamps</li>
-          <li>Technical data including IP address and user-agent string</li>
+          <li>Technical data including IP address (coarsened before storage) and user-agent string</li>
         </ul>
-        <p>This data is tied to an anonymous visitor/session identifier. QSortby does <strong>not</strong> use it to build identified profiles of named individuals, and does <strong>not</strong> require shopper purchase history.</p>
+        <p>This data is keyed to a first-party visitor/session identifier. When a shopper is signed in we also store their Shopify customer id and a one-way hash of their order email, so purchases can be joined to the ranking that led to them — we never store names, addresses or plaintext email. Past orders are used only to rank products for that shopper (reorder and cart-history signals); QSortby builds no advertising profile and nothing that follows a shopper across stores.</p>
+        <p>QSortby sets no cookies of its own. It stores a first-party visitor identifier and a recently-viewed list in your storefront's own <code>localStorage</code> (keys prefixed <code>qsortby_</code>), and reads Shopify's own <code>_shopify_y</code> cookie so a checkout purchase can be matched to the ranking that led to it.</p>
+        <p>To attribute an order to the ranking that produced it, QSortby writes hidden note attributes onto the cart — a visitor identifier, the surface, and the A/B variant — which Shopify carries into the order, and may tag the resulting order in your Shopify Admin. These live on your own order record and are removed with the order under your Shopify retention settings.</p>
+        <p><strong>Consent.</strong> Where your theme loads Shopify's Customer Privacy API, QSortby honors it: with analytics consent withheld we drop every behavioral event and keep only a minimal, non-identifying session record, so contextual ranking still works. On themes that do not load that API we cannot read a consent decision, so collection follows your own banner configuration — enable Shopify's consent API on your theme if you serve regions that require prior consent.</p>
 
         <h2>4. How we use data</h2>
         <ul>
-          <li>To compute and publish best-seller rankings and ranking metafields</li>
+          <li>To compute and publish best-seller rankings and keep app-managed collections in order</li>
           <li>To maintain a Best Sellers collection and demote out-of-stock items</li>
+          <li>To attribute orders to the ranking or offer a shopper engaged with</li>
           <li>To operate, secure, debug, and improve the service</li>
           <li>To provide support you request</li>
         </ul>
@@ -57,10 +63,10 @@ const description = 'How QSortby collects, uses, retains, and protects merchant 
         </ul>
 
         <h2>6. Data retention</h2>
-        <p>Behavioral event data is retained on a rolling basis (approximately 90 days) and then pruned. Ranking data reflects a rolling 24-hour window. Merchant account data is retained for the life of the installation and deleted on the schedule below after uninstall.</p>
+        <p>Behavioral event data is retained for the life of the installation, so long-window rankings and year-over-year reporting stay accurate. Derived visitor profiles and the IP/user-agent rollup are pruned after 12 months, and order records after 24 months. Ranking reads your order lines over whatever window each collection is set to. Merchant account data is retained for the life of the installation and deleted on the schedule below after uninstall.</p>
 
         <h2>7. Sub-processors &amp; infrastructure</h2>
-        <p>QSortby runs on dedicated cloud infrastructure provided by <strong>DigitalOcean</strong>, and uses Shopify's APIs and native event delivery. Where a merchant enables QSortby's optional AI personalization features, product and behavioral signals may be processed by <strong>OpenAI</strong> to generate embeddings and intent predictions. Data is processed only to deliver the service described here.</p>
+        <p>QSortby runs on dedicated cloud infrastructure provided by <strong>DigitalOcean</strong>, and uses Shopify's APIs. Shopify order, product and inventory events reach us through <strong>Google Cloud Pub/Sub</strong>. Where a merchant enables QSortby's optional AI features, product and behavioral signals may be processed by <strong>OpenAI</strong> to generate embeddings and state predictions. Data is processed only to deliver the service described here.</p>
 
         <h2>8. Your rights &amp; GDPR</h2>
         <p>QSortby is built to be GDPR-compliant. We honor Shopify's mandatory data-protection webhooks:</p>

@@ -5,7 +5,7 @@
 
 /* =====================================================================
    QSortby — "Polaris Pro": 50% Shopify Polaris · 30% Linear · 20% Apple.
-   White ground, Shopify-green accent, Inter, light borders, minimal
+   White ground, Shopify-green accent, Schibsted Grotesk, light borders, minimal
    shadow, no decorative gradients. Motion is quiet and quick.
    ===================================================================== */
 
@@ -26,10 +26,30 @@
     --grad-mint:linear-gradient(180deg,#ffffff 0%,#f3fbf7 100%);
     --shadow-float:0 1px 1px rgba(16,24,40,.04),0 8px 24px -12px rgba(16,24,40,.18),0 40px 80px -36px rgba(16,24,40,.22);
     --ease:cubic-bezier(.22,.61,.21,1);
+    /* The one place the typeface is named. tailwind.config.mjs reads this for
+       every font role; the headline rules below read it too. */
+    --font-sans:'Schibsted Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;
+    /* `--mono` was used in ~12 places (SortConsole, IntroVideo) and never
+       defined — an invalid var, so those rules silently did nothing and the
+       text inherited. It never showed because tailwind's `mono` role pointed at
+       the body face anyway. Defined explicitly now so the intent is on the
+       page: here "mono" means the tracked-uppercase LABEL style, not a
+       monospaced face. Point it elsewhere if a real mono is ever wanted. */
+    --mono:var(--font-sans);
     --row-h:58px;
   }
   html { scroll-behavior:smooth; }
   body { @apply bg-bg text-ink font-sans antialiased; letter-spacing:-.011em; }
+  /* <video> does not inherit the page font, so its no-support fallback text was
+     the one thing on the site still setting in Times. It only shows when the
+     video already failed — no reason for it to look broken twice. */
+  /* <video> does not inherit the page font, so its no-support fallback text was
+     the one thing on the site still setting in Times. The descendant selector is
+     there because the fallback markup lives INSIDE <video>. (Chromium reports
+     Times for those children either way — video fallback content has no box when
+     the video IS supported, so getComputedStyle returns UA defaults for it. The
+     rule is what applies in the browser that actually shows the fallback.) */
+  video, video * { font-family:var(--font-sans); }
   @media (max-width:1023px){ body { padding-bottom:62px; } }
   a { @apply text-inherit no-underline; }
   svg { @apply block; }
@@ -47,6 +67,30 @@
   .eyebrow { @apply inline-flex items-center gap-2 font-mono text-label uppercase; color:var(--green-ink); }
   .eyebrow .dot { @apply inline-block w-1.5 h-1.5 rounded-full; background:var(--green); }
   .kicker { @apply font-mono text-label uppercase text-muted; }
+
+  /* .kicker is a LABEL (3-5 words, all-caps, tracked). For the running-prose
+     footnote under a section use .snote instead: sentence case, no tracking,
+     readable size. All-caps + .2em tracking over four lines is unreadable. */
+  .snote { @apply mx-auto text-center; max-width:62ch; font-family:var(--font-sans);
+           font-size:.9375rem; line-height:1.66; letter-spacing:0; text-transform:none;
+           color:var(--muted); }
+  .snote b, .snote strong { font-weight:650; color:var(--ink-2); }
+  .snote i, .snote em { font-style:italic; }
+  .snote a { color:var(--ink-2); text-decoration:underline; text-underline-offset:2px; }
+  .snote a:hover { color:var(--green-ink); }
+  .snote.lt { text-align:left; margin-inline:0; max-width:76ch; }
+
+  /* Three-step setup strip — the compact replacement for the old Setup section.
+     Sits under the pricing teaser, where "how much work is this?" is actually
+     the question being asked. */
+  .setup3 { display:grid; gap:1px; background:var(--line); border:1px solid var(--line);
+            border-radius:14px; overflow:hidden; margin-top:2rem; }
+  @media (min-width:760px){ .setup3 { grid-template-columns:repeat(3,1fr); } }
+  .setup3 > div { background:var(--surface); padding:16px 18px 18px; display:grid; gap:4px; align-content:start; }
+  .setup3 .s3n { font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:.14em;
+                 text-transform:uppercase; color:var(--green-ink); }
+  .setup3 b { font-weight:650; font-size:1rem; letter-spacing:-.018em; color:var(--ink); }
+  .setup3 span:last-child { font-size:.88rem; line-height:1.55; color:var(--ink-2); }
 
   /* ---- section heads ---- */
   .shead { @apply max-w-2xl; }
@@ -119,6 +163,27 @@
   .hero-meta > div { @apply px-6 py-4 flex-1; border-color:var(--line); }
   .hero-meta .k { @apply font-mono text-label uppercase text-muted; }
   .hero-meta .n { @apply font-display font-semibold text-stat mt-1 tabular-nums; }
+  /* Wider variant + an inline unit, for the four-cell scope strip under the
+     hero. `.hero-meta` was already styled for label-over-number but unused;
+     these two rules are all it needed to hold values like "1h to 1 year"
+     without the cell text wrapping mid-number. */
+  /* Own section now, so it drops `.hero-meta`'s own mt-12 — the hero's pb-20
+     already supplies the gap, and stacking both left ~170px of dead air. */
+  .hero-meta.wide { @apply mt-0; max-width:840px; }
+  .hero-meta .n { @apply flex flex-col; }
+  .hero-meta .n .u { @apply font-sans font-normal text-muted mt-1; font-size:.8125rem; line-height:1.3; letter-spacing:0; }
+  /* A wrapped label pushes its own number down and breaks the row's shared
+     baseline, so the labels never wrap and the strip stacks before they would. */
+  .hero-meta .k { @apply whitespace-nowrap; }
+  @media (max-width:879px){
+    /* Below ~880px four cells are under 200px each and "Emotional states" wraps.
+       Stack to a 2×2 grid instead, and drop the vertical dividers `divide-x`
+       puts between flex children. */
+    .hero-meta { @apply grid grid-cols-2; }
+    .hero-meta > div { @apply border-l-0 border-t; flex:none; }
+    .hero-meta > div:nth-child(-n+2) { @apply border-t-0; }
+    .hero-meta > div:nth-child(even) { border-left:1px solid var(--line); }
+  }
 
   /* ---- cards ---- */
   .cards { @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4; }
@@ -370,7 +435,7 @@
 .as-top .u b { color:var(--ink); font-weight:600; }
 .as-body { display:grid; grid-template-columns:196px 1fr; min-height:418px; }
 .as-side { border-right:1px solid var(--w-line); padding:15px 12px; display:flex; flex-direction:column; gap:3px; background:var(--w-side); }
-.as-side .brand { display:flex; align-items:center; gap:8px; font-family:'Inter',sans-serif; font-weight:700; font-size:13.5px; letter-spacing:-.02em; margin-bottom:13px; padding:0 4px; color:var(--ink); }
+.as-side .brand { display:flex; align-items:center; gap:8px; font-family:var(--font-sans); font-weight:700; font-size:13.5px; letter-spacing:-.02em; margin-bottom:13px; padding:0 4px; color:var(--ink); }
 .as-side .brand .mk { width:18px; height:18px; border-radius:5px; background:linear-gradient(140deg,var(--green-bright),var(--green)); }
 .as-nav { display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:8px; font-size:12.5px; color:var(--muted); }
 .as-nav .d { width:14px; height:14px; border-radius:4px; background:#e7e9ec; }
@@ -378,7 +443,7 @@
 .as-nav.on .d { background:var(--green); }
 .as-main { padding:18px 20px 22px; }
 .as-h { display:flex; align-items:center; justify-content:space-between; margin-bottom:13px; }
-.as-h .ttl { font-family:'Inter',sans-serif; font-weight:600; font-size:17px; letter-spacing:-.02em; color:var(--ink); }
+.as-h .ttl { font-family:var(--font-sans); font-weight:600; font-size:17px; letter-spacing:-.02em; color:var(--ink); }
 .as-h .ttl small { display:block; font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin-top:3px; }
 .as-live { display:inline-flex; align-items:center; gap:7px; font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:.1em; color:var(--green-ink); background:var(--green-soft); padding:5px 10px; border-radius:999px; }
 .as-live i { width:6px; height:6px; border-radius:50%; background:var(--green); }
@@ -395,7 +460,7 @@
 .as-tiles { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:16px; }
 .as-tile { border:1px solid var(--w-line); border-radius:11px; padding:12px 13px; background:var(--grad-mint); }
 .as-tile .k { font-family:var(--mono); font-size:9.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
-.as-tile .v { font-family:'Inter',sans-serif; font-weight:700; font-size:20px; margin-top:5px; font-variant-numeric:tabular-nums; letter-spacing:-.02em; color:var(--ink); }
+.as-tile .v { font-family:var(--font-sans); font-weight:700; font-size:20px; margin-top:5px; font-variant-numeric:tabular-nums; letter-spacing:-.02em; color:var(--ink); }
 .as-tile .v em { font-style:normal; font-family:var(--mono); font-size:11px; font-weight:600; color:var(--green-ink); margin-left:5px; }
 
 /* the animated ranking table */
@@ -462,7 +527,7 @@ body.nav-open .menu-btn .ic-close { display:block; }
 .fb { position:relative; display:flex; flex-direction:column; background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:22px 22px 20px; overflow:hidden; transition:transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease); }
 .fb:hover { transform:translateY(-3px); border-color:var(--green-line); box-shadow:var(--shadow-float); }
 .fb .kicker { display:block; margin-bottom:9px; color:var(--green-ink); }
-.fb h3 { font-family:'Inter',sans-serif; font-weight:600; font-size:1.18rem; letter-spacing:-.02em; margin-bottom:8px; color:var(--ink); }
+.fb h3 { font-family:var(--font-sans); font-weight:600; font-size:1.18rem; letter-spacing:-.02em; margin-bottom:8px; color:var(--ink); }
 .fb p { font-size:.92rem; color:var(--ink-2); line-height:1.6; max-width:42ch; }
 .fb .fb-viz { margin-top:18px; }
 .fb.wide { grid-column:span 2; }
@@ -596,7 +661,7 @@ body.nav-open .menu-btn .ic-close { display:block; }
 .aud-col { position:relative; background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:26px 26px 24px; }
 .aud-col.feat { border-color:var(--green-line); background:linear-gradient(180deg,#fff,var(--mint)); box-shadow:var(--shadow-float); }
 .aud-col .badge { position:absolute; top:22px; right:22px; font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:#fff; background:var(--green); padding:4px 9px; border-radius:999px; }
-.aud-col h3 { font-family:'Inter',sans-serif; font-weight:600; font-size:1.32rem; letter-spacing:-.02em; margin:6px 0 8px; color:var(--ink); }
+.aud-col h3 { font-family:var(--font-sans); font-weight:600; font-size:1.32rem; letter-spacing:-.02em; margin:6px 0 8px; color:var(--ink); }
 .aud-col p { font-size:.95rem; color:var(--ink-2); line-height:1.6; margin-bottom:16px; }
 .aud-col ul { list-style:none; display:flex; flex-direction:column; gap:10px; }
 .aud-col li { display:flex; align-items:flex-start; gap:10px; font-size:.92rem; color:var(--ink-2); }
@@ -608,7 +673,7 @@ body.nav-open .menu-btn .ic-close { display:block; }
 .vq { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; aspect-ratio:4/3; background:var(--grad-mint); border:1px dashed var(--green-line); border-radius:18px; text-align:center; }
 .vq .play { display:grid; place-items:center; width:52px; height:52px; border-radius:50%; background:#fff; border:1px solid var(--green-line); box-shadow:0 8px 20px -12px rgba(16,24,40,.3); }
 .vq .play svg { width:22px; height:22px; fill:var(--green); margin-left:2px; }
-.vq .vlbl { font-family:'Inter',sans-serif; font-weight:600; font-size:.95rem; color:var(--ink); }
+.vq .vlbl { font-family:var(--font-sans); font-weight:600; font-size:.95rem; color:var(--ink); }
 .vq .vsub { font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); }
 
 /* ---- final CTA → emerald gradient (replaces dark panel) ---- */
@@ -640,7 +705,7 @@ body.nav-open .menu-btn .ic-close { display:block; }
 .sf-dot { width:8px; height:8px; border-radius:50%; background:var(--green); }
 .sf-cap { font-size:10px; text-transform:uppercase; letter-spacing:.14em; font-weight:700; color:var(--muted); transition:color .3s; }
 .sfront[data-phase="optimized"] .sf-cap, .sfront[data-phase="convert"] .sf-cap { color:var(--accent); }
-.sf-head { font-family:'Inter',sans-serif; font-weight:600; font-size:15px; letter-spacing:-.02em; color:var(--ink); padding:0 6px 10px; }
+.sf-head { font-family:var(--font-sans); font-weight:600; font-size:15px; letter-spacing:-.02em; color:var(--ink); padding:0 6px 10px; }
 
 /* signal chips — light up when QSortby "reads signals" */
 .sf-signals { display:flex; gap:6px; padding:0 6px 11px; }
@@ -693,7 +758,7 @@ body.nav-open .menu-btn .ic-close { display:block; }
 .sf-foot { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:13px; padding:11px 13px; background:var(--paper); border:1px solid var(--w-line); border-radius:12px; }
 .sf-kpi { display:flex; flex-direction:column; gap:3px; }
 .sf-k { font-size:9px; text-transform:uppercase; letter-spacing:.12em; font-weight:700; color:var(--muted); }
-.sf-v { display:inline-flex; align-items:baseline; gap:1px; font-family:'Inter',sans-serif; font-weight:700; font-size:18px; color:var(--ink); letter-spacing:-.02em; font-variant-numeric:tabular-nums; transition:color .4s; }
+.sf-v { display:inline-flex; align-items:baseline; gap:1px; font-family:var(--font-sans); font-weight:700; font-size:18px; color:var(--ink); letter-spacing:-.02em; font-variant-numeric:tabular-nums; transition:color .4s; }
 .sf-v em { font-style:normal; font-size:12px; color:var(--green-ink); margin-left:3px; opacity:0; transition:opacity .4s; }
 .sfront[data-phase="convert"] .sf-v { color:var(--green-ink); }
 .sfront[data-phase="convert"] .sf-v em { opacity:1; animation:kpibump 1.1s var(--ease); }
@@ -705,14 +770,17 @@ body.nav-open .menu-btn .ic-close { display:block; }
 .sfront[data-phase="convert"] .sf-spark .sp-rise { stroke-dashoffset:0; }
 
 /* =====================================================================
-   EDITORIAL TYPOGRAPHY — Playfair Display serif headlines with italic
-   accent emphasis + wide-tracked mono kickers (editorial, paper-magazine
-   feel inspired by the ownego deck), on the existing light/green brand.
+   EDITORIAL TYPOGRAPHY — one grotesque, tracked-tight headlines and
+   wide-tracked kickers. The paper-magazine feel now comes from the
+   spacing and the rules, not from a serif.
    ===================================================================== */
 .hero h1, .shead h2, .phero h1, .cta h2, .split h2, .prose h2 {
-  font-family:'Playfair Display', Georgia, 'Times New Roman', serif;
-  font-weight:600;
-  letter-spacing:-.012em;
+  font-family:var(--font-sans);
+  /* Schibsted at 700 with tighter tracking does the work Playfair's 600 did.
+     A grotesque needs more negative tracking than a serif at display size or
+     it reads loose; -.028em is where the counters stop opening up. */
+  font-weight:700;
+  letter-spacing:-.028em;
 }
 .hero h1 { font-weight:700; line-height:1.05; }
 .phero h1 { font-weight:700; line-height:1.06; }
@@ -1017,7 +1085,7 @@ header.site { background:rgba(252,252,250,.62); -webkit-backdrop-filter:blur(16p
 /* electronics extras: revenue bars + amounts + conversion badge */
 .rv-bar { width:46px; height:6px; border-radius:3px; background:rgba(20,18,16,.12); overflow:hidden; flex:none; }
 .rv-bar i { display:block; height:100%; width:var(--w); border-radius:3px; background:linear-gradient(90deg,var(--green),var(--green-bright)); }
-.rv-amt { font-family:'Inter',sans-serif; font-weight:800; font-size:12px; color:var(--ink); flex:none; min-width:38px; text-align:right; font-variant-numeric:tabular-nums; }
+.rv-amt { font-family:var(--font-sans); font-weight:800; font-size:12px; color:var(--ink); flex:none; min-width:38px; text-align:right; font-variant-numeric:tabular-nums; }
 .rv-cvr { position:absolute; right:11px; top:-7px; font-size:8.5px; font-weight:700; color:#fff; background:var(--green); padding:2px 6px; border-radius:999px; box-shadow:0 6px 12px -4px rgba(0,163,107,.6); }
 
 /* beauty: intent signals → meter → recommended hero */
@@ -1162,7 +1230,7 @@ header.site { background:rgba(252,252,250,.62); -webkit-backdrop-filter:blur(16p
   border-radius:12px; background:var(--paper); }
 .emap-read .emap-k { font-family:var(--mono); font-size:10px; font-weight:600;
   text-transform:uppercase; letter-spacing:.12em; color:var(--muted); }
-.emap-read b { font-family:'Inter',sans-serif; font-weight:600; font-size:.95rem; color:var(--ink); }
+.emap-read b { font-family:var(--font-sans); font-weight:600; font-size:.95rem; color:var(--ink); }
 .emap-read .emap-arrow { color:var(--faint); }
 .emap-read .emap-note { flex-basis:100%; font-size:.85rem; color:var(--ink-2); }
 
@@ -1186,7 +1254,7 @@ header.site { background:rgba(252,252,250,.62); -webkit-backdrop-filter:blur(16p
 .espot .ladder .n { display:grid; place-items:center; width:26px; height:26px; flex:none;
   border-radius:50%; background:var(--paper); border:1px solid var(--line-2);
   font-family:var(--mono); font-size:11px; font-weight:700; color:var(--ink-2); }
-.espot .ladder b { display:block; font-family:'Inter',sans-serif; font-weight:600;
+.espot .ladder b { display:block; font-family:var(--font-sans); font-weight:600;
   font-size:1rem; color:var(--ink); margin-bottom:3px; }
 .espot .ladder p { font-size:.93rem; color:var(--ink-2); line-height:1.6; }
 
@@ -1200,7 +1268,7 @@ header.site { background:rgba(252,252,250,.62); -webkit-backdrop-filter:blur(16p
   letter-spacing:.1em; color:var(--muted); }
 .etier.on .et-p { color:var(--green-ink); }
 .etier .et-pr { font-family:var(--mono); font-size:11px; color:var(--faint); }
-.etier b { display:block; font-family:'Inter',sans-serif; font-weight:600; font-size:.97rem;
+.etier b { display:block; font-family:var(--font-sans); font-weight:600; font-size:.97rem;
   color:var(--ink); margin-bottom:4px; }
 .etier p { font-size:.88rem; color:var(--ink-2); line-height:1.55; }
 
@@ -1297,3 +1365,30 @@ header.site { background:rgba(252,252,250,.62); -webkit-backdrop-filter:blur(16p
   .pf-row .gthumb { display:none; }
   .pf-n { font-size:11px; }
 }
+
+/* =====================================================================
+   HEADLINE EMPHASIS — final word.
+
+   `<em>` inside a headline is set five times further up this file, across
+   four cascade passes that were added at different times: not-italic, then
+   italic, then colour:inherit, then colour:var(--accent). Untangling that
+   history is a separate job; this closes it out in one place.
+
+   The device used to be an italic serif. With a single grotesque there is no
+   italic to lean on — synthesised or true, an italic sans inside a tracked
+   sans headline reads as a mistake — so emphasis becomes weight plus the
+   brand green. Same job, stays in family.
+   ===================================================================== */
+.hero h1 em, .shead h2 em, .cta h2 em, .phero h1 em, .split h2 em, .prose h2 em {
+  font-style:normal;
+  font-weight:800;
+  /* --green (#00a36b, the mark colour), NOT --accent (#16d223). That neon was
+     picked when the emphasis was a thin italic serif, where only a little ink
+     is coloured. At 800-weight sans it is a large field of acid green and it
+     shouts over the headline it is meant to inflect. Compared all three on the
+     real hero before choosing. --accent is left alone for its other uses. */
+  color:var(--green);
+}
+/* The CTA band is light, not dark — it was inverted at some point and the
+   inversion was removed. So no special case: same brand green as the hero.
+   (Checked on the built page; --green-bright reads mint on paper.) */

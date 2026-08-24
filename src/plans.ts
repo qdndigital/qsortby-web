@@ -11,8 +11,11 @@
  *   1. REVERSE_TRIAL_DAYS (10) — every new install runs on full Growth features,
  *      then auto-downgrades to Free. The app is never locked or turned off.
  *      This is the acquisition hook and belongs in the headline.
- *   2. Shopify's payment trial (7 days) — only applies once a merchant picks a
- *      PAID plan; it's the window before the first charge. Billing detail, not a hook.
+ *   2. Shopify's payment trial (10 days, see PAYMENT_TRIAL_DAYS) — only applies
+ *      once a merchant picks a PAID plan; it's the window before the first
+ *      charge. Billing detail, not a hook. This line said 7 for a while, which
+ *      is what put a stale "7-day trial" into /terms — the app has always set
+ *      `trialDays: 10`.
  */
 
 /** Full-access window on install, before auto-downgrade to Free. */
@@ -74,7 +77,14 @@ export const PLANS: Plan[] = [
       'Cart upsell + free-shipping bar',
       'A/B testing + revenue attribution',
       // ─── below here: /pricing only, not the home teaser ───
-      '7-day ranking window',
+      // A FLOOR, not a fixed window: `smart_sortby.minWindowDays: 7` on Free
+      // (apps/api plan-features) stops a low-volume store picking a noisy
+      // short window. Longer windows are fine on Free — don't write "7 days".
+      '7-day minimum ranking window',
+      // Ungated in the app: the Manual order tab and the before/after preview
+      // carry no feature check, so they belong here rather than on Starter.
+      'Manual order & before/after preview',
+      'Shop-wide product exclusions',
     ],
     cta: 'install',
   },
@@ -93,8 +103,10 @@ export const PLANS: Plan[] = [
       // ─── below here: /pricing only, not the home teaser ───
       '3 upsells of each type',
       'Per-category rankings',
-      'Configurable window — 24h to 30 days',
-      'Manual order, preview & CSV export',
+      // No plan caps the window — the only entitlement is Free's 7-day FLOOR.
+      // What Starter actually buys is the short end, plus calendar windows.
+      'Short windows unlocked — from 1 hour',
+      'Fixed windows — last week, a set month, any date range',
     ],
     cta: 'install',
   },
@@ -114,7 +126,11 @@ export const PLANS: Plan[] = [
       'Unlimited sort rules and visitor types',
       'Unlimited upsells of each type',
       'Emotional preview (read-only)',
-      'Priority refresh & throughput',
+      // Was "Priority refresh & throughput" — nothing in the app schedules by
+      // plan (cron interval is per-collection, 5 min floor for everyone). The
+      // CSV export lives on the Analytics page, which is what `analytics`
+      // gates, so it is a real Pro line.
+      'Full report history & CSV export',
     ],
     badge: 'Most popular',
     feat: true,
@@ -130,12 +146,19 @@ export const PLANS: Plan[] = [
       // Says out loud that the AI reaches INTO the upsells. Without this line
       // Growth reads as "buy another AI feature" instead of "everything you
       // already run gets smarter".
-      'Emotional re-rank inside every upsell',
+      //
+      // NAME THE FOUR. The re-rank is threaded through cart, popup, checkout
+      // and thank-you only — the free-shipping bar picks on price band and FBT
+      // on co-purchase pairs, so "every upsell" was wrong.
+      'Emotional re-rank in cart, popup, checkout & thank-you',
       'In-checkout upsell (Shopify Plus)',
       // ─── below here: /pricing only, not the home teaser ───
       'Per-shopper real-time reranking',
       'Emotional heatmap, journey + AI summaries',
-      'Highest AI limits',
+      // Was "Highest AI limits" — Pro and Growth carry IDENTICAL monthlyCalls /
+      // dailyCalls (both unset). The real difference is that the emotional read
+      // is applied rather than only logged.
+      'Emotional state written to every ranked surface',
     ],
     badge: 'Most advanced',
     cta: 'install',
@@ -173,7 +196,12 @@ export const MATRIX: { label: string; cells: string[] }[] = [
   { label: 'A/B testing + revenue attribution', cells: ['✓', '✓', '✓', '✓'] },
   { label: 'Klaviyo & Google Analytics', cells: ['✓', '✓', '✓', '✓'] },
   { label: 'Managed collections', cells: ['1', '5', 'Unlimited', 'Unlimited'] },
-  { label: 'Ranking window', cells: ['7 days', '24h – 30d', 'Any', 'Any'] },
+  // The ONLY window entitlement in the app is `smart_sortby.minWindowDays`, a
+  // FLOOR, set to 7 on Free and unset everywhere else. There is no max-window
+  // limit field at all, so no plan has a 30-day ceiling — the picker allows up
+  // to 365 days on every tier. Don't reintroduce a range here.
+  { label: 'Ranking window', cells: ['7 days min.', '1h – 365d', '1h – 365d', '1h – 365d'] },
+  { label: 'Fixed / calendar windows', cells: ['—', '✓', '✓', '✓'] },
   { label: 'Personalized “For You” feed', cells: ['—', '✓', '✓', '✓'] },
   // The `personalize` caps (maxLogics / maxVisitorTypes in the app). These were
   // on the App Store listing but nowhere on the site, which made Starter look
@@ -200,8 +228,12 @@ export const MATRIX: { label: string; cells: string[] }[] = [
   { label: 'AI authoring (taxonomy + logic)', cells: ['—', '—', '✓', '✓'] },
   { label: 'Emotional AI — preview only', cells: ['—', '—', '✓', '✓'] },
   { label: 'Emotional AI — live per shopper', cells: ['—', '—', '—', '✓'] },
-  { label: 'Emotional re-rank inside upsells', cells: ['—', '—', '—', '✓'] },
+  { label: 'Emotional re-rank in cart / popup / checkout / thank-you', cells: ['—', '—', '—', '✓'] },
   { label: 'Emotional Insights — heatmap, journey, AI summaries', cells: ['—', '—', '—', '✓'] },
   { label: 'Orders / month', cells: ['200*', '2,000*', 'Unlimited', 'Unlimited'] },
-  { label: 'Support', cells: ['Docs', 'Email', 'Priority', 'Priority'] },
+  // Nothing in the app tiers support, and /support promises email + a one
+  // business-day reply + free setup help to EVERY plan. This row used to say
+  // Free got docs only, which contradicted our own support page.
+  { label: 'Support', cells: ['Email + docs', 'Email + docs', 'Priority email', 'Priority email'] },
+  { label: 'Setup help', cells: ['✓', '✓', '✓', '✓'] },
 ];

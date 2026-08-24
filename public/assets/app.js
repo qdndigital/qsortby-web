@@ -101,7 +101,7 @@
     var msg = {
       sending: cf.getAttribute('data-msg-sending') || 'Sending…',
       ok: cf.getAttribute('data-msg-ok') || 'Thanks — we got your message.',
-      err: cf.getAttribute('data-msg-err') || 'Could not send right now — email quang.dinh@scentiment.com.'
+      err: cf.getAttribute('data-msg-err') || 'Could not send right now — email hello@qdn.vn.'
     };
     var say = function (m, cls) { if (st) { st.textContent = m; st.className = 'form-status' + (cls ? ' ' + cls : ''); } };
     cf.addEventListener('submit', function (e) {

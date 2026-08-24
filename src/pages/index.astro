@@ -1,10 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
 import StorefrontHero from '../components/StorefrontHero.astro';
-import EmotionMap from '../components/EmotionMap.astro';
+import EmotionRead from '../components/EmotionRead.astro';
 import SortConsole from '../components/SortConsole.astro';
 import IntroVideo from '../components/IntroVideo.astro';
-import { APP_STORE_URL, DEMO_URL } from '../consts';
+import { APP_STORE_URL } from '../consts';
+import BookDemo from '../components/BookDemo.astro';
 import { PLANS, REVERSE_TRIAL_DAYS, TEASER_BULLETS } from '../plans';
 
 const title = 'QSortby — Collection Sorting & Upsells for Shopify';
@@ -36,27 +37,50 @@ const x = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M6 18L18 6"/></svg>';
         </p>
         <div class="hero-cta">
           <a href={APP_STORE_URL} class="btn btn-accent btn-lg">Install free <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          <a href={DEMO_URL} class="btn btn-line btn-lg">Book a demo</a>
+          <BookDemo class="btn btn-line btn-lg">Book a demo</BookDemo>
         </div>
-        <p class="hero-note">Free plan forever · {REVERSE_TRIAL_DAYS} days full access on install · No card, no theme code</p>
+        <p class="hero-note">Free plan forever · {REVERSE_TRIAL_DAYS} days full access on install · No card · GDPR-ready</p>
       </div>
       <div class="hero-viz"><StorefrontHero /></div>
     </div>
   </section>
 
-  <!-- ===================== TRUST BAR ===================== -->
-  <section style="padding:1rem 0 0">
+  <!-- ===================== SCOPE STRIP =====================
+       This replaced a five-chip trust bar that restated the eyebrow ("Built for
+       Shopify") and the hero note ("Free plan, no card", "No theme code") a
+       second time, and carried a bare "Real-time" claim. Three of five items
+       were duplicates, so the strip cost a screenful and said nothing new.
+
+       What sits here now is the first thing on the page a visitor can CHECK:
+       four counts, each traceable to the app. Specific beats adjectival — "13
+       sorting rules" survives scrutiny in a way "Real-time" does not.
+
+       ── This is the slot for real numbers. ──
+       The moment there is a store figure worth quoting (lift, orders ranked,
+       revenue attributed), swap a cell for it: `.hero-meta` is built for
+       label-over-number and takes 3–5 cells. A sourced number outranks every
+       count below, so replace, don't append. Never put an unsourced figure
+       here — the site already had to walk back a "+37% revenue" that was only
+       ever an illustration. -->
+  <section style="padding:0 0 .5rem">
     <div class="wrap">
-      <div class="trustbar rv">
-        <span class="ti"><svg viewBox="0 0 24 24"><path d="M12 3l8 4v6c0 5-4 7-8 8-4-1-8-3-8-8V7z"/></svg> Built for Shopify</span>
-        <span class="sep"></span>
-        <span class="ti"><svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-4 8-8 10-4-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg> GDPR-ready</span>
-        <span class="sep"></span>
-        <span class="ti"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg> Free plan, no card</span>
-        <span class="sep"></span>
-        <span class="ti"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg> Real-time</span>
-        <span class="sep"></span>
-        <span class="ti"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/></svg> No theme code</span>
+      <div class="hero-meta wide rv">
+        <div>
+          <span class="k">Ways to sort</span>
+          <span class="n">13<span class="u">+ per-visitor</span></span>
+        </div>
+        <div>
+          <span class="k">Ranking window</span>
+          <span class="n">1h<span class="u">to 1 year</span></span>
+        </div>
+        <div>
+          <span class="k">Emotional states</span>
+          <span class="n">12<span class="u">read per session</span></span>
+        </div>
+        <div>
+          <span class="k">Upsell surfaces</span>
+          <span class="n">6<span class="u">cart to thank-you</span></span>
+        </div>
       </div>
     </div>
   </section>
@@ -97,8 +121,8 @@ const x = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M6 18L18 6"/></svg>';
         <div class="ps-col good">
           <span class="tag">QSortby</span>
           <ul>
-            <li><span class="mk" set:html={mk} /> A rolling window <b>you</b> choose — 24 hours for trends, 30 days for stability</li>
-            <li><span class="mk" set:html={mk} /> Sold-out demoted the moment stock hits zero, promoted back on restock</li>
+            <li><span class="mk" set:html={mk} /> A window <b>you</b> choose — an hour for trends, a year for stability, or a set month</li>
+            <li><span class="mk" set:html={mk} /> Sold-out demoted within minutes of hitting zero, promoted back on restock</li>
             <li><span class="mk" set:html={mk} /> Optional per-shopper feed — each visitor gets their own order</li>
             <li><span class="mk" set:html={mk} /> 10+ signals: velocity, revenue, margin, conversion, trend, selling-fast</li>
             <li><span class="mk" set:html={mk} /> Every sort A/B-tested with attributed revenue and a significance verdict</li>
@@ -119,98 +143,26 @@ const x = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M6 18L18 6"/></svg>';
     </div>
   </section>
 
-  <!-- ===================== EMOTIONAL AI SPOTLIGHT =====================
-       This is the category differentiator and the whole basis of the $199 tier,
-       so it gets a section of its own rather than a card in the grid above.
-       The map is the asset no competitor can copy-paste — keep it here. -->
+  <!-- ===================== PROOF (the A/B report) =====================
+       This was a full "The ranking engine" section: three step cards, this A/B
+       panel, and a four-cell stats row — 1,270px. The step cards restated the
+       console directly above ("pick the signal" = the chips, "score live,
+       in-stock first" = the animation and the sold-out row, "A/B it" = this
+       panel), and the stats row restated the scope strip under the hero almost
+       cell for cell. Two thirds of the section was the page repeating itself.
+
+       What survived is the one asset neither carried: the experiment report. It
+       sits directly under the console now, because "the storefront rearranged
+       itself" and "here is what that earned" are one thought, not two sections.
+
+       The two facts the deleted cards carried that nothing else did — the
+       five-minute republish and the last-touch funnel — moved into the lead. -->
   <section class="sec">
     <div class="wrap">
-      <div class="shead ctr rv" style="margin-bottom:3rem">
-        <span class="eyebrow"><span class="dot"></span> Emotional AI</span>
-        <h2>Other engines know who a shopper <em>has been</em>. QSortby knows who they are <em>right now</em>.</h2>
-        <p class="lead-c">Recommendation engines rank on purchase history, so a first-time visitor gets nothing and a returning one gets last year's taste. QSortby reads the session in progress and adapts to the state the shopper is actually in — no history, no login, no cold start.</p>
-      </div>
-
-      <div class="espot rv">
-        <div>
-          <EmotionMap />
-        </div>
-
-        <div>
-          <ol class="ladder">
-            <li>
-              <span class="n">1</span>
-              <div>
-                <b>It reads the session, not the CRM</b>
-                <p>Pace, dwell, revisits, comparisons, variant switches, hesitation before the cart — signals your storefront already produces. Nothing is asked of the shopper: no quiz, no login, no survey.</p>
-              </div>
-            </li>
-            <li>
-              <span class="n">2</span>
-              <div>
-                <b>It places them on two axes, not in a bucket</b>
-                <p>How activated they are, and whether the mood is positive or negative — which resolves to one of twelve states and a matching copy tone. Profiles stay behavioural vectors; nothing is ever stored saying "this person is sad".</p>
-              </div>
-            </li>
-            <li>
-              <span class="n">3</span>
-              <div>
-                <b>It reorders that shopper's feed</b>
-                <p>An anxious shopper gets reassurance — reviews, returns, no pressure. A celebratory one gets the premium pick. A tired one gets fewer, easier choices. Low confidence falls back to your standard best-sellers order rather than guessing.</p>
-              </div>
-            </li>
-          </ol>
-
-          <div class="etiers">
-            <div class="etier">
-              <div class="et-h"><span class="et-p">Pro</span><span class="et-pr">$99</span></div>
-              <b>Look before you apply</b>
-              <p>The layer classifies and reports, but changes nothing on your storefront. You see the state mix across your sessions and the ranking it <i>would</i> have served.</p>
-            </div>
-            <div class="etier on">
-              <div class="et-h"><span class="et-p">Growth</span><span class="et-pr">$199</span></div>
-              <b>Applied live, per shopper</b>
-              <p>The inferred state reorders the feed in real time — with the same A/B test and revenue attribution behind it, so you see what it earned.</p>
-            </div>
-          </div>
-
-          <p style="margin-top:1.5rem">
-            <a href="/how-it-works" class="btn btn-line">How the emotional read works <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          </p>
-        </div>
-      </div>
-
-      <p class="kicker rv" style="text-align:center;margin-top:2.5rem;max-width:62ch;margin-inline:auto">
-        Relevance, never leverage — no manufactured urgency, and never exploiting a low mood to force a sale.
-      </p>
-    </div>
-  </section>
-
-  <!-- ===================== THE RANKING ENGINE ===================== -->
-  <section class="sec alt">
-    <div class="wrap">
       <div class="shead ctr rv" style="margin-bottom:2.5rem">
-        <span class="eyebrow"><span class="dot"></span> The ranking engine</span>
-        <h2>Ranked for conversion — and <em>proven</em>, not guessed.</h2>
-        <p class="lead-c">No black box. You pick the signal, QSortby scores your catalog live and keeps in-stock first — or personalizes per shopper — then a built-in A/B test and revenue attribution prove how much it actually lifted.</p>
-      </div>
-
-      <div class="steps rv" style="margin-bottom:2.75rem">
-        <div class="step">
-          <div class="sn">01 · Choose</div>
-          <h3>Pick the signal</h3>
-          <p>Rank each collection by any of 10+ live signals — velocity, revenue, margin, conversion rate, trending momentum, selling-fast, repeat buyers, engagement, dwell time, newest — over a rolling or fixed window you set.</p>
-        </div>
-        <div class="step">
-          <div class="sn">02 · Rank</div>
-          <h3>Score live, in-stock first</h3>
-          <p>Every order re-scores the catalog within seconds. Sold-out sinks to the bottom, restocks climb back — so shoppers only meet products they can actually buy.</p>
-        </div>
-        <div class="step">
-          <div class="sn">03 · Prove</div>
-          <h3>A/B it, keep the winner</h3>
-          <p>Test any sort against your current order. QSortby measures clicks → cart → attributed revenue and calls statistical significance — so the winning sort is the one the data picks, not a guess.</p>
-        </div>
+        <span class="eyebrow"><span class="dot"></span> The proof</span>
+        <h2>Every sort has to <em>prove it made you money.</em></h2>
+        <p class="lead-c">No black box, and no faith required. QSortby re-scores as orders land — republishing a collection as often as every five minutes — and any sort can run against your current order as a live A/B test. It measures clicks &rarr; add-to-cart &rarr; attributed revenue and calls statistical significance, so the sort you keep is the one your own data picked.</p>
       </div>
 
       <div class="ab-panel rv">
@@ -238,21 +190,36 @@ const x = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M6 18L18 6"/></svg>';
         </p>
       </div>
 
-      <div class="stats rv">
-        <div class="s"><b><em>10+</em></b><span>ranking signals</span></div>
-        <div class="s"><b>Real-time</b><span>re-scored every order</span></div>
-        <div class="s"><b>A/B</b><span>tested for significance</span></div>
-        <div class="s"><b>Attributed</b><span>revenue per sort</span></div>
-      </div>
       <p class="rv" style="text-align:center;margin-top:2rem">
         <a href="/how-it-works" class="btn btn-line">See exactly how it ranks <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </p>
     </div>
   </section>
 
+  <!-- ===================== EMOTIONAL AI SPOTLIGHT =====================
+       This is the category differentiator and the whole basis of the $199 tier,
+       so it gets a section of its own rather than a card in the grid above.
+
+       The section used to lead with the 12-state map and three paragraphs of
+       explanation beside it, which taught the model and never showed the result.
+       It now leads with the result — one collection, two first-time sessions,
+       two different orders — and the model is the supporting artifact below it.
+       See components/EmotionRead.astro for why each part is where it is. -->
+  <section class="sec alt">
+    <div class="wrap">
+      <div class="shead ctr rv" style="margin-bottom:2.5rem">
+        <span class="eyebrow"><span class="dot"></span> Emotional AI</span>
+        <h2>Same collection. Two shoppers. <em>Different order.</em></h2>
+        <p class="lead-c">Other engines rank on purchase history, so a first-time visitor gets nothing and a returning one gets last year's taste. QSortby reads <em>this</em> visit — pace, dwell, revisits, hesitation before the cart — and reorders the feed for the state the shopper is actually in. Both sessions below are first visits: no history, no login, no quiz.</p>
+      </div>
+
+      <EmotionRead />
+    </div>
+  </section>
+
   <!-- ===================== UPSELL SURFACES =====================
        Ranking decides WHICH products a shopper meets; these decide what else
-       goes in the basket once they've chosen. Placed after the ranking engine
+       goes in the basket once they've chosen. Placed after the proof panel
        because that's the order the value arrives in — and kept as its own
        section rather than a bullet in pricing, because six surfaces is a second
        reason to install, not a plan detail.
@@ -283,7 +250,7 @@ const x = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M6 18L18 6"/></svg>';
         <div class="step">
           <div class="sn">Product page</div>
           <h3>Frequently bought together</h3>
-          <p>Real co-purchase pairs from your own order history. Until there's enough pair data it falls back to your best sellers, so the block is never empty.</p>
+          <p>Real co-purchase pairs from the orders your store takes after install. Until there's enough pair data it falls back to your best sellers, so the block is never empty.</p>
           <span class="utag">Starter</span>
         </div>
         <div class="step">
@@ -295,7 +262,7 @@ const x = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M6 18L18 6"/></svg>';
         <div class="step">
           <div class="sn">Any page</div>
           <h3>Popup upsell</h3>
-          <p>Fires on a moment you choose — after an add to cart, on exit intent, or once the cart is near free shipping. Gated by AND/OR rules so it doesn't fire at everyone.</p>
+          <p>Fires on a moment you choose — after an add to cart, on exit intent, on a timer, or once the cart is near free shipping. Gated by AND/OR rules so it doesn't fire at everyone.</p>
           <span class="utag">Pro</span>
         </div>
         <div class="step">
@@ -306,27 +273,13 @@ const x = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M6 18L18 6"/></svg>';
         </div>
       </div>
 
-      <p class="kicker rv" style="text-align:center;margin-top:2.25rem;max-width:64ch;margin-inline:auto">
-        On <b>Growth</b>, the emotional read reaches inside these too — an anxious shopper and a celebratory
-        one get different suggestions from the same cart.
+      <p class="snote rv" style="margin-top:2.25rem">
+        On <b>Growth</b>, the emotional read reaches inside the cart, popup, checkout and thank-you offers
+        too — an anxious shopper and a celebratory one get different suggestions from the same cart.
       </p>
     </div>
   </section>
 
-  <!-- ===================== SETUP ===================== -->
-  <section class="sec">
-    <div class="wrap">
-      <div class="shead rv" style="margin-bottom:2.5rem">
-        <span class="eyebrow"><span class="dot"></span> Setup</span>
-        <h2>Live in three steps.</h2>
-      </div>
-      <div class="steps">
-        <div class="step rv"><div class="sn">01</div><h3>Install</h3><p>Add QSortby from the App Store. No theme edits, no card.</p></div>
-        <div class="step rv"><div class="sn">02</div><h3>Pick a signal</h3><p>Choose how each collection sorts. Preview the exact before/after.</p></div>
-        <div class="step rv"><div class="sn">03</div><h3>It sorts itself</h3><p>Real-time ordering, sold-out demoted, revenue attributed. Done.</p></div>
-      </div>
-    </div>
-  </section>
 
   <!-- ===================== PRICING TEASER ===================== -->
   <section class="sec alt">
@@ -352,10 +305,21 @@ const x = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M6 18L18 6"/></svg>';
           </div>
         ))}
       </div>
-      <p class="kicker" style="text-align:center;margin-top:1.75rem">
+      <p class="snote" style="margin-top:1.75rem">
         <a href="/pricing" style="text-decoration:underline">Compare all four plans in full →</a>
         <span style="display:block;margin-top:.6rem">Billed via Shopify · cancel anytime</span>
       </p>
+
+      <!-- "Live in three steps" was its own 468px section between the upsell
+           surfaces and pricing — a whole screen for thirty-six words, and it sat
+           where nobody was asking the question. Effort is the LAST objection, so
+           it belongs here, right under the price, as a strip rather than a
+           section. Same three steps, a tenth of the height. -->
+      <div class="setup3 rv" aria-label="Setup in three steps">
+        <div><span class="s3n">01</span><b>Install</b><span>Add QSortby from the App Store. No code, no card.</span></div>
+        <div><span class="s3n">02</span><b>Switch it on</b><span>Flip the QSortby embed on in your theme editor. One toggle.</span></div>
+        <div><span class="s3n">03</span><b>Pick a signal</b><span>Choose how each collection sorts, preview the before/after, done.</span></div>
+      </div>
     </div>
   </section>
 
@@ -372,10 +336,10 @@ const x = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M6 18L18 6"/></svg>';
         <details><summary>What algorithm does QSortby use to maximize conversion value?<span class="pm"></span></summary><div class="ans">There's no single black-box formula. You pick the ranking signal per collection — sales velocity, revenue, margin, <b>conversion rate</b>, trending momentum, selling-fast, repeat-purchase, engagement or newest — and QSortby scores your catalog in real time, keeping in-stock products first. The part that answers "maximum conversion value": you can <b>A/B-test any sort against your current order</b>, and QSortby measures the funnel it drove (clicks → add-to-cart → <b>influenced revenue</b>, via last-touch attribution) and reports <b>statistical significance</b> — so the winning sort is the one the data proves, not a guess.</div></details>
         <details><summary>What can QSortby sort by?<span class="pm"></span></summary><div class="ans">10+ live signals: sales velocity, revenue (GMV), margin, conversion rate, trending momentum, selling-fast (velocity vs. remaining stock), repeat-purchase rate, engagement (clicks / CTR / dwell / add-to-cart), or newest — over a rolling or fixed window you choose. Per-visitor "For You" ranking blends weighted signals per shopper. Or order any collection by hand.</div></details>
         <details><summary>How do I know it actually lifts sales?<span class="pm"></span></summary><div class="ans">QSortby runs an A/B test between the new sort and your current order, then attributes downstream orders (last-touch) to the feed a shopper interacted with — reporting click-through, add-to-cart and influenced revenue per variant with a significance verdict. You see the lift on your own store, you're not taking it on faith.</div></details>
-        <details><summary>What is the Emotional AI layer?<span class="pm"></span></summary><div class="ans">It classifies a shopper's current session — dwell time, revisits, comparisons, hesitation — into an emotional and intent state, then reorders their feed to match. Two levels: <b>Pro</b> gets it as a read-only preview (you see the state mix across your sessions and the ranking it <i>would</i> serve, while your storefront stays exactly as it is), and <b>Growth</b> applies it live per shopper. Cost is capped per store — sessions are sampled, classifications cached, and if a daily ceiling is hit it falls back to your standard ranking rather than degrading the feed.</div></details>
+        <details><summary>What is the Emotional AI layer?<span class="pm"></span></summary><div class="ans">It classifies a shopper's current session — dwell time, revisits, comparisons, hesitation — into an emotional and intent state, then moves the products you've tagged for that state up their feed. Two levels: <b>Pro</b> gets it as a read-only preview (you see the mix of emotional states across your sessions, while your storefront stays exactly as it is), and <b>Growth</b> applies it live per shopper. Cost is capped per store — reads are cached per behaviour pattern and every store has a daily AI ceiling; past it the same read is made by the rule-based classifier rather than the model, so the feed never degrades.</div></details>
         <details><summary>Is this a sorting app or an upsell app?<span class="pm"></span></summary><div class="ans">Both, and they run off the same engine — that's the point. The ranking decides which products a shopper meets; the upsell surfaces decide what else goes in the basket. Because the offers are fed by the same live signals, they suggest what's <b>actually selling and actually in stock</b> instead of a static list you have to keep updating. Six surfaces: cart drawer and cart page, a free-shipping progress bar, frequently-bought-together on the product page, a thank-you-page offer, popups with AND/OR rules, and an offer inside checkout itself. The first two are on the <b>Free</b> plan.</div></details>
-        <details><summary>Will the upsells slow my storefront down?<span class="pm"></span></summary><div class="ans">No. Suggestions are served from a pre-ranked cache rather than computed per shopper, and nothing is added to your theme's critical path — the widgets render after the cart, not before it. If a request fails, the section simply doesn't appear; a cart never blocks on an offer.</div></details>
-        <details><summary>Do I need to edit my theme?<span class="pm"></span></summary><div class="ans">No. QSortby maintains standard Shopify collections — add them like any other. No custom code.</div></details>
+        <details><summary>Will the upsells slow my storefront down?<span class="pm"></span></summary><div class="ans">No. Suggestions come off a pre-ranked pool rather than a fresh catalog scan, the per-shopper step is a cheap reorder of that pool, and nothing is added to your theme's critical path — the widgets render after the cart, not before it. If a request fails, the section simply doesn't appear; a cart never blocks on an offer.</div></details>
+        <details><summary>Do I need to edit my theme?<span class="pm"></span></summary><div class="ans">No code. QSortby maintains standard Shopify collections — add them like any other. One step does happen in the theme editor: flip the QSortby embed on so we can read the behavioral signals that drive ranking and attribution, and drop in a block if you want the personalized or best-seller feeds rendered on a page. Toggles only — nothing to edit.</div></details>
         <details><summary>What happens when a product sells out?<span class="pm"></span></summary><div class="ans">It drops to the bottom automatically, and returns to its earned spot once restocked.</div></details>
       </div>
     </div>
@@ -390,7 +354,7 @@ const x = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M6 18L18 6"/></svg>';
         <p>Install free, run it on one collection, and read the attributed revenue in your own dashboard.</p>
         <div class="hero-cta" style="justify-content:center">
           <a href={APP_STORE_URL} class="btn btn-accent btn-lg">Install free <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          <a href={DEMO_URL} class="btn btn-ghost btn-lg">Book a demo</a>
+          <BookDemo class="btn btn-ghost btn-lg">Book a demo</BookDemo>
         </div>
       </div>
     </div>

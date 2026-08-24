@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
-import { SUPPORT_EMAIL, DEMO_URL } from '../consts';
+import { SUPPORT_EMAIL } from '../consts';
+import BookDemo from '../components/BookDemo.astro';
 
 const title = 'Support — QSortby for Shopify';
 const description =
@@ -21,7 +22,7 @@ const topics = ['General question', 'Demo request', 'Setup & onboarding', 'Billi
       <div class="contact-grid">
         <div class="cinfo rv">
           <div class="r"><div class="k">Email</div><div class="v"><a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a></div></div>
-          <div class="r"><div class="k">See it live</div><div class="v"><a href={DEMO_URL} style="color:var(--green-ink)">Book a 15-min demo →</a></div></div>
+          <div class="r"><div class="k">See it live</div><div class="v"><BookDemo style="color:var(--green-ink)">Book a 30-min demo →</BookDemo></div></div>
           <div class="r"><div class="k">Response time</div><div class="v">Within 1 business day</div></div>
           <div class="r"><div class="k">Setup help</div><div class="v">Free for every plan</div></div>
           <div class="r"><div class="k">Data &amp; privacy</div><div class="v font-mono text-sm">Deletion / export requests honored — see <a href="/privacy" class="underline" style="color:var(--green-ink)">Privacy</a></div></div>
@@ -30,7 +31,7 @@ const topics = ['General question', 'Demo request', 'Setup & onboarding', 'Billi
         <!-- Netlify form: data-netlify enables capture; honeypot blocks bots;
              AJAX submit lives in app.js, native POST to /thank-you is the no-JS fallback. -->
         <form id="brief-form" name="support" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you" class="cform rv"
-              data-msg-sending="Sending…" data-msg-ok="Thanks — your message is in. We'll reply within one business day." data-msg-err="Could not send right now — please email us directly.">
+              data-msg-sending="Sending…" data-msg-ok="Thanks — your message is in. We'll reply within one business day." data-msg-err={`Could not send right now — please email ${SUPPORT_EMAIL} directly.`}>
           <input type="hidden" name="form-name" value="support" />
           <p class="hidden"><label>Leave this empty: <input name="bot-field" /></label></p>
           <div class="fr"><label for="f-name">Your name</label><input id="f-name" type="text" name="name" placeholder="Jane Merchant" required /></div>

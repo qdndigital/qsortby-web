@@ -1,0 +1,17 @@
+---
+/**
+ * The one "Book a demo" trigger. Renders our own button/link markup — the class
+ * comes from the caller, so a demo CTA looks like every other CTA around it —
+ * and hands the click to the QOne Desk widget loaded in Base.astro.
+ *
+ * It stays an <a> rather than a <button> on purpose: the widget calls
+ * preventDefault only once it has loaded, so with JS blocked, on an old browser,
+ * or on a cmd-click, the same element still goes somewhere real (DEMO_URL).
+ */
+import { DEMO_URL, DEMO_EVENT } from '../consts';
+
+const { class: cls, layout, ...rest } = Astro.props;
+---
+{/* Slot kept on one line: these render inside inline links and flex buttons,
+    where a stray leading/trailing space is real whitespace in the label. */}
+<a href={DEMO_URL} class={cls} data-qone-book={DEMO_EVENT} data-layout={layout} {...rest}><slot>Book a demo</slot></a>

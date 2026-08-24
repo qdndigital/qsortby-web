@@ -1,5 +1,6 @@
 ---
-import { NAV, APP_STORE_URL, DEMO_URL } from '../consts';
+import { NAV, APP_STORE_URL } from '../consts';
+import BookDemo from './BookDemo.astro';
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
 ---
 <header class="site">
@@ -20,7 +21,7 @@ const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
         so putting "Book a demo" first would gate a funnel that needs no gate.
         Demo stays as the secondary path for Growth-tier conversations. */}
     <div class="nav-cta">
-      <a href={DEMO_URL} class="btn btn-line nav-secondary">Book a demo</a>
+      <BookDemo class="btn btn-line nav-secondary">Book a demo</BookDemo>
       <a href={APP_STORE_URL} class="btn btn-accent">Install free</a>
       <button class="menu-btn" aria-label="Open menu" aria-controls="nav-links" aria-expanded="false">
         <svg class="ic-open" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>

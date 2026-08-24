@@ -47,7 +47,11 @@
     <span class="sc-pk">Proof</span>
     <span class="sc-pt"><b>Every sort is A/B-tested.</b> QSortby splits traffic and reports the revenue each order actually drove — not clicks.</span>
     <div class="sc-abmini" aria-hidden="true"><i class="a"></i><i class="b"></i></div>
-    <span class="sc-win">B wins · +37% revenue</span>
+    {/* The bars and this label are a picture of the report, NOT a result. The
+        big A/B panels on / and /how-it-works carry an explicit "illustrative"
+        caption; this strip had a bare "+37% revenue", which reads as a
+        benchmark we have never published. Keep a verdict, drop the number. */}
+    <span class="sc-win">B wins · illustrative</span>
   </div>
 </div>
 
@@ -57,7 +61,7 @@
 
   .sortconsole .sc-eyebrow { font-family:var(--mono); font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--green-ink); display:inline-flex; align-items:center; gap:9px; margin:0; }
   .sortconsole .sc-eyebrow .dot { width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 0 4px var(--green-soft); }
-  .sortconsole .sc-title { font-family:"Playfair Display",Georgia,serif; font-weight:600; letter-spacing:-.015em; font-size:clamp(28px,4.4vw,44px); line-height:1.05; text-wrap:balance; margin:16px 0 14px; color:var(--ink); }
+  .sortconsole .sc-title { font-family:var(--font-sans); font-weight:700; letter-spacing:-.028em; font-size:clamp(28px,4.4vw,44px); line-height:1.05; text-wrap:balance; margin:16px 0 14px; color:var(--ink); }
   .sortconsole .sc-title em { font-style:italic; color:var(--green-ink); }
   .sortconsole .sc-lead { color:var(--ink-2); font-size:16.5px; max-width:48ch; margin:0 0 24px; line-height:1.6; }
 

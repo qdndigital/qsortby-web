@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
-import { APP_STORE_URL, DEMO_URL } from '../consts';
+import { APP_STORE_URL } from '../consts';
+import BookDemo from '../components/BookDemo.astro';
 import { PLANS, MATRIX, REVERSE_TRIAL_DAYS, PAYMENT_TRIAL_DAYS } from '../plans';
 
 const title = 'Pricing — QSortby for Shopify';
@@ -41,7 +42,7 @@ const cellClass = (v: string) => (v === '✓' ? 'yes' : v === '—' ? 'no' : '')
               {p.features.map((f) => <li><span set:html={check} /> {f}</li>)}
             </ul>
             {p.cta === 'demo' ? (
-              <a href={DEMO_URL} class="btn btn-accent w-full">Talk to us</a>
+              <BookDemo class="btn btn-accent w-full">Talk to us</BookDemo>
             ) : (
               <a href={APP_STORE_URL} class={p.feat ? 'btn btn-accent w-full' : 'btn btn-line w-full'}>
                 {p.price === '$0' ? 'Install free' : 'Start free'}
@@ -51,7 +52,7 @@ const cellClass = (v: string) => (v === '✓' ? 'yes' : v === '—' ? 'no' : '')
         ))}
       </div>
 
-      <p class="kicker" style="text-align:center;margin-top:2rem">
+      <p class="snote" style="margin-top:2rem">
         Billed via Shopify · cancel anytime · paid plans include a {PAYMENT_TRIAL_DAYS}-day Shopify trial
       </p>
     </div>
@@ -84,7 +85,7 @@ const cellClass = (v: string) => (v === '✓' ? 'yes' : v === '—' ? 'no' : '')
           </tbody>
         </table>
       </div>
-      <p class="kicker" style="margin-top:1.25rem">
+      <p class="snote lt" style="margin-top:1.25rem">
         * Order limits are a nudge, not a wall. Cross them and ranking keeps running exactly as before —
         you'll just see an upgrade prompt in the dashboard. We never break a live storefront to sell a plan.
       </p>
@@ -100,10 +101,10 @@ const cellClass = (v: string) => (v === '✓' ? 'yes' : v === '—' ? 'no' : '')
       </div>
       <div class="faq rv">
         <details open><summary>“My collections are stale and I sort them by hand.”<span class="pm"></span></summary><div class="ans"><b>Free.</b> One collection that ranks itself in real time, demotes sold-out products, and reports the revenue it influenced. If that one collection lifts, you'll see it before you've paid anything.</div></details>
-        <details><summary>“Different collections need different logic.”<span class="pm"></span></summary><div class="ans"><b>Starter — $29.</b> Five managed collections, per-category rankings, and a window you control (24 hours for trend-catching, up to 30 days for stability).</div></details>
+        <details><summary>“Different collections need different logic.”<span class="pm"></span></summary><div class="ans"><b>Starter — $29.</b> Five managed collections, per-category rankings, and short windows unlocked — down to an hour for trend-catching, where Free is held to a steadier seven days. Fixed windows too: last week, a set month, any two dates.</div></details>
         <details><summary>“I need to prove the lift to someone.”<span class="pm"></span></summary><div class="ans"><b>Pro — $99.</b> Unlimited collections plus full customer-event analytics and attribution reporting, so every sort comes with a funnel and a revenue figure. Also unlocks AI authoring — it drafts your taxonomy and sort logic for you.</div></details>
-        <details><summary>“I want a bigger average order, not just a better sort.”<span class="pm"></span></summary><div class="ans"><b>Start on Free.</b> The cart upsell and the free-shipping progress bar are included at $0, and both are fed by the same live ranking — so what gets suggested is what's actually selling and in stock. <b>Starter</b> adds frequently-bought-together on the product page and a thank-you-page offer; <b>Pro</b> adds popups on any page with AND/OR rules for when they fire; <b>Growth</b> adds an offer inside checkout itself (Shopify Plus only) and lets the emotional read choose the suggestions per shopper.</div></details>
-        <details><summary>“I want each shopper to see a different storefront.”<span class="pm"></span></summary><div class="ans"><b>Growth — $199.</b> The Emotional AI layer applied live: each visitor's session signals are classified in real time and the feed reorders for them, with the same A/B and attribution reporting behind it so you can see what it earned. Pro gets the same layer as a read-only preview first if you'd rather look before you apply.</div></details>
+        <details><summary>“I want a bigger average order, not just a better sort.”<span class="pm"></span></summary><div class="ans"><b>Start on Free.</b> The cart upsell and the free-shipping progress bar are included at $0, and both are fed by the same live ranking — so what gets suggested is what's actually selling and in stock. <b>Starter</b> adds frequently-bought-together on the product page and a thank-you-page offer; <b>Pro</b> adds popups on any page with AND/OR rules for when they fire; <b>Growth</b> adds an offer inside checkout itself (Shopify Plus only) and lets the emotional read choose the suggestions in the cart, popup, checkout and thank-you offers.</div></details>
+        <details><summary>“I want each shopper to see a different storefront.”<span class="pm"></span></summary><div class="ans"><b>Growth — $199.</b> The Emotional AI layer applied live: each visitor's session signals are classified from their first pause and the feed reorders for them, with the same A/B and attribution reporting behind it so you can see what it earned. Pro gets the same layer as a read-only preview first — the mix of states across your sessions, storefront untouched — if you'd rather look before you apply.</div></details>
       </div>
     </div>
   </section>
@@ -133,7 +134,7 @@ const cellClass = (v: string) => (v === '✓' ? 'yes' : v === '—' ? 'no' : '')
         <p>{REVERSE_TRIAL_DAYS} days of everything, then Free forever. No card to start.</p>
         <div class="hero-cta" style="justify-content:center">
           <a href={APP_STORE_URL} class="btn btn-accent btn-lg">Install free <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          <a href={DEMO_URL} class="btn btn-ghost btn-lg">Book a demo</a>
+          <BookDemo class="btn btn-ghost btn-lg">Book a demo</BookDemo>
         </div>
       </div>
     </div>

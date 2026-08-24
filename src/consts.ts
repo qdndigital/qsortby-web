@@ -1,25 +1,45 @@
 /** Shared site constants. */
-export const SITE_NAME = 'QSortby';
-export const TAGLINE = 'Every sort has to prove it made you money.';
+export const SITE_NAME = "QSortby";
+export const TAGLINE = "Every sort has to prove it made you money.";
 
 // Live App Store listing. Every primary CTA on the site points here.
-export const APP_STORE_URL = 'https://apps.shopify.com/qsortby';
-// TODO: still a placeholder booking link — every "Book a demo" button 404s until
-// this is replaced. Those are all SECONDARY CTAs (primary is install), so the
-// funnel works meanwhile, but fix before running paid traffic.
-export const DEMO_URL = 'https://cal.com/qsortby/demo';
+export const APP_STORE_URL = "https://apps.shopify.com/qsortby";
+
+// Booking runs on our own QOne Desk embed, loaded once in Base.astro. Every
+// "Book a demo" is a plain link that the widget intercepts to open the calendar
+// in a modal — see components/BookDemo.astro.
+//
+// DEMO_URL is therefore both the no-JS fallback and what a cmd-click or a
+// copied link resolves to, so it has to stay a real page: it's the server-
+// rendered booking page for the same event, not a marketing URL.
+export const DEMO_URL = "https://qdn.qone.work/desk/qsortby/book/toan";
+export const DEMO_SCRIPT_URL = "https://qdn.qone.work/book.js";
+// Test mode swaps in the product's test key, which books against the same
+// event without touching the real calendar. On automatically in `astro dev`;
+// PUBLIC_DEMO_TEST=1 forces it on for a production build, so `npm run preview`
+// can be clicked through safely (it serves on the same port dev does, and the
+// live key is allow-listed there — without this it would book for real).
+const DEMO_TEST_MODE =
+  import.meta.env.DEV || import.meta.env.PUBLIC_DEMO_TEST === "1";
+export const DEMO_PRODUCT_KEY = DEMO_TEST_MODE
+  ? "pk_test_890b77deb4f206bde3e28fc1"
+  : "fp_ab49994270d17cd686485bfd";
+export const DEMO_EVENT = "toan";
 
 // User guide — canonical page lives at /guide; also served on the guide.qsortby.com
 // subdomain (same Netlify site, see netlify.toml). Point links at the subdomain.
-export const GUIDE_URL = 'https://guide.qsortby.com';
+export const GUIDE_URL = "https://guide.qsortby.com";
 
-export const SUPPORT_EMAIL = 'support@qsortby.com';
+// Single inbox for support, demo and contact. Every mailto:, the
+// Organization schema in Base.astro and the contact-form failure message
+// all read from HERE — never hard-code an address anywhere else.
+export const SUPPORT_EMAIL = "hello@qdn.vn";
 
 // Primary nav.
 export const NAV = [
-  ['/use-cases', 'Use cases'],
-  ['/how-it-works', 'How it works'],
-  ['/integrations', 'Integrations'],
-  ['/pricing', 'Pricing'],
-  [GUIDE_URL, 'Guide'],
+  ["/use-cases", "Use cases"],
+  ["/how-it-works", "How it works"],
+  ["/integrations", "Integrations"],
+  ["/pricing", "Pricing"],
+  [GUIDE_URL, "Guide"],
 ] as const;

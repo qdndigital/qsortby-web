@@ -2,6 +2,7 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import StickyCta from '../components/StickyCta.astro';
+import { DEMO_SCRIPT_URL, DEMO_PRODUCT_KEY, DEMO_EVENT, SUPPORT_EMAIL } from '../consts';
 import '../styles/global.css';
 
 const { title, description, noindex = false, image } = Astro.props;
@@ -21,7 +22,7 @@ const jsonld = {
       '@id': 'https://qsortby.com/#org',
       name: 'QSortby',
       url: 'https://qsortby.com/',
-      email: 'support@qsortby.com',
+      email: SUPPORT_EMAIL,
       description:
         'QSortby is a Shopify collection sorting and upsell app: collections that rank themselves by best sellers and live demand, AI that adapts the order to each shopper, and cart, bundle and checkout upsells drawn from the same ranking.',
       logo: 'https://qsortby.com/favicon.svg',
@@ -66,10 +67,9 @@ const jsonld = {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {/* Self-hosted fonts (see src/styles/fonts.css) — no third-party origin.
-        Preload the faces visible above the fold; the rest load on demand. */}
-    <link rel="preload" href="/fonts/playfair-vf-latin.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/playfair-italic-vf-latin.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/inter-vf-latin.woff2" as="font" type="font/woff2" crossorigin />
+        One family now, so one preload: the roman carries everything above the
+        fold. The italic loads on demand — nothing in a hero uses it. */}
+    <link rel="preload" href="/fonts/schibsted-vf-latin.woff2" as="font" type="font/woff2" crossorigin />
     <title>{title}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex,follow" />}
@@ -99,5 +99,18 @@ const jsonld = {
     <Footer />
     <StickyCta />
     <script src="/assets/app.js" is:inline defer></script>
+    {/* QOne Desk — our own booking embed, behind every "Book a demo"
+        (see components/BookDemo.astro). Loaded once here because the demo CTA
+        sits in the header and footer, so it's on every page anyway. async: it
+        binds one delegated click handler and nothing above the fold waits on
+        it, and if it never arrives the CTAs still navigate to the booking page.
+        data-layout sets the site-wide default; a call site can override it. */}
+    <script
+      src={DEMO_SCRIPT_URL}
+      data-product={DEMO_PRODUCT_KEY}
+      data-event={DEMO_EVENT}
+      data-layout="calendar"
+      is:inline
+      async></script>
   </body>
 </html>

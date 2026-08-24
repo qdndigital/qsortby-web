@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
-import { APP_STORE_URL, DEMO_URL } from '../consts';
+import { APP_STORE_URL } from '../consts';
+import BookDemo from '../components/BookDemo.astro';
 
 const title = 'Shopify collection sorting by use case — QSortby';
 const description =
@@ -24,10 +25,10 @@ const check = '<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>';
         <div class="uc-copy">
           <span class="tag">Fast-moving launches</span>
           <h3>Lead with what's trending this week — not last season.</h3>
-          <p>Drops and new arrivals live and die on momentum. QSortby ranks by <b>trending velocity</b>, so the product catching fire rises to the front the moment it moves — and the variant that just sold out steps aside before it kills a click.</p>
+          <p>Drops and new arrivals live and die on momentum. QSortby ranks by <b>trending velocity</b>, so the product catching fire rises to the front within minutes of moving — and the one that just sold out steps aside before it kills a click.</p>
           <ul>
             <li><span set:html={check} /> Trending velocity over a window you set</li>
-            <li><span set:html={check} /> Sold-out variants demoted instantly</li>
+            <li><span set:html={check} /> Sold-out products demoted automatically</li>
             <li><span set:html={check} /> A fresh front row every launch</li>
           </ul>
         </div>
@@ -91,10 +92,10 @@ const check = '<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>';
         <div class="uc-copy">
           <span class="tag">Limited &amp; seasonal stock</span>
           <h3>Only feature what's actually buyable.</h3>
-          <p>Seasonal ranges and small-batch runs mean availability matters as much as popularity. QSortby pairs sales velocity with <b>live inventory</b>: when stock runs low it demotes before it sells out, and promotes the moment you restock.</p>
+          <p>Seasonal ranges and small-batch runs mean availability matters as much as popularity. QSortby pairs sales velocity with <b>live inventory</b>: sold-out products drop out of the front row on their own, and "selling fast" pushes the low-stock movers up while there's still stock to sell.</p>
           <ul>
             <li><span set:html={check} /> Inventory-aware ranking</li>
-            <li><span set:html={check} /> Low stock demotes before it's gone</li>
+            <li><span set:html={check} /> Sold-out drops out automatically</li>
             <li><span set:html={check} /> Restock auto-promotes back up</li>
           </ul>
         </div>
@@ -143,7 +144,7 @@ const check = '<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>';
         <p>Install free and point QSortby at one collection — by the signal that matters most to you.</p>
         <div class="hero-cta" style="justify-content:center">
           <a href={APP_STORE_URL} class="btn btn-accent btn-lg">Install free <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          <a href={DEMO_URL} class="btn btn-ghost btn-lg">Book a demo</a>
+          <BookDemo class="btn btn-ghost btn-lg">Book a demo</BookDemo>
         </div>
       </div>
     </div>

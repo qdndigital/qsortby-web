@@ -1,0 +1,299 @@
+---
+// ── The Emotional AI showpiece ────────────────────────────────────────────
+// Replaces the old .espot layout (big static 12-state scatter on the left, three
+// numbered paragraphs + two plan cards on the right). That version explained the
+// MODEL and never showed the OUTCOME: a merchant read "there are twelve states"
+// and still could not picture what changes on their storefront.
+//
+// This shows the outcome instead — one collection, two live sessions, two
+// different orders — and lets the three steps BE the three bands of the diagram
+// (session → read → feed) rather than prose sitting beside it. The 150 words of
+// ladder copy compressed to the three facts it carried that the picture cannot
+// show; they live in .er-rails at the bottom.
+//
+// Continuity: the catalog and icons are deliberately the SAME six products the
+// visitor just watched re-rank by signal in SortConsole. Watching the identical
+// four items reorder again — this time with no signal picked, only a shopper —
+// is the whole argument of the section, made without a word.
+//
+// Numbers and session traces are illustrative, and labelled as such.
+const ICON = {
+  tee: '<path d="M6 4l3-1a3 3 0 006 0l3 1 3 4-3 2v9H6v-9L3 8z"/>',
+  sneaker: '<path d="M2 16h13l5-2c2-1 2 3 2 3H2zM2 16v-3l4-1 2-4 3 3 4 1"/>',
+  headphones: '<path d="M4 13v-1a8 8 0 0116 0v1M4 13h3v6H5a1 1 0 01-1-1zM20 13h-3v6h2a1 1 0 001-1z"/>',
+  watch: '<circle cx="12" cy="12" r="6"/><path d="M12 9v3l2 2M9 4l1-2h4l1 2M9 20l1 2h4l1-2"/>',
+};
+
+// Same four products in both columns — that is what makes the reorder readable.
+// `d` is the rank change against the store's default best-seller order
+// (Tee 1, Runner 2, Headphones 3, Watch 4), so the arrows are consistent.
+const CASES = [
+  {
+    who: 'Shopper A',
+    seen: 'First visit · 2m 14s',
+    trace: ['2m 14s on one product', 'Reviews opened ×3', 'Back to collection ×2', 'Size chart', 'No add to cart'],
+    state: 'Anxious',
+    axes: 'activated · negative',
+    tone: 'Reassuring',
+    toneNote: 'best-reviewed and free-returns first · no urgency, no upsell',
+    feed: [
+      { n: 'Studio Headphones', i: 'headphones', d: 2, why: '2,140 reviews' },
+      { n: 'Everyday Tee', i: 'tee', d: -1, why: 'Free returns' },
+      { n: 'Trail Runner', i: 'sneaker', d: -1 },
+      { n: 'Field Watch', i: 'watch', d: 0 },
+    ],
+  },
+  {
+    who: 'Shopper B',
+    seen: 'First visit · 41s',
+    trace: ['4 products in 41s', 'Straight to new arrivals', 'Gift note opened', 'Added ×2', 'No review views'],
+    state: 'Celebratory',
+    axes: 'activated · positive',
+    tone: 'Celebrate',
+    toneNote: 'premium end first · bundles and gifting allowed',
+    feed: [
+      { n: 'Field Watch', i: 'watch', d: 3, why: 'Premium lead' },
+      { n: 'Studio Headphones', i: 'headphones', d: 1, why: 'Gift-ready' },
+      { n: 'Trail Runner', i: 'sneaker', d: -1 },
+      { n: 'Everyday Tee', i: 'tee', d: -3 },
+    ],
+  },
+];
+
+// The model, kept — but as a 2×2 read instead of a hand-positioned scatter that
+// owned half the section. Four quadrants, three states each, one emphasised.
+// Assignment follows the real coordinates, which is why the counts are 2/3/3/3
+// rather than a tidy 3/3/3/3: `Focused` sits at the CENTRE of both axes and
+// belongs to no quadrant. Forcing it into one (it was filed under calm-negative
+// in the first pass) misstates the model — engaged is not a bad mood. It gets
+// named below the grid instead.
+const QUADS = [
+  { ax: 'Activated', vl: 'Negative', s: ['Anxious', 'Stressed'] },
+  { ax: 'Activated', vl: 'Positive', s: ['Excited', 'Celebratory', 'Curious'] },
+  { ax: 'Calm', vl: 'Negative', s: ['Sad', 'Tired', 'Bored'] },
+  { ax: 'Calm', vl: 'Positive', s: ['Content', 'Grateful', 'Nostalgic'] },
+];
+const NOW = 'Anxious';
+
+// The order both columns are measured against — the store's own best-seller sort.
+// Naming it here is what makes the ▲▼ in each feed legible instead of decorative.
+const DEFAULT = ['Everyday Tee', 'Trail Runner', 'Studio Headphones', 'Field Watch'];
+
+const RAILS = [
+  ['No profile is stored', 'A state is a behavioural vector for this session. Nothing is ever written down saying “this person is sad.”'],
+  ['Unsure means unchanged', 'Below the confidence bar the feed falls back to your standard best-sellers order rather than guessing.'],
+  ['Relevance, never leverage', 'No manufactured urgency, and never exploiting a low mood to force a sale.'],
+];
+---
+<div class="eread">
+  <!-- context bar: names the one thing both columns share -->
+  <div class="er-bar rv">
+    <span class="er-coll">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+      your-store.com / <b>Bestsellers</b>
+    </span>
+    <span class="er-same">
+      <em>Default order</em>
+      {DEFAULT.map((n, i) => <b>{i + 1} {n}</b>)}
+    </span>
+  </div>
+
+  <div class="er-dip rv">
+    {CASES.map((c, ci) => (
+      <article class={ci === 1 ? 'er-case er-b' : 'er-case'}>
+        <header class="er-top">
+          <span class="er-who"><i>{ci === 0 ? 'A' : 'B'}</i>{c.who}</span>
+          <span class="er-seen">{c.seen}</span>
+        </header>
+
+        <div class="er-band">
+          <span class="er-lb"><i>01</i> What the session shows</span>
+          <ul class="er-trace">
+            {c.trace.map((t) => <li>{t}</li>)}
+          </ul>
+        </div>
+
+        <div class="er-band er-read">
+          <span class="er-lb"><i>02</i> The read</span>
+          <div class="er-readrow">
+            <span class="er-state">{c.state}<small>{c.axes}</small></span>
+            <span class="er-to" aria-hidden="true">→</span>
+            <span class="er-tone">{c.tone}<small>tone</small></span>
+          </div>
+          <p class="er-tn">{c.toneNote}</p>
+        </div>
+
+        <div class="er-band er-feedband">
+          <span class="er-lb"><i>03</i> The feed they get</span>
+          <ol class="er-feed">
+            {c.feed.map((p, i) => (
+              <li class={i === 0 ? 'lead' : ''}>
+                <span class="er-rk">{i + 1}</span>
+                <span class="er-th"><svg viewBox="0 0 24 24" set:html={ICON[p.i]} /></span>
+                <span class="er-nm">{p.n}</span>
+                {p.why && <span class="er-why">{p.why}</span>}
+                <span class={'er-d ' + (p.d > 0 ? 'up' : p.d < 0 ? 'dn' : 'flat')}>
+                  {p.d > 0 ? '▲ ' + p.d : p.d < 0 ? '▼ ' + Math.abs(p.d) : '—'}
+                </span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </article>
+    ))}
+  </div>
+
+  <p class="er-cap">Illustration of the same four products reordered by state — arrows are each product's move against the default order named above, not a result claim.</p>
+
+  <div class="er-foot rv">
+    <figure class="er-model">
+      <figcaption>Twelve states on two axes — how activated, and whether the mood is positive. Not a bucket, a position.</figcaption>
+      <div class="er-quads">
+        {QUADS.map((q) => (
+          <div class="er-q">
+            <span class="er-qk">{q.ax} · {q.vl}</span>
+            <span class="er-qs">
+              {q.s.map((n) => <b class={n === NOW ? 'on' : ''}>{n}</b>)}
+            </span>
+          </div>
+        ))}
+      </div>
+      <p class="er-centre"><b>Focused</b> sits at the centre of both axes — engaged, neither up nor down. Twelve in total.</p>
+    </figure>
+
+    <div class="er-side">
+      <ul class="er-rails">
+        {RAILS.map(([h, b]) => <li><b>{h}</b><span>{b}</span></li>)}
+      </ul>
+      <div class="etiers" style="margin-top:20px">
+        <div class="etier">
+          <div class="et-h"><span class="et-p">Pro</span><span class="et-pr">$99</span></div>
+          <b>Look before you apply</b>
+          <p>The layer reads and reports; your storefront stays exactly as it is. You see the mix of states across your sessions — the read without the risk.</p>
+        </div>
+        <div class="etier on">
+          <div class="et-h"><span class="et-p">Growth</span><span class="et-pr">$199</span></div>
+          <b>Applied live, per shopper</b>
+          <p>The read reorders that shopper's feed from their first pause on — behind the same A/B test and revenue attribution, so you see what it earned.</p>
+        </div>
+      </div>
+      <p style="margin-top:20px">
+        <a href="/how-it-works" class="btn btn-line">How the emotional read works <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  /* ── context bar ─────────────────────────────────────────────────────── */
+  .eread .er-bar { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px 18px;
+    padding:11px 16px; border:1px solid var(--line); border-bottom:0; border-radius:16px 16px 0 0; background:var(--bg-2); }
+  .eread .er-coll { display:inline-flex; align-items:center; gap:9px; font-family:var(--mono); font-size:12.5px; color:var(--ink-2); }
+  .eread .er-coll b { color:var(--ink); font-weight:650; }
+  .eread .er-coll svg { width:15px; height:15px; fill:none; stroke:var(--muted); stroke-width:2; stroke-linecap:round; }
+  .eread .er-same { display:inline-flex; flex-wrap:wrap; align-items:center; gap:6px;
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.05em; color:var(--muted); }
+  .eread .er-same em { font-style:normal; font-weight:700; letter-spacing:.11em; text-transform:uppercase; }
+  .eread .er-same b { font-weight:600; color:var(--ink-2); background:var(--surface);
+    border:1px solid var(--line); border-radius:6px; padding:3px 7px; }
+
+  /* ── the diptych ─────────────────────────────────────────────────────── */
+  .eread .er-dip { display:grid; gap:0; border:1px solid var(--line); border-radius:0 0 16px 16px; overflow:hidden; background:var(--surface); }
+  @media (min-width:900px){ .eread .er-dip { grid-template-columns:1fr 1fr; } }
+  .eread .er-case { padding:20px 20px 22px; display:flex; flex-direction:column; }
+  @media (min-width:900px){ .eread .er-case + .er-case { border-left:1px solid var(--line); } }
+  @media (max-width:899px){ .eread .er-case + .er-case { border-top:1px solid var(--line); } }
+  /* No tint on either column. The first pass washed B in mint, which read as
+     "this is the chosen one" when both are just two sessions. Difference comes
+     from the A/B letter and the divider, not from colour. */
+
+  .eread .er-top { display:flex; align-items:baseline; justify-content:space-between; gap:12px; padding-bottom:14px; margin-bottom:16px; border-bottom:1px solid var(--line); }
+  .eread .er-who { display:inline-flex; align-items:center; gap:10px; font-weight:650; font-size:1.02rem; letter-spacing:-.018em; color:var(--ink); }
+  .eread .er-who i { display:grid; place-items:center; width:24px; height:24px; border-radius:8px; flex:none;
+    background:var(--ink); color:var(--bg); font-style:normal; font-family:var(--mono);
+    font-size:12px; font-weight:700; letter-spacing:0; }
+  .eread .er-seen { font-family:var(--mono); font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); }
+
+  .eread .er-band + .er-band { margin-top:18px; }
+  .eread .er-lb { display:flex; align-items:center; gap:8px; font-family:var(--mono); font-size:10px; font-weight:700;
+    letter-spacing:.13em; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
+  .eread .er-lb i { display:grid; place-items:center; width:17px; height:17px; border-radius:5px; flex:none;
+    background:var(--bg-2); border:1px solid var(--line); font-style:normal; font-size:9px; color:var(--ink-2); letter-spacing:0; }
+
+  /* 01 — the session trace */
+  .eread .er-trace { list-style:none; display:flex; flex-wrap:wrap; gap:6px; margin:0; padding:0; }
+  .eread .er-trace li { font-family:var(--mono); font-size:11.5px; color:var(--ink-2); background:var(--bg-2);
+    border:1px solid var(--line); border-radius:7px; padding:5px 9px; }
+  /* The last chip in each trace is what did NOT happen — as diagnostic as the
+     rest, so it stays the same size and gets a dashed edge instead of grey text. */
+  .eread .er-trace li:last-child { color:var(--muted); border-style:dashed; background:transparent; }
+
+  /* 02 — the read */
+  .eread .er-readrow { display:flex; align-items:stretch; gap:11px; }
+  .eread .er-state, .eread .er-tone { flex:1; min-width:0; display:flex; flex-direction:column; gap:3px;
+    font-weight:650; font-size:1.06rem; letter-spacing:-.02em; color:var(--ink);
+    border:1px solid var(--line); border-radius:11px; padding:10px 13px; background:var(--bg-2); }
+  .eread .er-state small, .eread .er-tone small { font-family:var(--mono); font-size:9.5px; font-weight:600;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  .eread .er-state { border-color:var(--green-line); background:var(--green-soft); color:var(--green-ink); }
+  .eread .er-state small { color:var(--green-ink); opacity:.72; }
+  .eread .er-to { align-self:center; font-size:15px; color:var(--faint); flex:none; }
+  .eread .er-tn { margin-top:9px; font-size:.85rem; line-height:1.5; color:var(--muted); }
+
+  /* 03 — the resulting feed */
+  .eread .er-feed { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px; }
+  .eread .er-feed li { display:grid; grid-template-columns:18px 30px 1fr auto auto; align-items:center; gap:10px;
+    border:1px solid var(--line); border-radius:10px; padding:8px 11px; background:var(--surface); }
+  .eread .er-feed li.lead { border-color:var(--green-line); background:var(--green-soft); }
+  .eread .er-rk { font-family:var(--mono); font-size:12px; font-weight:700; color:var(--faint); font-variant-numeric:tabular-nums; }
+  .eread .er-feed li.lead .er-rk { color:var(--green-ink); }
+  .eread .er-th { width:30px; height:30px; border-radius:8px; background:var(--bg-2); display:grid; place-items:center; }
+  .eread .er-feed li.lead .er-th { background:#fff; }
+  .eread .er-th svg { width:17px; height:17px; fill:none; stroke:var(--ink-2); stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+  .eread .er-nm { font-size:.92rem; font-weight:600; letter-spacing:-.012em; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .eread .er-why { font-family:var(--mono); font-size:9.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--green-ink); background:#fff; border:1px solid var(--green-line); border-radius:999px; padding:3px 8px; white-space:nowrap; }
+  .eread .er-feed li:not(.lead) .er-why { color:var(--muted); border-color:var(--line); background:var(--bg-2); }
+  .eread .er-d { font-family:var(--mono); font-size:10.5px; font-weight:700; letter-spacing:.02em; min-width:26px; text-align:right; }
+  .eread .er-d.up { color:var(--green-ink); }
+  .eread .er-d.dn { color:var(--muted); }
+  .eread .er-d.flat { color:var(--faint); }
+
+  .eread .er-cap { margin:12px 0 0; font-size:.82rem; line-height:1.55; color:var(--muted); text-align:center; max-width:76ch; margin-inline:auto; }
+
+  /* ── foot: the model + the guardrails + tiers ─────────────────────────── */
+  .eread .er-foot { display:grid; gap:32px; margin-top:44px; align-items:start; }
+  @media (min-width:900px){ .eread .er-foot { grid-template-columns:.86fr 1.14fr; gap:48px; } }
+
+  .eread .er-model { margin:0; }
+  .eread .er-model figcaption { font-size:.9rem; line-height:1.6; color:var(--ink-2); margin-bottom:16px; max-width:38ch; }
+  .eread .er-quads { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line);
+    border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+  .eread .er-q { background:var(--surface); padding:13px 14px 15px; }
+  .eread .er-qk { display:block; font-family:var(--mono); font-size:9px; font-weight:700; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--muted); margin-bottom:9px; }
+  .eread .er-qs { display:flex; flex-direction:column; gap:5px; }
+  .eread .er-qs b { font-size:.88rem; font-weight:600; color:var(--ink-2); letter-spacing:-.01em; }
+  .eread .er-qs b.on { display:inline-flex; align-self:flex-start; color:#fff; background:var(--green);
+    border-radius:6px; padding:2px 8px; margin:-2px -2px; }
+
+  .eread .er-centre { margin:12px 0 0; font-size:.83rem; line-height:1.55; color:var(--muted); }
+  .eread .er-centre b { font-weight:650; color:var(--ink-2); }
+
+  /* Narrow: the reason badge drops to its own line so the product NAME never
+     truncates. A row that reads "Studio H…" loses the one thing the row is for. */
+  @media (max-width:560px){
+    .eread .er-feed li { grid-template-columns:18px 30px 1fr auto; row-gap:6px;
+      grid-template-areas:"rk th nm d" ". . why why"; }
+    .eread .er-rk { grid-area:rk; }
+    .eread .er-th { grid-area:th; }
+    .eread .er-nm { grid-area:nm; }
+    .eread .er-d  { grid-area:d; }
+    .eread .er-why { grid-area:why; justify-self:start; }
+  }
+
+  .eread .er-rails { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:14px; }
+  .eread .er-rails li { display:grid; gap:3px; padding-left:15px; border-left:2px solid var(--green-line); }
+  .eread .er-rails b { font-weight:650; font-size:.97rem; letter-spacing:-.016em; color:var(--ink); }
+  .eread .er-rails span { font-size:.9rem; line-height:1.58; color:var(--ink-2); }
+</style>
