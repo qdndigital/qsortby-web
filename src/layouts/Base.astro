@@ -5,7 +5,15 @@ import StickyCta from '../components/StickyCta.astro';
 import { DEMO_SCRIPT_URL, DEMO_PRODUCT_KEY, DEMO_EVENT, SUPPORT_EMAIL } from '../consts';
 import '../styles/global.css';
 
-const { title, description, noindex = false, image } = Astro.props;
+const { title, description, noindex = false, image, faq = [], breadcrumb } = Astro.props;
+
+// FAQPage acceptedAnswer.text must be plain prose — the answers in src/faqs.ts
+// carry <b> and links for the rendered list, so strip markup here rather than
+// keeping a second, plain copy of every answer that would drift from the first.
+const plain = (html: string) =>
+  html.replace(/<[^>]+>/g, '').replace(/&mdash;/g, '—').replace(/&rarr;/g, '→')
+      .replace(/&ldquo;|&rdquo;/g, '"').replace(/&nbsp;/g, ' ')
+      .replace(/\s+/g, ' ').trim();
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
 // Social share card. Every link to this site — a Slack paste, a tweet, a DM to a
@@ -24,7 +32,7 @@ const jsonld = {
       url: 'https://qsortby.com/',
       email: SUPPORT_EMAIL,
       description:
-        'QSortby is a Shopify collection sorting and upsell app: collections that rank themselves by best sellers and live demand, AI that adapts the order to each shopper, and cart, bundle and checkout upsells drawn from the same ranking.',
+        'QSortby is a Shopify collection sorting and upsell app: collections that rank themselves by best sellers and live demand, per-shopper feeds that work from the first visit, and cart, bundle and checkout upsells drawn from the same ranking.',
       logo: 'https://qsortby.com/favicon.svg',
       areaServed: 'Worldwide',
     },
@@ -39,7 +47,30 @@ const jsonld = {
       // everywhere at once. It used to omit the emotional layer and the upsell
       // surfaces entirely — the two things that justify the top two tiers.
       description:
-        'Collection sorting and upsells for Shopify: auto-rank collections by sales, revenue, margin, conversion or trending; emotional AI that reorders each shopper\'s feed with no purchase history; cart, bundle, popup, thank-you and in-checkout upsells; A/B tests with revenue attribution.',
+        'Collection sorting and upsells for Shopify: auto-rank collections by sales, revenue, margin, conversion or trending; per-visitor ranking that reorders each shopper\'s feed with no purchase history; cart, bundle, popup, thank-you and in-checkout upsells; A/B tests with revenue attribution.',
+      // What the app actually does, enumerated. Search engines read featureList
+      // for a SoftwareApplication entity, and it is the cheapest place to make
+      // shipped-but-unmarketed capabilities discoverable — the before/after
+      // preview, pairing rules, config-version reporting and theme-native
+      // rendering were in no field of this site before Sep 2026.
+      // Every line here must name something a merchant can find in the app.
+      featureList: [
+        'Auto-sort collections by sales velocity, revenue, margin, conversion rate or trending momentum',
+        'Selling-fast ranking from live inventory against sales rate',
+        'Rank by review score, read from your existing review app with no setup',
+        'Sold-out products demoted automatically and promoted back on restock',
+        'Before/after preview of the new collection order before it publishes',
+        'Approve a new order manually, or keep collection membership manual',
+        'Pairing rules that keep related products side by side in the grid',
+        'Per-shopper collection feeds that need no login and no purchase history',
+        'Ranking rules written and weighted by the merchant in plain words',
+        'Product feeds rendered with your own theme snippets, not app markup',
+        'Cart, free-shipping, bought-together, thank-you, popup and in-checkout upsells',
+        'Frequently-bought-together from real co-purchase, co-add and co-view data',
+        'A/B testing of any sort against your current order, with significance',
+        'Last-touch revenue attribution and order tagging in Shopify admin',
+        'Config-version reporting — what each ranking configuration earned',
+      ],
       // Keep in sync with src/plans.ts — this is what search engines quote as
       // the app's price, so a stale tier here misprices us in results.
       offers: [
@@ -57,6 +88,35 @@ const jsonld = {
       name: 'QSortby',
       publisher: { '@id': 'https://qsortby.com/#org' },
     },
+    // Emitted only where the page renders the questions it describes — a
+    // FAQPage node on a page without the visible Q&A is a policy violation,
+    // not a shortcut.
+    ...(faq.length
+      ? [
+          {
+            '@type': 'FAQPage',
+            '@id': canonical + '#faq',
+            mainEntity: faq.map((f: { q: string; a: string }) => ({
+              '@type': 'Question',
+              name: f.q,
+              acceptedAnswer: { '@type': 'Answer', text: plain(f.a) },
+            })),
+          },
+        ]
+      : []),
+    // Mirrors the visible `.crumb` trail the interior pages already render.
+    ...(breadcrumb
+      ? [
+          {
+            '@type': 'BreadcrumbList',
+            '@id': canonical + '#crumb',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://qsortby.com/' },
+              { '@type': 'ListItem', position: 2, name: breadcrumb, item: canonical },
+            ],
+          },
+        ]
+      : []),
   ],
 };
 ---

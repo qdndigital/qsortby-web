@@ -57,8 +57,8 @@ export interface Plan {
   badge?: string;
   /** true → render as the visually emphasised card. */
   feat?: boolean;
-  /** CTA label. All four tiers are self-serve — the emotional layer completed
-   *  end-to-end validation, so Growth no longer needs a sales conversation. */
+  /** CTA label. All four tiers are self-serve — nothing here needs a sales
+   *  conversation, so every card installs rather than books. */
   cta: 'install' | 'demo';
 }
 
@@ -72,6 +72,7 @@ export const PLANS: Plan[] = [
       // line leads with the limit. Same phrasing as the listing.
       'Real-time best-sellers ranking, 1 collection',
       'Sold-out auto-demotion',
+      'Keep paired products side by side',
       // The AOV surfaces start on Free deliberately: a merchant has to see an
       // upsell working before a tier that adds more of them means anything.
       'Cart upsell + free-shipping bar',
@@ -125,7 +126,7 @@ export const PLANS: Plan[] = [
       // ─── below here: /pricing only, not the home teaser ───
       'Unlimited sort rules and visitor types',
       'Unlimited upsells of each type',
-      'Emotional preview (read-only)',
+      'Config-version reporting — what each sort earned',
       // Was "Priority refresh & throughput" — nothing in the app schedules by
       // plan (cron interval is per-collection, 5 min floor for everyone). The
       // CSV export lives on the Analytics page, which is what `analytics`
@@ -142,7 +143,7 @@ export const PLANS: Plan[] = [
     desc: 'For stores that want a storefront tuned to each shopper.',
     features: [
       'Everything in Pro',
-      'Live shopper personalization (Emotional AI)',
+      'Live per-visitor personalization',
       // Says out loud that the AI reaches INTO the upsells. Without this line
       // Growth reads as "buy another AI feature" instead of "everything you
       // already run gets smarter".
@@ -150,15 +151,15 @@ export const PLANS: Plan[] = [
       // NAME THE FOUR. The re-rank is threaded through cart, popup, checkout
       // and thank-you only — the free-shipping bar picks on price band and FBT
       // on co-purchase pairs, so "every upsell" was wrong.
-      'Emotional re-rank in cart, popup, checkout & thank-you',
+      'Personalized offers in cart, popup, checkout & thank-you',
       'In-checkout upsell (Shopify Plus)',
       // ─── below here: /pricing only, not the home teaser ───
       'Per-shopper real-time reranking',
-      'Emotional heatmap, journey + AI summaries',
+      'Session heatmap, journey + AI summaries',
       // Was "Highest AI limits" — Pro and Growth carry IDENTICAL monthlyCalls /
       // dailyCalls (both unset). The real difference is that the emotional read
       // is applied rather than only logged.
-      'Emotional state written to every ranked surface',
+      'Session read written to every ranked surface',
     ],
     badge: 'Most advanced',
     cta: 'install',
@@ -226,10 +227,10 @@ export const MATRIX: { label: string; cells: string[] }[] = [
   { label: 'Upsells per type', cells: ['1', '3', 'Unlimited', 'Unlimited'] },
   { label: 'Customer events & analytics', cells: ['—', '—', '✓', '✓'] },
   { label: 'AI authoring (taxonomy + logic)', cells: ['—', '—', '✓', '✓'] },
-  { label: 'Emotional AI — preview only', cells: ['—', '—', '✓', '✓'] },
-  { label: 'Emotional AI — live per shopper', cells: ['—', '—', '—', '✓'] },
-  { label: 'Emotional re-rank in cart / popup / checkout / thank-you', cells: ['—', '—', '—', '✓'] },
-  { label: 'Emotional Insights — heatmap, journey, AI summaries', cells: ['—', '—', '—', '✓'] },
+  { label: 'Session insights — read-only', cells: ['—', '—', '✓', '✓'] },
+  { label: 'Live per-shopper reranking', cells: ['—', '—', '—', '✓'] },
+  { label: 'Personalized offers in cart / popup / checkout / thank-you', cells: ['—', '—', '—', '✓'] },
+  { label: 'Session insights — heatmap, journey, AI summaries', cells: ['—', '—', '—', '✓'] },
   { label: 'Orders / month', cells: ['200*', '2,000*', 'Unlimited', 'Unlimited'] },
   // Nothing in the app tiers support, and /support promises email + a one
   // business-day reply + free setup help to EVERY plan. This row used to say

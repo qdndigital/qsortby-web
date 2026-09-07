@@ -1,5 +1,15 @@
 ---
-// ── The Emotional AI showpiece ────────────────────────────────────────────
+// ── The per-shopper showpiece ─────────────────────────────────────────────
+//
+// VOCABULARY NOTE — read before editing any label in this file.
+// This used to present an inferred EMOTIONAL STATE ("Anxious", "Celebratory")
+// as the read. That framing was dropped: an emotional label has no ground
+// truth, so it can never be shown to be right, and a merchant cannot act on
+// it. What the app actually does — and what a merchant can check — is read
+// INTENT from session behaviour and match it against MOOD TAGS the merchant
+// approved on their own catalogue. Both halves are verifiable, so both are
+// what this component now shows. Do not reintroduce emotion labels here.
+// See docs/EMOTIONAL_LAYER_REVIEW.md in the app repo.
 // Replaces the old .espot layout (big static 12-state scatter on the left, three
 // numbered paragraphs + two plan cards on the right). That version explained the
 // MODEL and never showed the OUTCOME: a merchant read "there are twelve states"
@@ -32,9 +42,9 @@ const CASES = [
     who: 'Shopper A',
     seen: 'First visit · 2m 14s',
     trace: ['2m 14s on one product', 'Reviews opened ×3', 'Back to collection ×2', 'Size chart', 'No add to cart'],
-    state: 'Anxious',
-    axes: 'activated · negative',
-    tone: 'Reassuring',
+    state: 'Comparing',
+    axes: 'from 5 session signals',
+    tone: 'Reassurance',
     toneNote: 'best-reviewed and free-returns first · no urgency, no upsell',
     feed: [
       { n: 'Studio Headphones', i: 'headphones', d: 2, why: '2,140 reviews' },
@@ -47,10 +57,10 @@ const CASES = [
     who: 'Shopper B',
     seen: 'First visit · 41s',
     trace: ['4 products in 41s', 'Straight to new arrivals', 'Gift note opened', 'Added ×2', 'No review views'],
-    state: 'Celebratory',
-    axes: 'activated · positive',
-    tone: 'Celebrate',
-    toneNote: 'premium end first · bundles and gifting allowed',
+    state: 'Gift buying',
+    axes: 'from 4 session signals',
+    tone: 'Gifting',
+    toneNote: 'premium end first · bundles and gift-ready items allowed',
     feed: [
       { n: 'Field Watch', i: 'watch', d: 3, why: 'Premium lead' },
       { n: 'Studio Headphones', i: 'headphones', d: 1, why: 'Gift-ready' },
@@ -60,29 +70,28 @@ const CASES = [
   },
 ];
 
-// The model, kept — but as a 2×2 read instead of a hand-positioned scatter that
-// owned half the section. Four quadrants, three states each, one emphasised.
-// Assignment follows the real coordinates, which is why the counts are 2/3/3/3
-// rather than a tidy 3/3/3/3: `Focused` sits at the CENTRE of both axes and
-// belongs to no quadrant. Forcing it into one (it was filed under calm-negative
-// in the first pass) misstates the model — engaged is not a bad mood. It gets
-// named below the grid instead.
+// The vocabulary the read matches against: eight mood tags that describe
+// PRODUCTS, not people. QSortby drafts them across the catalogue and the
+// merchant approves them, which is what makes them checkable — a merchant can
+// look at a candle tagged Comfort and agree or disagree. An inferred mood for a
+// shopper has no such test, which is why the tags live on the product side.
 const QUADS = [
-  { ax: 'Activated', vl: 'Negative', s: ['Anxious', 'Stressed'] },
-  { ax: 'Activated', vl: 'Positive', s: ['Excited', 'Celebratory', 'Curious'] },
-  { ax: 'Calm', vl: 'Negative', s: ['Sad', 'Tired', 'Bored'] },
-  { ax: 'Calm', vl: 'Positive', s: ['Content', 'Grateful', 'Nostalgic'] },
+  { ax: 'Trust', vl: 'Ease', s: ['Reassurance', 'Effortless'] },
+  { ax: 'Warmth', vl: 'Familiarity', s: ['Comfort', 'Classic'] },
+  { ax: 'Occasion', vl: 'Proof', s: ['Gifting & Occasion', 'Top rated'] },
+  { ax: 'Newness', vl: 'Energy', s: ['Discovery', 'Trending & Bold'] },
 ];
-const NOW = 'Anxious';
+const NOW = 'Reassurance';
 
 // The order both columns are measured against — the store's own best-seller sort.
 // Naming it here is what makes the ▲▼ in each feed legible instead of decorative.
 const DEFAULT = ['Everyday Tee', 'Trail Runner', 'Studio Headphones', 'Field Watch'];
 
 const RAILS = [
-  ['No profile is stored', 'A state is a behavioural vector for this session. Nothing is ever written down saying “this person is sad.”'],
+  ['You own the vocabulary', 'QSortby drafts a mood tag for every product; nothing is applied until you approve it, and you can rewrite any tag.'],
+  ['No profile is stored', 'A read is a behavioural vector for this session. Nothing is ever written down about a person.'],
   ['Unsure means unchanged', 'Below the confidence bar the feed falls back to your standard best-sellers order rather than guessing.'],
-  ['Relevance, never leverage', 'No manufactured urgency, and never exploiting a low mood to force a sale.'],
+  ['Relevance, never leverage', 'No manufactured urgency, and never pressure dressed up as personalization.'],
 ];
 ---
 <div class="eread">
@@ -114,7 +123,7 @@ const RAILS = [
         </div>
 
         <div class="er-band er-read">
-          <span class="er-lb"><i>02</i> The read</span>
+          <span class="er-lb"><i>02</i> What it reads, and which tag it serves</span>
           <div class="er-readrow">
             <span class="er-state">{c.state}<small>{c.axes}</small></span>
             <span class="er-to" aria-hidden="true">→</span>
@@ -143,11 +152,11 @@ const RAILS = [
     ))}
   </div>
 
-  <p class="er-cap">Illustration of the same four products reordered by state — arrows are each product's move against the default order named above, not a result claim.</p>
+  <p class="er-cap">Illustration of the same four products reordered by what each session showed — arrows are each product's move against the default order named above, not a result claim.</p>
 
   <div class="er-foot rv">
     <figure class="er-model">
-      <figcaption>Twelve states on two axes — how activated, and whether the mood is positive. Not a bucket, a position.</figcaption>
+      <figcaption>Eight mood tags across your catalogue — drafted for every product, approved by you. This is the vocabulary the read matches against.</figcaption>
       <div class="er-quads">
         {QUADS.map((q) => (
           <div class="er-q">
@@ -158,7 +167,7 @@ const RAILS = [
           </div>
         ))}
       </div>
-      <p class="er-centre"><b>Focused</b> sits at the centre of both axes — engaged, neither up nor down. Twelve in total.</p>
+      <p class="er-centre">Tags describe <b>products</b>, not people — so you can open any product and check the tag yourself. Rename them to your own words at any time.</p>
     </figure>
 
     <div class="er-side">
@@ -169,16 +178,16 @@ const RAILS = [
         <div class="etier">
           <div class="et-h"><span class="et-p">Pro</span><span class="et-pr">$99</span></div>
           <b>Look before you apply</b>
-          <p>The layer reads and reports; your storefront stays exactly as it is. You see the mix of states across your sessions — the read without the risk.</p>
+          <p>The layer reads and reports; your storefront stays exactly as it is. You see the mix of sessions your store actually gets — the read without the risk.</p>
         </div>
         <div class="etier on">
           <div class="et-h"><span class="et-p">Growth</span><span class="et-pr">$199</span></div>
           <b>Applied live, per shopper</b>
-          <p>The read reorders that shopper's feed from their first pause on — behind the same A/B test and revenue attribution, so you see what it earned.</p>
+          <p>The read reorders that shopper's feed from their first pause on — behind the same A/B test and revenue attribution, so you see what it earned, not what it promised.</p>
         </div>
       </div>
       <p style="margin-top:20px">
-        <a href="/how-it-works" class="btn btn-line">How the emotional read works <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a href="/how-it-works" class="btn btn-line">How the per-shopper feed works <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </p>
     </div>
   </div>

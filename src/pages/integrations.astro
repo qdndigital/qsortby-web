@@ -5,7 +5,7 @@ import BookDemo from '../components/BookDemo.astro';
 
 const title = 'Integrations — QSortby for Shopify';
 const description =
-  'QSortby runs on native Shopify surfaces — collections, product metafields, order tags and checkout — plus Klaviyo and GA4 by OAuth.';
+  'QSortby runs on native Shopify surfaces — collections, product metafields, order tags and checkout — and reads your review app automatically.';
 
 // Every card here has to name something that actually ships. The old list
 // promised Shopify Flow, POS and Markets: there is no Flow extension, no
@@ -22,7 +22,7 @@ const native = [
   { nm: 'Sales channels', sub: 'Publish everywhere', d: 'App-created collections are published to every sales channel your store has enabled, so they behave like any other collection wherever you use them.' },
 ];
 ---
-<Base title={title} description={description}>
+<Base title={title} description={description} breadcrumb="Integrations">
   <section class="phero">
     <div class="wrap">
       <div class="crumb"><a href="/">~</a> / integrations</div>
@@ -60,7 +60,7 @@ const native = [
       <div class="steps">
         <div class="step rv"><div class="sn">01</div><h3>Install &amp; authorize</h3><p>Grant access to orders, products, inventory and customers at install — read to rank, plus write so QSortby can maintain collections, order tags and metafield definitions. Shopify's native event delivery is wired up for you.</p></div>
         <div class="step rv"><div class="sn">02</div><h3>Pick your surfaces</h3><p>Choose which collections to sort and which segments to rank. Flip the QSortby embed on in your theme editor so the first-party signals start flowing.</p></div>
-        <div class="step rv"><div class="sn">03</div><h3>Connect your stack</h3><p>Sorted collections land in your storefront and every sales channel. Link Klaviyo or GA4 in a click if you want QSortby's numbers next to theirs.</p></div>
+        <div class="step rv"><div class="sn">03</div><h3>It reads what you already run</h3><p>Sorted collections land in your storefront and every sales channel, and your review app is picked up automatically &mdash; so review score works as a ranking signal with nothing to connect.</p></div>
       </div>
     </div>
   </section>
@@ -71,15 +71,16 @@ const native = [
       <div class="shead ctr rv" style="margin-bottom:2.5rem">
         <span class="eyebrow" style="justify-content:center"><span class="dot"></span> Your stack</span>
         <h2>Feeds the tools you already run.</h2>
-        <p class="lead-c">Two direct connectors, on every plan including Free — connect them by OAuth in a click, no keys to paste. Everything else travels through Shopify's own collections and metafields, so there's no proprietary lock-in.</p>
+        <p class="lead-c">Review apps are read automatically — nothing to connect. Klaviyo and GA4 have their OAuth flow built and are opening to merchants in stages. Everything else travels through Shopify's own collections and metafields, so there's no proprietary lock-in.</p>
       </div>
       <div class="intg rv">
-        <div class="i"><span class="lg"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3z"/><path d="M3 7l9 6 9-6"/></svg></span><span class="nm">Klaviyo<small>Connected by OAuth</small></span></div>
-        <div class="i"><span class="lg"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 16V9M13 16v-5M18 16v-8"/></svg></span><span class="nm">Google Analytics<small>GA4, by OAuth</small></span></div>
+        <div class="i"><span class="lg"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.4l6-.8z"/></svg></span><span class="nm">Review apps<small>Judge.me, Fera, REVIEWS.io, Stamped &mdash; read automatically</small></span></div>
+        <div class="i"><span class="lg"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3z"/><path d="M3 7l9 6 9-6"/></svg></span><span class="nm">Klaviyo<small>OAuth built, opening in stages</small></span></div>
+        <div class="i"><span class="lg"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 16V9M13 16v-5M18 16v-8"/></svg></span><span class="nm">Google Analytics<small>GA4, opening in stages</small></span></div>
         <div class="i"><span class="lg"><svg viewBox="0 0 24 24"><path d="M20.6 8.5L12 3 3.4 8.5 12 14z"/><path d="M3.4 12.5L12 18l8.6-5.5"/></svg></span><span class="nm">Ads &amp; catalogs<small>Meta, Google feeds</small></span></div>
         <div class="i"><span class="lg"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span><span class="nm">Helpdesk<small>Gorgias, Zendesk</small></span></div>
       </div>
-      <p class="snote rv" style="margin-top:1.25rem">Klaviyo and GA4 connect directly. The rest read QSortby's work through standard Shopify collections, metafields and order tags.</p>
+      <p class="snote rv" style="margin-top:1.25rem">Review scores are picked up from whichever review app you already run &mdash; no keys, no setup &mdash; and can be used as a ranking signal straight away. Klaviyo and GA4 are built and rolling out. Everything else reads QSortby's work through standard Shopify collections, metafields and order tags.</p>
     </div>
   </section>
 
