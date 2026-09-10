@@ -157,7 +157,7 @@ export const PLANS: Plan[] = [
       'Per-shopper real-time reranking',
       'Session heatmap, journey + AI summaries',
       // Was "Highest AI limits" — Pro and Growth carry IDENTICAL monthlyCalls /
-      // dailyCalls (both unset). The real difference is that the emotional read
+      // dailyCalls (both unset). The real difference is that the session read
       // is applied rather than only logged.
       'Session read written to every ranked surface',
     ],

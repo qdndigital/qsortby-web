@@ -5,134 +5,221 @@ import BookDemo from '../components/BookDemo.astro';
 
 const title = 'Shopify collection sorting by use case — QSortby';
 const description =
-  'Every catalog moves on a different signal. QSortby sorts each collection by the one that matters — trend, margin, reviews, live stock or per-shopper intent.';
-const check = '<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>';
+  'Sold-out products in the front row, new arrivals buried, a catalog too big to drag by hand — nine situations merchants bring to QSortby, what each costs today, and what changes.';
+
+/**
+ * NINE SITUATIONS, ONE FORMAT.
+ *
+ * This page replaced five full-width articles that alternated copy against a
+ * dark 252px slab with a 3-D tilt. Three things were wrong with it:
+ *   1. Five cases ran to 3.8 screens, so a merchant whose situation was fourth
+ *      had to scroll past three that were not theirs. The page is a LIST OF
+ *      SITUATIONS, not an argument built in order — it should be enterable at
+ *      any point, which is what the jump index and this grid give it.
+ *   2. The dark panels were a second visual language on a light site, and each
+ *      one carried a product name and an animation that were not the point.
+ *   3. Each case argued in two paragraphs plus a checklist that restated them.
+ *
+ * What a case actually has to carry is three things, and they are the three
+ * fields below: the sentence a merchant recognises, what it costs them TODAY,
+ * and what changes. The mechanism goes in a mono caption — named, so it can be
+ * checked, but never leading.
+ *
+ * RULE FOR ADDING ONE: `now` must describe the merchant's world without QSortby
+ * in it, and `then` may only claim shipped, verifiable behaviour. Three
+ * situations we hear and deliberately do NOT list — sorting on variant-level
+ * stock, pinning a product to a position, and scheduling a temporary sort —
+ * are absent because the app cannot do them yet.
+ */
+const CASES = [
+  {
+    id: 'buried-launch',
+    group: 'decay',
+    tag: 'New arrivals',
+    said: 'The drop I launched last week is still buried behind last season.',
+    now: 'New arrivals have no sales history, so a best-seller sort files them at the bottom on day one and they never climb out.',
+    then: 'Rank on new <em>and</em> selling: recency weighted against real velocity, so a fresh product rises the moment it starts moving.',
+    mech: 'newest × velocity',
+  },
+  {
+    id: 'out-of-stock',
+    group: 'decay',
+    tag: 'Live stock',
+    said: 'By Friday half my front row is out of stock.',
+    now: "Shopify's own sort leaves a sold-out product exactly where it was until someone steps in and moves it.",
+    then: 'In-stock first is the top tie-breaker and cannot be switched off. A product that hits zero sinks within minutes and climbs back on restock.',
+    mech: 'in-stock first',
+  },
+  {
+    id: 'too-many-skus',
+    group: 'hand',
+    tag: 'Scale',
+    said: 'I stopped merchandising when the catalog passed a thousand SKUs.',
+    now: 'Dragging works at twenty products. It is a chore at two hundred, and after that it stops being something a person can keep up with.',
+    then: 'Write the rule once and apply it to as many collections as you want. New products join on their own; you never open the picker again.',
+    mech: 'bulk apply · app membership',
+  },
+  {
+    id: 'flat-grid',
+    group: 'hand',
+    tag: 'Position',
+    said: 'Forty products look identical on the grid — position is the only thing deciding the sale.',
+    now: 'And that position was set by whoever dragged them last, on a day nobody remembers.',
+    then: 'Rank on conversion rate or revenue instead of instinct, so the near-identical products that actually close take the front row.',
+    mech: 'conversion · revenue',
+  },
+  {
+    id: 'browse-no-buy',
+    group: 'hand',
+    tag: 'Per shopper',
+    said: 'People browse for ten minutes and leave without buying anything.',
+    now: 'One fixed order serves every visitor, whatever they arrived looking for.',
+    then: 'A feed built from what this visit is doing — pace, dwell, revisits. No login, no purchase history, no quiz.',
+    mech: 'per-shopper feed',
+  },
+  {
+    id: 'stale-window',
+    group: 'decay',
+    tag: 'Seasonality',
+    said: 'Our best sellers change every month. The collection does not.',
+    now: 'A sort you set in spring is still ranking on spring demand in October.',
+    then: 'Choose the window: a rolling hour for a trend, last month for a season, a fixed range to re-run a campaign.',
+    mech: 'window picker',
+  },
+  {
+    id: 'why-first',
+    group: 'control',
+    tag: 'Explainability',
+    said: 'Someone asks why a product is where it is, and I have to answer.',
+    now: 'Every app in this category will re-order a collection. Almost none will let you read the rule that did it, let alone change it.',
+    then: 'The criteria and their share of influence are yours, written in plain words and editable. On any product, the Similar tab names the signal behind every match it made.',
+    mech: 'score breakdown',
+    own: true,
+  },
+  {
+    id: 'did-it-work',
+    group: 'control',
+    tag: 'Proof',
+    said: 'I changed the order and I have no idea whether I made it worse.',
+    now: 'Reorder, then wait a fortnight and read a sales chart that moved for ten other reasons too.',
+    then: 'Run the new order against your current one as a split test, with attributed revenue and a stated minimum sample. Every configuration change is on record with its date, so you can always see which rule was live when a week went the way it did.',
+    mech: 'A/B · snapshots · attribution',
+    own: true,
+  },
+  {
+    id: 'theme-card',
+    group: 'control',
+    tag: 'Your theme',
+    said: "The app's product cards don't look like the rest of my store.",
+    now: 'You take the app\'s markup, or you pay a developer to reskin it every time the theme changes.',
+    then: "The feed can hand back your theme's own product-card snippet, so app-chosen products render in your theme rather than beside it.",
+    mech: 'theme card',
+  },
+];
+
+/**
+ * THREE BANDS, THREE EACH.
+ *
+ * Nine cards in one uniform grid gave the eye no landmark: a merchant scanning
+ * for their own situation had nine identical objects and no coarse filter. The
+ * bands cost almost no words and turn the page into two passes — pick the band,
+ * then read three — which is how somebody actually looks for themselves in a
+ * list.
+ *
+ * The split is by what the merchant is losing, not by feature area: the page is
+ * organised around their problem, and grouping it by ours would put `newest ×
+ * velocity` and `window picker` together purely because both read order lines.
+ */
+const BANDS = [
+  {
+    key: 'decay',
+    kicker: 'It goes wrong on its own',
+    line: 'Nothing broke. The catalogue moved and the order did not follow it.',
+  },
+  {
+    key: 'hand',
+    kicker: 'Too big to do by hand',
+    line: 'The work is possible, just not at the size the store has grown to.',
+  },
+  {
+    key: 'control',
+    kicker: 'You want to stay in charge of it',
+    line: 'Automation is only worth having if you can still see, check and undo what it did.',
+  },
+];
 ---
 <Base title={title} description={description} breadcrumb="Use cases">
   <section class="phero">
     <div class="wrap">
-      <div class="crumb"><a href="/">~</a> / solutions</div>
-      <h1>Merchandised by what actually moves <em>your</em> catalog.</h1>
-      <p>Fast launches live on momentum. Discovery catalogs live on intent. Lookalike ranges live on proof. Limited stock lives on availability. Big catalogs live on scale. QSortby sorts each one by the signal that moves it — automatically.</p>
+      <div class="crumb"><a href="/">~</a> / use cases</div>
+      <h1>Nine sentences merchants say <em>before</em> they go looking for a sorting app.</h1>
+      <p>Nobody wakes up wanting to re-order a collection. They open their own store, see something wrong with it, and go looking for a way to stop fixing it by hand. Here is each one, what it costs today, and what changes.</p>
+
+      <nav class="ucjump" aria-label="Jump to a situation">
+        {CASES.map((c) => <a href={`#${c.id}`}>{c.tag}</a>)}
+      </nav>
     </div>
   </section>
 
-  <section class="sec">
-    <div class="wrap ucs">
+  <!-- One visual, once. The five animated panels this replaced each said a
+       version of the same thing — an order rearranging — and said it beside
+       copy that had already said it. Stating it once, at full strength, leaves
+       the nine cases free to be read rather than illustrated. -->
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="ucba rv" aria-hidden="true">
+        <div class="ucba-p">
+          <div class="ucba-h"><b>Your order today</b><span>Manual</span></div>
+          <div class="ucba-r dead"><i>1</i><u></u><s style="--w:26%"></s><em class="out">Sold out</em></div>
+          <div class="ucba-r"><i>2</i><u></u><s style="--w:44%"></s></div>
+          <div class="ucba-r"><i>3</i><u></u><s style="--w:38%"></s></div>
+          <div class="ucba-r"><i>4</i><u></u><s style="--w:96%"></s></div>
+          <div class="ucba-r"><i>5</i><u></u><s style="--w:70%"></s></div>
+        </div>
+        <div class="ucba-mid"><span>&rarr;</span></div>
+        <div class="ucba-p after">
+          <div class="ucba-h"><b>After one sort</b><span>Live</span></div>
+          <div class="ucba-r win"><i>1</i><u></u><s style="--w:100%"></s><em class="up">&#9650; 3</em></div>
+          <div class="ucba-r"><i>2</i><u></u><s style="--w:73%"></s></div>
+          <div class="ucba-r"><i>3</i><u></u><s style="--w:46%"></s></div>
+          <div class="ucba-r"><i>4</i><u></u><s style="--w:40%"></s></div>
+          <div class="ucba-r dead"><i>5</i><u></u><s style="--w:26%"></s><em class="out">Sold out</em></div>
+        </div>
+      </div>
+      <p class="ucba-cap">The same five products, before and after one run. Illustration, not a result claim.</p>
+    </div>
+  </section>
 
-      <!-- ===== FAST LAUNCHES — trending velocity + sold-out variants ===== -->
-      <article class="uc rv">
-        <div class="uc-copy">
-          <span class="tag">Fast-moving launches</span>
-          <h3>Lead with what's trending this week — not last season.</h3>
-          <p>Drops and new arrivals live and die on momentum. QSortby ranks by <b>trending velocity</b>, so the product catching fire rises to the front within minutes of moving — and the one that just sold out steps aside before it kills a click.</p>
-          <ul>
-            <li><span set:html={check} /> Trending velocity over a window you set</li>
-            <li><span set:html={check} /> Sold-out products demoted automatically</li>
-            <li><span set:html={check} /> A fresh front row every launch</li>
-          </ul>
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      {BANDS.map((band) => (
+      <div class="ucband">
+        <div class="ucband-h">
+          <h2>{band.kicker}</h2>
+          <p>{band.line}</p>
         </div>
-        <div class="uc-panel">
-          <span class="uc-cap" data-c="trend">Trending this launch</span>
-          <div class="uc-stage uc-trend">
-            <div class="gcard tr-row tr-a"><span class="gthumb"><img src="/products/sneaker.svg" alt="" /></span><span class="tr-nm">Trail Runner</span><span class="tr-tag sold">Sold out · size M</span></div>
-            <div class="gcard tr-row tr-b"><span class="gthumb"><img src="/products/cap.svg" alt="" /></span><span class="tr-nm">Canvas Cap</span><span class="tr-tag up">▲ Trending</span></div>
-            <div class="gcard tr-row tr-c"><span class="gthumb"><img src="/products/headphones.svg" alt="" /></span><span class="tr-nm">Studio Headphones</span></div>
-          </div>
+        <div class="ucgrid">
+        {CASES.filter((c) => c.group === band.key).map((c) => (
+          <article class={c.own ? 'uccard own rv' : 'uccard rv'} id={c.id}>
+            <span class="uc-tag">{c.tag}</span>
+            <h2 class="uc-said">&ldquo;{c.said}&rdquo;</h2>
+            <dl>
+              <dt>Today</dt>
+              <dd>{c.now}</dd>
+              <dt>With QSortby</dt>
+              <dd set:html={c.then} />
+            </dl>
+            <span class="uc-mech">{c.mech}</span>
+          </article>
+        ))}
         </div>
-      </article>
-
-      <!-- ===== DISCOVERY CATALOGS — session intent ===== -->
-      <article class="uc rev rv">
-        <div class="uc-copy">
-          <span class="tag">Discovery-driven catalogs</span>
-          <h3>Turn browsing into discovery.</h3>
-          <p>In some categories shoppers buy on feel and can't name what they want. QSortby reads <b>on-site intent</b> — what they linger on, revisit, compare — and surfaces the product they're most likely to fall for.</p>
-          <ul>
-            <li><span set:html={check} /> Reads passive intent signals</li>
-            <li><span set:html={check} /> Surfaces a different order per shopper</li>
-            <li><span set:html={check} /> Per-category bestsellers stay fresh</li>
-          </ul>
-        </div>
-        <div class="uc-panel">
-          <span class="uc-cap" data-c="intent">Reading intent</span>
-          <div class="uc-stage uc-int">
-            <div class="bi-sigs"><span class="bi-sig s1">gifting</span><span class="bi-sig s2">comparing</span><span class="bi-sig s3">returning</span></div>
-            <div class="bi-meter"><i></i></div>
-            <span class="bi-lbl">Match found</span>
-            <div class="gcard bi-rec"><span class="gthumb"><img src="/products/headphones.svg" alt="" /></span><span class="tr-nm">Studio Headphones</span><span class="bi-tag">Surface</span></div>
-          </div>
-        </div>
-      </article>
-
-      <!-- ===== LOOKALIKE RANGES — velocity / conversion ===== -->
-      <article class="uc rv">
-        <div class="uc-copy">
-          <span class="tag">Wide, lookalike ranges</span>
-          <h3>Lead with proven sellers, not a flat grid.</h3>
-          <p>When forty products look near-identical on a grid, position decides the sale. QSortby sorts by <b>sales velocity and conversion rate</b> — so the variants that actually close move to the front, and the lookalikes that don't quietly sink.</p>
-          <ul>
-            <li><span set:html={check} /> Sort by sales velocity or conversion</li>
-            <li><span set:html={check} /> Proven sellers &amp; bundles up front</li>
-            <li><span set:html={check} /> Insights on what truly converts</li>
-          </ul>
-        </div>
-        <div class="uc-panel">
-          <span class="uc-cap" data-c="rev">Sort · Bestselling</span>
-          <div class="uc-stage uc-rev">
-            <div class="rv-row rv-a gcard"><span class="gthumb"><img src="/products/mug.svg" alt="" /></span><span class="tr-nm">Ceramic Mug</span><span class="rv-bar"><i style="--w:38%"></i></span><span class="rv-amt">$2.1k</span></div>
-            <div class="rv-row rv-b gcard win"><span class="gthumb"><img src="/products/tee.svg" alt="" /></span><span class="tr-nm">Everyday Tee</span><span class="rv-bar"><i style="--w:100%"></i></span><span class="rv-amt">$8.4k</span><span class="rv-cvr">3.2× CVR</span></div>
-            <div class="rv-row rv-c gcard"><span class="gthumb"><img src="/products/tote.svg" alt="" /></span><span class="tr-nm">Canvas Tote</span><span class="rv-bar"><i style="--w:62%"></i></span><span class="rv-amt">$4.7k</span></div>
-          </div>
-        </div>
-      </article>
-
-      <!-- ===== LIMITED / SEASONAL STOCK — inventory-aware ===== -->
-      <article class="uc rev rv">
-        <div class="uc-copy">
-          <span class="tag">Limited &amp; seasonal stock</span>
-          <h3>Only feature what's actually buyable.</h3>
-          <p>Seasonal ranges and small-batch runs mean availability matters as much as popularity. QSortby pairs sales velocity with <b>live inventory</b>: sold-out products drop out of the front row on their own, and "selling fast" pushes the low-stock movers up while there's still stock to sell.</p>
-          <ul>
-            <li><span set:html={check} /> Inventory-aware ranking</li>
-            <li><span set:html={check} /> Sold-out drops out automatically</li>
-            <li><span set:html={check} /> Restock auto-promotes back up</li>
-          </ul>
-        </div>
-        <div class="uc-panel">
-          <span class="uc-cap" data-c="stock">Live inventory</span>
-          <div class="uc-stage uc-stock">
-            <div class="st-row st-a gcard"><span class="gthumb"><img src="/products/bottle.svg" alt="" /></span><span class="tr-nm">Steel Water Bottle</span><span class="st-bar"><i class="ok"></i></span><span class="st-pill ok">In stock</span></div>
-            <div class="st-row st-b gcard"><span class="gthumb"><img src="/products/jar.svg" alt="" /></span><span class="tr-nm">Daily Moisturizer</span><span class="st-bar"><i class="low"></i></span><span class="st-pill no">Low → out</span></div>
-          </div>
-        </div>
-      </article>
-
-      <!-- ===== LARGE CATALOGS — auto-curation at scale ===== -->
-      <article class="uc rv">
-        <div class="uc-copy">
-          <span class="tag">Large catalogs &amp; bundles</span>
-          <h3>Make a huge catalog feel hand-picked.</h3>
-          <p>Thousands of SKUs are impossible to merchandise by hand. QSortby <b>auto-curates at scale</b> — every collection arranges itself by what's actually selling, so hundreds of products look like someone hand-picked the front row.</p>
-          <ul>
-            <li><span set:html={check} /> Hands-off curation at scale</li>
-            <li><span set:html={check} /> Per-collection rules</li>
-            <li><span set:html={check} /> Always-fresh homepage rows</li>
-          </ul>
-        </div>
-        <div class="uc-panel">
-          <span class="uc-cap" data-c="curate">Auto-curated</span>
-          <div class="uc-stage uc-curate">
-            <span class="cu-tile c1"><img src="/products/box.svg" alt="" /></span>
-            <span class="cu-tile c2"><img src="/products/mug.svg" alt="" /></span>
-            <span class="cu-tile c3"><img src="/products/watch.svg" alt="" /></span>
-            <span class="cu-tile c4"><img src="/products/bottle.svg" alt="" /></span>
-            <span class="cu-tile c5"><img src="/products/tote.svg" alt="" /></span>
-            <span class="cu-tile c6"><img src="/products/tee.svg" alt="" /></span>
-          </div>
-        </div>
-      </article>
-
+      </div>
+      ))}
+      <p class="ucgrid-note">
+        Three situations we hear often are not on this list &mdash; sorting on variant-level stock,
+        pinning a product to a position, and scheduling a sort for a few days and back.
+        The app cannot do them yet, so they are not claimed here.
+      </p>
     </div>
   </section>
 
@@ -140,8 +227,8 @@ const check = '<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>';
     <div class="wrap">
       <div class="cta rv">
         <span class="eyebrow"><span class="dot"></span> Get started</span>
-        <h2>Sorted for <em>your</em> catalog.</h2>
-        <p>Install free and point QSortby at one collection — by the signal that matters most to you.</p>
+        <h2>Start with the one that is <em>your</em> store.</h2>
+        <p>Install free and point QSortby at a single collection. Nothing publishes until you have seen the new order.</p>
         <div class="hero-cta" style="justify-content:center">
           <a href={APP_STORE_URL} class="btn btn-accent btn-lg">Install free <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           <BookDemo class="btn btn-ghost btn-lg">Book a demo</BookDemo>

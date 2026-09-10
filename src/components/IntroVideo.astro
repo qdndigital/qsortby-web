@@ -122,7 +122,14 @@ const {
       if (!btn) return;
       const video = document.getElementById(btn.getAttribute('data-for'));
       if (!video) return;
+      // `controls` ships in the MARKUP so the video stays playable with no JS.
+      // With JS it comes straight back off: the native control bar is a black
+      // strip across the bottom fifth of the poster, and the poster is a
+      // designed light frame that most visitors only ever see (preload="none",
+      // click to play). Controls return the moment play is requested.
+      video.removeAttribute('controls');
       btn.addEventListener('click', () => {
+        video.controls = true;
         // Remove the overlay FIRST so the controls are reachable even if play()
         // is rejected (a blocked or unsupported source shouldn't leave the
         // visitor stuck behind a dead button).

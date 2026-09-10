@@ -26,6 +26,17 @@ export const FAQS: Faq[] = [
       'Because the built-in sort is one fixed rule with no window you control, no sold-out handling, no per-shopper variation, and — the part that matters — <b>no way to tell whether it earned you anything</b>. QSortby lets you choose the signal and the window, demotes sold-out products automatically, can give each shopper their own order, and A/B-tests the result against your current sort with attributed revenue behind it. Install the Free plan on one collection and compare for yourself.',
   },
   {
+    // The question a merchant in 2026 actually reaches second. The App Store
+    // now carries a dozen collection-sorting apps whose feature lists are
+    // effectively identical to ours, so answering only "why not Shopify's
+    // built-in sort" leaves the real comparison unanswered. Concede the tie
+    // openly — it is checkable in thirty seconds and pretending otherwise
+    // costs more trust than it saves — then name the part that differs.
+    q: 'There are a lot of collection sorting apps. How is this one different?',
+    a:
+      'Most of the feature list is the same on all of them, ours included \u2014 automatic sorting, sold-out demotion, rules on sales, margin and stock. Treat that part as a tie. What differs is whether you can <b>check the result</b>. QSortby lets you read and edit the rule itself \u2014 the criteria and how much each counts \u2014 and names the signal behind every similar-product match; it keeps every configuration change on record with its date, so you can tell which rule was live in any week; shows the last run beside your pixel and catalogue-sync state on the app home; and labels revenue <b>influenced</b> \u2014 never <em>caused</em> \u2014 with the minimum sample per arm on screen whether or not you have reached it. None of that is a paid tier. Install Free on one collection and look at it.',
+  },
+  {
     q: 'Is there really a free plan, or is it a trial?',
     a:
       `A real plan. Every install starts with <b>${REVERSE_TRIAL_DAYS} days of full access</b> to every feature, then drops to <b>Free</b> — one managed collection with real-time ranking, sold-out demotion and revenue attribution, running indefinitely at $0 with no card. Paid plans add collections, personalization and analytics; they don't turn the core back on, because it was never off.`,
@@ -51,9 +62,17 @@ export const FAQS: Faq[] = [
       'Only if you want it to. Every collection has a <b>before/after preview</b> — the exact order the next run would produce, side by side with what\'s live, as product cards with added, removed and reordered counted. You can switch auto-publish off entirely, so a new order waits for your approval, or keep the collection <b>manual</b> and let QSortby decide only the order of products you picked yourself. Every published order is stored with the configuration behind it, so you can always see what changed and when. Preview, manual order and exclusions are on <b>every plan, including Free</b>.',
   },
   {
+    // The failure that ends most merchandising-app subscriptions is not a bad
+    // sort, it is a sort that quietly stopped and nobody said so. Answer it
+    // directly; every claim here is on the app home, ungated.
+    q: 'How do I know it is still running?',
+    a:
+      'The app home carries the <b>last run</b> next to the state of your pixel and catalogue sync, so a sort that has stopped shows up there instead of on your storefront. Every published order is stored with its timestamp and the configuration that produced it, so \u201cwhen did this collection last change, and to what\u201d has an answer you can read rather than infer. Sold-out demotion is the one thing that never waits \u2014 a product that hits zero sinks within minutes and climbs back to its earned position on restock.',
+  },
+  {
     q: 'How does the per-shopper feed decide what to show?',
     a:
-      'Two halves, and you can inspect both. On the <b>product</b> side, QSortby drafts a mood tag for each item — comfort, gifting, reassurance, effortless, classic and so on — and <b>you approve or rewrite them</b>; you can open any product and check its tag. On the <b>session</b> side, it reads what this visit is actually doing — pace, dwell, revisits, comparisons, hesitation before the cart — and leans the feed toward the matching tags. You set the signals and their weights yourself, so the rule behind any order is one you can read and edit &mdash; never a black box. <b>Pro</b> gets the read as a report while your storefront stays untouched; <b>Growth</b> applies it live per shopper, behind the same A/B test and attribution as everything else. Cost is capped per store: reads are cached per behaviour pattern and there\'s a daily ceiling, past which the rule-based classifier answers instead — the feed never degrades.',
+      'Two halves, and you can inspect both. On the <b>product</b> side, QSortby drafts a fit tag for each item — comfort, gifting, reassurance, effortless, classic and so on — and <b>you approve or rewrite them</b>; you can open any product and check its tag. On the <b>session</b> side, it reads what this visit is actually doing — pace, dwell, revisits, comparisons, hesitation before the cart — and leans the feed toward the matching tags. You set the signals and their weights yourself, so the rule behind any order is one you can read and edit &mdash; never a black box. <b>Pro</b> gets the read as a report while your storefront stays untouched; <b>Growth</b> applies it live per shopper, behind the same A/B test and attribution as everything else. Cost is capped per store: reads are cached per behaviour pattern and there\'s a daily ceiling, past which the rule-based classifier answers instead — the feed never degrades.',
   },
   {
     q: 'Is this a sorting app or an upsell app?',

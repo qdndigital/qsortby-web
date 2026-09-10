@@ -17,10 +17,20 @@ const plain = (html: string) =>
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
 // Social share card. Every link to this site — a Slack paste, a tweet, a DM to a
-// colleague — rendered as a bare text row before this existed, because og:image was
-// absent entirely. Defaults to the intro video's poster: it's already 1600×900, above
-// the 1200×630 minimum, and it's the most representative single frame we have.
-const shareImage = new URL(image ?? '/video/qsortby-intro.jpg', Astro.site).href;
+// colleague — rendered as a bare text row before an og:image existed.
+//
+// It defaulted to the intro video's POSTER FRAME, which failed at the two jobs a
+// share card actually has. (1) It carried no words: pasted in Slack it was three
+// dark UI panels and a 20px wordmark, so a reader learnt nothing the link text
+// did not already say. (2) It showed capabilities that do not exist — two rows
+// labelled PINNED and a "BOOST WINDOW" meter — and a share card is the single
+// most-reproduced asset a product has.
+//
+// This one is generated from the site's own tokens and typeface, sized so the
+// headline still reads at the ~500px most feeds render, and every element in it
+// is shipped behaviour: a product climbing on live demand, and a sold-out one
+// sinking. Regenerate with the card source if the positioning line changes.
+const shareImage = new URL(image ?? '/og-default.jpg', Astro.site).href;
 
 const jsonld = {
   '@context': 'https://schema.org',
@@ -44,10 +54,13 @@ const jsonld = {
       operatingSystem: 'Shopify',
       // Kept in step with the page titles and meta descriptions: this is the entity
       // blurb search engines quote, so an out-of-date one misdescribes the product
-      // everywhere at once. It used to omit the emotional layer and the upsell
-      // surfaces entirely — the two things that justify the top two tiers.
+      // everywhere at once. Order matters here: the sorting keyword comes first
+      // because it is what merchants search, then the part no competing listing
+      // can claim — that the result is checkable. Per-visitor ranking and the
+      // upsell surfaces close it out; they justify the top two tiers but they
+      // are not why a merchant picks this app over the dozen beside it.
       description:
-        'Collection sorting and upsells for Shopify: auto-rank collections by sales, revenue, margin, conversion or trending; per-visitor ranking that reorders each shopper\'s feed with no purchase history; cart, bundle, popup, thank-you and in-checkout upsells; A/B tests with revenue attribution.',
+        'Collection sorting for Shopify that shows its work: auto-rank by sales, revenue, margin, conversion or trending, then check the result — the rule itself in plain words, a diff of what the last run changed, the run and sync state, and revenue labelled influenced rather than caused. Plus per-visitor ranking with no purchase history, and cart, bundle, popup, thank-you and in-checkout upsells.',
       // What the app actually does, enumerated. Search engines read featureList
       // for a SoftwareApplication entity, and it is the cheapest place to make
       // shipped-but-unmarketed capabilities discoverable — the before/after

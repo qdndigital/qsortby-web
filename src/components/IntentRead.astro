@@ -2,14 +2,13 @@
 // ── The per-shopper showpiece ─────────────────────────────────────────────
 //
 // VOCABULARY NOTE — read before editing any label in this file.
-// This used to present an inferred EMOTIONAL STATE ("Anxious", "Celebratory")
-// as the read. That framing was dropped: an emotional label has no ground
-// truth, so it can never be shown to be right, and a merchant cannot act on
-// it. What the app actually does — and what a merchant can check — is read
-// INTENT from session behaviour and match it against MOOD TAGS the merchant
-// approved on their own catalogue. Both halves are verifiable, so both are
-// what this component now shows. Do not reintroduce emotion labels here.
-// See docs/EMOTIONAL_LAYER_REVIEW.md in the app repo.
+// This once presented an inferred emotional state ("Anxious", "Celebratory")
+// as the read. That framing is GONE and must not come back: such a label has
+// no ground truth, so it can never be shown to be right, and a merchant
+// cannot act on it. What the app does — and what a merchant can check — is
+// read INTENT from session behaviour and match it against PRODUCT TAGS the
+// merchant approved on their own catalogue. Both halves are verifiable, so
+// both are what this component shows.
 // Replaces the old .espot layout (big static 12-state scatter on the left, three
 // numbered paragraphs + two plan cards on the right). That version explained the
 // MODEL and never showed the OUTCOME: a merchant read "there are twelve states"
@@ -70,10 +69,10 @@ const CASES = [
   },
 ];
 
-// The vocabulary the read matches against: eight mood tags that describe
-// PRODUCTS, not people. QSortby drafts them across the catalogue and the
+// The vocabulary the read matches against: eight PRODUCT tags that describe
+// what a product is good for, not how a shopper feels. QSortby drafts them across the catalogue and the
 // merchant approves them, which is what makes them checkable — a merchant can
-// look at a candle tagged Comfort and agree or disagree. An inferred mood for a
+// look at a candle tagged Comfort and agree or disagree. An inferred state for a
 // shopper has no such test, which is why the tags live on the product side.
 const QUADS = [
   { ax: 'Trust', vl: 'Ease', s: ['Reassurance', 'Effortless'] },
@@ -88,7 +87,7 @@ const NOW = 'Reassurance';
 const DEFAULT = ['Everyday Tee', 'Trail Runner', 'Studio Headphones', 'Field Watch'];
 
 const RAILS = [
-  ['You own the vocabulary', 'QSortby drafts a mood tag for every product; nothing is applied until you approve it, and you can rewrite any tag.'],
+  ['You own the vocabulary', 'QSortby drafts a tag for every product; nothing is applied until you approve it, and you can rewrite any tag.'],
   ['No profile is stored', 'A read is a behavioural vector for this session. Nothing is ever written down about a person.'],
   ['Unsure means unchanged', 'Below the confidence bar the feed falls back to your standard best-sellers order rather than guessing.'],
   ['Relevance, never leverage', 'No manufactured urgency, and never pressure dressed up as personalization.'],
@@ -156,7 +155,7 @@ const RAILS = [
 
   <div class="er-foot rv">
     <figure class="er-model">
-      <figcaption>Eight mood tags across your catalogue — drafted for every product, approved by you. This is the vocabulary the read matches against.</figcaption>
+      <figcaption>Eight product tags across your catalogue — drafted for every product, approved by you. This is the vocabulary the read matches against.</figcaption>
       <div class="er-quads">
         {QUADS.map((q) => (
           <div class="er-q">

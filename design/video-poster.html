@@ -1,0 +1,97 @@
+<!-- SOURCE OF public/video/qsortby-intro.jpg — the intro video's poster frame.
+
+     The video is click-to-play with preload="none", so for most visitors this
+     still IS the video block: it is what they see and never click. That makes it
+     a banner, not a thumbnail.
+
+     It replaced a frame lifted from the video itself, for two reasons:
+     1. That frame showed two rows labelled PINNED and a "BOOST WINDOW" meter.
+        Neither exists in the app.
+     2. It was dark, while the play overlay on top of it is a WHITE ring with
+        --muted grey label text — an overlay designed for a light ground. The two
+        had never matched.
+
+     Centre is deliberately empty: the play ring and its "Watch the intro" label
+     land there.
+
+     CAVEAT LEFT OPEN: the video itself still plays the old material. Until it is
+     re-rendered, the poster is honest and the video behind it is not.
+
+     Render: 1600×900, JPEG q90 → public/video/qsortby-intro.jpg -->
+<meta charset="utf-8">
+<style>
+@font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:100 900;
+  src:url('file:///Users/qdn/GitHub/qsortby-web/public/fonts/schibsted-vf-latin.woff2') format('woff2');}
+:root{
+  --ink:#1a1a1a; --ink-2:#474747; --muted:#6b6f76;
+  --green:#00a36b; --green-ink:#067a55; --green-soft:#e9f6f0; --green-line:#cbe8da;
+  --line:#e4e5e7; --surface:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1600px;height:900px}
+body{
+  font-family:'Schibsted Grotesk',system-ui,sans-serif; color:var(--ink);
+  background:
+    radial-gradient(90% 70% at 50% 42%, #ffffff 0%, rgba(255,255,255,0) 62%),
+    radial-gradient(120% 90% at 90% 6%, #edf8f3 0%, rgba(237,248,243,0) 55%),
+    linear-gradient(180deg,#fafbfa 0%, #f4f6f5 100%);
+  display:grid; grid-template-columns:1fr 340px 1fr; align-items:center;
+  padding:104px 88px 116px; gap:0;
+}
+
+.panel{
+  background:var(--surface); border:1px solid var(--line); border-radius:24px;
+  padding:26px 26px 28px;
+  box-shadow:0 2px 3px rgba(16,24,40,.04), 0 36px 64px -34px rgba(16,24,40,.24);
+}
+.panel.after{ border-color:var(--green-line); }
+.hd{
+  display:flex; align-items:baseline; justify-content:space-between;
+  padding:0 4px 18px; border-bottom:1px solid var(--line); margin-bottom:18px;
+}
+.hd b{font-size:23px; font-weight:700; letter-spacing:-.01em}
+.hd span{font-size:17px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--muted)}
+.after .hd span{color:var(--green-ink)}
+
+.row{display:flex; align-items:center; gap:16px; padding:13px 10px; border-radius:13px}
+.row .n{width:26px; font-size:20px; font-weight:700; color:#b6bcc0; text-align:center; font-variant-numeric:tabular-nums}
+.row .th{width:44px; height:44px; border-radius:11px; background:#eceae4; flex:none}
+.row .bar{height:11px; border-radius:6px; background:#e8eaec; flex:1}
+.row .bar i{display:block; height:100%; border-radius:6px; background:#cfd4d8; width:var(--w)}
+
+.row.dead .th{background:#efedec}
+.row.dead .bar i{background:#dfe3e6}
+.row.dead{opacity:.66}
+.row.win{background:var(--green-soft); border:1px solid var(--green-line); padding:12px 9px}
+.row.win .n{color:var(--green-ink)}
+.row.win .th{background:#d8ece1}
+.row.win .bar{background:#cfe8db}
+.row.win .bar i{background:linear-gradient(90deg,var(--green),#2bd996)}
+
+.tag{font-size:16px; font-weight:700; padding:5px 11px; border-radius:999px; flex:none}
+.tag.out{background:#ebedee; color:#7c838a}
+.tag.up{background:var(--green); color:#fff}
+
+/* the centre stays empty — the play ring and its label sit here */
+.mid{display:grid; place-items:center; align-content:center; gap:0}
+</style>
+
+<div class="panel">
+  <div class="hd"><b>Your order today</b><span>Manual</span></div>
+  <div class="row dead"><span class="n">1</span><span class="th"></span><span class="bar"><i style="--w:26%"></i></span><span class="tag out">Sold out</span></div>
+  <div class="row"><span class="n">2</span><span class="th"></span><span class="bar"><i style="--w:44%"></i></span></div>
+  <div class="row"><span class="n">3</span><span class="th"></span><span class="bar"><i style="--w:38%"></i></span></div>
+  <div class="row"><span class="n">4</span><span class="th"></span><span class="bar"><i style="--w:96%"></i></span></div>
+  <div class="row"><span class="n">5</span><span class="th"></span><span class="bar"><i style="--w:70%"></i></span></div>
+</div>
+
+<div class="mid"></div>
+
+<div class="panel after">
+  <div class="hd"><b>After one sort</b><span>Live</span></div>
+  <div class="row win"><span class="n">1</span><span class="th"></span><span class="bar"><i style="--w:100%"></i></span><span class="tag up">&#9650; 3</span></div>
+  <div class="row"><span class="n">2</span><span class="th"></span><span class="bar"><i style="--w:73%"></i></span></div>
+  <div class="row"><span class="n">3</span><span class="th"></span><span class="bar"><i style="--w:46%"></i></span></div>
+  <div class="row"><span class="n">4</span><span class="th"></span><span class="bar"><i style="--w:40%"></i></span></div>
+  <div class="row dead"><span class="n">5</span><span class="th"></span><span class="bar"><i style="--w:26%"></i></span><span class="tag out">Sold out</span></div>
+</div>
