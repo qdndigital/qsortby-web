@@ -1,0 +1,64 @@
+---
+import Base from '../../layouts/Base.astro';
+import { APP_STORE_URL } from '../../consts';
+import BookDemo from '../../components/BookDemo.astro';
+import MerchandisingHero from '../../components/MerchandisingHero.astro';
+import MerchandisingFeatures from '../../components/MerchandisingFeatures.astro';
+
+const title = 'Merchandising — QSortby';
+const description =
+  'Automated Shopify collection sorting: live re-ranking on sales, margin, conversion and stock, grouping rules that keep products together, and every sort tested against real shopper behavior.';
+---
+<Base title={title} description={description} breadcrumb="Merchandising">
+  <section class="phero phero-mint">
+    <div class="wrap herogrid">
+      <div>
+        <h1>Collections that merchandise themselves.</h1>
+        <p>Auto-sort on sales, margin, conversion or stock, keep related products grouped, and check every result against an A/B test — no manual re-ordering, ever.</p>
+        <div class="hero-cta" style="margin-top:2rem">
+          <a href={APP_STORE_URL} class="btn btn-accent btn-lg">Try it free <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </div>
+      <MerchandisingHero />
+    </div>
+  </section>
+
+  <!-- ===================== HOW IT WORKS ===================== -->
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="shead ctr rv" style="margin-bottom:2.5rem">
+        <h2>How it works</h2>
+      </div>
+      <div class="steps">
+        <div class="step rv"><div class="sn">01</div><h3>Set the rule</h3><p>Pick a ranking signal for the collection, or build a personalize rule of your own and apply it instead.</p></div>
+        <div class="step rv"><div class="sn">02</div><h3>Preview the order</h3><p>See exactly how the collection will look before you publish, no surprises once it's live.</p></div>
+        <div class="step rv"><div class="sn">03</div><h3>Apply to your theme</h3><p>Drop the collection into any storefront block, wherever you place it, and it follows the rule automatically.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FEATURE DETAIL =====================
+       Five sections, each a claim + its own illustration, alternating sides
+       (components/MerchandisingFeatures.astro). Sits directly under How it
+       works, replacing the earlier 3-card summary — this covers the same
+       ground in more depth so the two would have overlapped. -->
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <MerchandisingFeatures />
+    </div>
+  </section>
+
+  <!-- ===================== CTA ===================== -->
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="cta rv">
+        <h2>Ready to see it in <em>action?</em></h2>
+        <p>Start your free trial or book a demo with our merchandising experts.</p>
+        <div class="hero-cta" style="justify-content:center">
+          <a href={APP_STORE_URL} class="btn btn-accent btn-lg">Get started <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <BookDemo class="btn btn-ghost btn-lg">Book a demo</BookDemo>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

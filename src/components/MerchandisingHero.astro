@@ -1,0 +1,128 @@
+---
+/**
+ * MERCHANDISING HERO ILLUSTRATION — /features/merchandising.
+ *
+ * Two layers, same relationship as the reference the request pointed at: the
+ * QSortby app (the rule that decides the order) sits behind, a storefront
+ * browser (the collection it produces) sits in front and overlaps it. Both
+ * reuse markup/classes that already exist elsewhere on the site rather than
+ * inventing a new look:
+ *   - the sliders panel is the exact "Sorting strategy" viz from the
+ *     Merchandising tab on the homepage (components/Offer.astro) — same
+ *     numbers, so the two never disagree.
+ *   - the product grid + its swap animation is RankWhy.astro's `.rw-grid`
+ *     (the homepage hero's "For you" tiles), reused here for a QSortby
+ *     collection auto-sorting on a live storefront instead of a personalized
+ *     feed. Two adjacent tiles trade places on the same 12s two-run loop as
+ *     every other animated card on the site, so "auto sort" is shown, not
+ *     just claimed.
+ */
+const GRID = [
+  { name: 'Everyday Tee', slug: 'tee', swap: 'down' },
+  { name: 'Trail Runner', slug: 'sneaker', swap: 'up' },
+  { name: 'Classic Cap', slug: 'cap' },
+  { name: 'Canvas Tote', slug: 'tote' },
+  { name: 'Chrono Watch', slug: 'watch', swap: 'down' },
+  { name: 'Steel Water Bottle', slug: 'bottle', swap: 'up' },
+];
+---
+<div class="fx-stage" aria-hidden="true">
+  <div class="fx-row">
+    <div class="fx-back">
+      <span class="offer-ck">Sorting strategy &middot; live</span>
+      <div class="offer-sliders">
+        <div class="offer-sl"><span>Sales</span><i style="--w:75%"></i><b>75</b></div>
+        <div class="offer-sl"><span>Margin</span><i style="--w:40%"></i><b>40</b></div>
+        <div class="offer-sl"><span>Conversion</span><i style="--w:60%"></i><b>60</b></div>
+        <div class="offer-sl"><span>Stock</span><i style="--w:90%"></i><b>90</b></div>
+      </div>
+      <div class="offer-verdict">96% significant &mdash; <b>B wins</b><span class="offer-vtag">Revenue</span></div>
+    </div>
+
+    <div class="fx-front">
+      <div class="us-chrome"><i></i><i></i><i></i><span>your-store.com/collections/all</span></div>
+      <div class="mh-collhead"><span class="mh-live"><i></i>Live</span><span>Best selling</span></div>
+      <div class="rw-grid mh-grid">
+        {GRID.map((p, i) => (
+          <div class={`rw-card${p.swap ? ' swap' + (p.swap === 'up' ? 'l' : 'r') : ''}`}>
+            <span class="rw-cbody">
+              <span class="rw-th"><img src={`/products/${p.slug}.svg`} alt="" width="120" height="120" loading={i === 0 ? 'eager' : 'lazy'} decoding="async" /></span>
+              <span class="rw-nm">{p.name}</span>
+              {p.swap ? (
+                <span class="rw-dstack">
+                  <span class={`rw-d a d${p.swap}`}>{p.swap === 'up' ? '▲ 1' : '▼ 1'}</span>
+                  <span class={`rw-d b d${p.swap === 'up' ? 'down' : 'up'}`}>{p.swap === 'up' ? '▼ 1' : '▲ 1'}</span>
+                </span>
+              ) : (
+                <span class="rw-tag-ph" aria-hidden="true">&nbsp;</span>
+              )}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  /* `.offer-*`/`.us-chrome` below are copied from components/Offer.astro's own
+     <style is:global> block, not the sitewide global.css — Astro only ships a
+     component's styles on pages that actually render that component, so
+     "is:global" there means "don't hash-scope it", not "ship it everywhere".
+     This page never renders <Offer />, so those classes didn't exist on it at
+     all (found by inspecting computed styles: `.offer-sl` was rendering
+     `display:block`, not the grid rule below, because the rule was simply
+     absent from this page's CSS). Keep these in sync with Offer.astro if its
+     "Sorting strategy" panel ever changes — see that file for the source. */
+  .offer-ck { display:block; font-family:var(--mono); font-size:10px; font-weight:700;
+    letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:13px; }
+  .offer-sliders { display:grid; gap:12px; }
+  .offer-sl { display:grid; grid-template-columns:82px 1fr 28px; align-items:center; gap:10px; }
+  .offer-sl span { font-size:.82rem; color:var(--ink-2); }
+  .offer-sl i { display:block; height:7px; border-radius:4px; background:var(--line); position:relative; overflow:hidden; }
+  .offer-sl i::before { content:""; position:absolute; inset:0; width:var(--w); border-radius:4px;
+    background:linear-gradient(90deg,var(--green),var(--green-bright)); }
+  .offer-sl b { font-family:var(--mono); font-size:.8rem; font-weight:700; color:var(--ink);
+    text-align:right; font-variant-numeric:tabular-nums; }
+  .offer-verdict { display:flex; align-items:center; gap:8px; margin-top:12px;
+    font-family:var(--mono); font-size:11px; color:var(--muted); }
+  .offer-verdict b { color:var(--green-ink); }
+  .offer-vtag { margin-left:auto; font-size:10px; font-weight:700; color:var(--green-ink);
+    background:var(--green-soft); border-radius:999px; padding:3px 9px; }
+  .us-chrome { display:flex; align-items:center; gap:6px; padding-bottom:12px; margin-bottom:12px;
+    border-bottom:1px solid var(--line); }
+  .us-chrome i { width:7px; height:7px; border-radius:50%; background:var(--line); }
+  .us-chrome span { margin-left:6px; font-family:var(--mono); font-size:10px; color:var(--muted);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; }
+
+  /* Structural two-panel layout (stage/row/back/front + entrance keyframe +
+     mobile stacking) lives in the sitewide `.fx-*` classes in global.css —
+     see the "TWO-PANEL FEATURE HERO" section there. Only this illustration's
+     own content styling is local to this component. */
+  .mh-collhead { display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:10px; font-family:var(--mono); font-size:9.5px; text-transform:uppercase;
+    letter-spacing:.08em; color:var(--muted); }
+  .mh-live { display:inline-flex; align-items:center; gap:5px; color:var(--green-ink); }
+  .mh-live i { width:5px; height:5px; border-radius:50%; background:var(--green);
+    animation:qpulse 1.9s var(--ease) infinite; }
+
+  /* Denser tile than the homepage's `.rw-grid` (that one lives in a 620px
+     card; this one shares a browser mockup with a chrome bar and a label
+     row). Columns/gap stay the default 3-up + 12px — `rwRight`/`rwLeft` in
+     global.css translate a swapping tile by `calc(100% + 12px)`, a value
+     hardcoded to that gap, so only the tile's own padding/thumb/type shrink
+     here, never the grid geometry the keyframes assume. Names go single-line
+     with an ellipsis: at this width "Steel Water Bottle" wrapping to 3 lines
+     is what blew the card heights out of sync with `.mh-app` last time. */
+  .mh-grid .rw-cbody { padding:13px 6px 10px; }
+  .mh-grid .rw-cbody .rw-th { width:34px; height:34px; }
+  .mh-grid .rw-nm { font-size:.72rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; }
+  /* `1fr` tracks default to a minimum of `auto` (their content's min-content),
+     which for a nowrap+ellipsis name is its FULL unwrapped width — so the
+     grid refused to shrink below that, and on a narrow viewport dragged the
+     whole flex row (and the page) wider than the screen with it. `minmax(0,…)`
+     lets a column go narrower than its content and let the ellipsis do its
+     job instead — `.fx-back`/`.fx-front` already carry their own `min-width:0`
+     in global.css for the same reason at the row level. */
+  .mh-grid.rw-grid { grid-template-columns:repeat(3, minmax(0,1fr)); }
+</style>

@@ -1,106 +1,54 @@
 ---
 /**
- * HERO VISUAL — the ranked list with its reasoning open.
+ * HERO VISUAL — a For You feed reordering itself.
  *
- * Replaces a browser-window mockup whose four product cards reflowed through a
- * five-act animation. Two things were wrong with it, and only one was timing:
+ * Draws the per-visitor personalization feature rather than a single merchant
+ * collection: a 3x3 tile grid that swaps positions on a loop, which is what a
+ * shopper's feed actually does as their session signals come in. Sold-out
+ * demotion stays in frame (last tile, dimmed) because it holds even in a
+ * personalized feed. No rank numbers — the ▲/▼ badges on the moving tiles are
+ * what say "this reordered", not a position count a shopper never sees.
  *
- *   1. It was the category's default picture. Every merchandising app on the
- *      App Store draws a storefront with products swapping places, so the one
- *      image a visitor meets first said nothing that separated this app from
- *      the twelve beside it.
- *   2. It illustrated the wrong half of its own headline. The H1 is "Sort your
- *      collections. See why. Prove it worked." — and the visual showed only the
- *      sorting.
- *
- * So this draws the half nothing else in the category can draw: the position and
- * THE RULE THAT PRODUCED IT — the criteria the merchant chose and how much each
- * one counts, which is what the app really shows. It is deliberately not a
- * per-product score breakdown: that is logged but has no read path in the
- * dashboard, and the app leaves the section out rather than mislabel a
- * recomputed number as "what the ranker used". Everything in the frame is shipped behaviour — a
- * per-signal breakdown, a position delta, sold-out demotion, and the last run
- * time. No conversion rate, no revenue figure: the picture this replaced counted
- * a conversion rate from 1.9% to 3.4% with no label on it, which is the same
- * unsourced-number mistake this site has already had to walk back once.
- *
- * Motion is one beat — the three bars grow on first view and stop. There is no
- * phase machine to get stuck in, and the resting state is the whole picture, so
- * a screenshot, a no-JS load and a two-second glance all get the same thing.
+ * Two pairs swap sideways within their row — same two-run, 12s loop as the
+ * rest of the site's animated cards — while the rest hold still, so the eye
+ * has a fixed frame to judge the movement against.
  */
-/* Share of influence, which is what the app actually exposes: the merchant
-   picks the criteria and how much each one counts. It is NOT a per-product
-   score breakdown — the dashboard has no read path to that, and the app
-   deliberately omits the section rather than recompute and mislabel it. */
-const SIGNALS = [
-  { label: 'Units sold · 7 days', pts: '60%', w: 100 },
-  { label: 'Margin', pts: '30%', w: 50 },
-  { label: 'Repeat buyers', pts: '10%', w: 17 },
-];
-const REST = [
-  { n: 2, name: 'Trail Runner', slug: 'sneaker', swap: 'down' },
-  { n: 3, name: 'Studio Headphones', slug: 'headphones', swap: 'up' },
-  { n: 4, name: 'Steel Water Bottle', slug: 'bottle', out: true },
+const PRODUCTS = [
+  { name: 'Everyday Tee', slug: 'tee', swap: 'down' },
+  { name: 'Trail Runner', slug: 'sneaker', swap: 'up' },
+  { name: 'Studio Headphones', slug: 'headphones' },
+  { name: 'Canvas Tote', slug: 'tote' },
+  { name: 'Classic Cap', slug: 'cap', swap: 'down' },
+  { name: 'Chrono Watch', slug: 'watch', swap: 'up' },
+  { name: 'Ceramic Mug', slug: 'mug' },
+  { name: 'Travel Candle', slug: 'candle-tin' },
+  { name: 'Steel Water Bottle', slug: 'bottle', out: true },
 ];
 ---
 <div class="rw" aria-hidden="true">
   <div class="rw-top">
-    <span class="rw-coll"><span class="rw-dot"></span> Women&rsquo;s new in</span>
-    <span class="rw-run">Last sorted <b class="rw-ago"><i>4 min ago</i><i class="now">just now</i></b></span>
+    <span class="rw-coll"><span class="rw-dot"></span> For you</span>
+    <span class="rw-run">Personalized <b>live</b></span>
   </div>
 
-  <div class="rw-row lead">
-    <span class="rw-n">1</span>
-    <span class="rw-th"><img src="/products/tee.svg" alt="" width="120" height="120" loading="eager" decoding="async" /></span>
-    <span class="rw-nm">Everyday Tee</span>
-    <span class="rw-move">&#9650; 3</span>
-  </div>
-
-  <div class="rw-why">
-    <span class="rw-whyh">The rule you wrote</span>
-    {SIGNALS.map((s) => (
-      <span class="rw-sig">
-        <span class="rw-sl">{s.label}</span>
-        <span class="rw-sb"><i style={`--w:${s.w}%`}></i></span>
-        <span class="rw-sp">{s.pts}</span>
-      </span>
+  <div class="rw-grid">
+    {PRODUCTS.map((p, i) => (
+      <div class={`rw-card${p.swap ? ' swap' + (p.swap === 'up' ? 'l' : 'r') : ''}${p.out ? ' out' : ''}`}>
+        <span class="rw-cbody">
+          <span class="rw-th"><img src={`/products/${p.slug}.svg`} alt="" width="120" height="120" loading={i === 0 ? 'eager' : 'lazy'} decoding="async" /></span>
+          <span class="rw-nm">{p.name}</span>
+          {p.swap ? (
+            <span class="rw-dstack">
+              <span class={`rw-d a d${p.swap}`}>{p.swap === 'up' ? '▲ 1' : '▼ 1'}</span>
+              <span class={`rw-d b d${p.swap === 'up' ? 'down' : 'up'}`}>{p.swap === 'up' ? '▼ 1' : '▲ 1'}</span>
+            </span>
+          ) : p.out ? (
+            <span class="rw-out">Sold out</span>
+          ) : (
+            <span class="rw-tag-ph" aria-hidden="true">&nbsp;</span>
+          )}
+        </span>
+      </div>
     ))}
-    <span class="rw-sig tie">
-      <span class="rw-sl">In stock</span>
-      <span class="rw-sb tiebar"></span>
-      <span class="rw-sp ok">
-        <svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
-      </span>
-    </span>
   </div>
-
-  {/* Rows 2 and 3 trade places on a loop. The POSITION NUMBER stays put and the
-      product travels, which is what actually happens when demand shifts — and it
-      means every frozen frame of the loop is a valid ranking, so there is no
-      moment a screenshot could catch that shows the list in a wrong state. Row 1
-      never moves (it is the one being explained) and the sold-out row never
-      leaves the bottom (that tie-breaker cannot be switched off).
-
-      TWO badges per moving row, not one. The loop is two complete runs (see
-      rwDown/rwUp in global.css): a product that falls on run A rises again on
-      run B, so a single fixed "▼ 1" would be wrong for half of every cycle.
-      Badge `a` belongs to the outbound run, badge `b` to the return. They are
-      stacked in one grid cell so neither one changes the row's width. */}
-  {REST.map((p) => (
-    <div class={`rw-row${p.out ? ' out' : ''}${p.swap ? ' swap' + p.swap : ''}`}>
-      <span class="rw-n">{p.n}</span>
-      <span class="rw-body">
-        <span class="rw-th"><img src={`/products/${p.slug}.svg`} alt="" width="120" height="120" loading="lazy" decoding="async" /></span>
-        <span class="rw-nm">{p.name}</span>
-        {p.swap && (
-          <span class="rw-dstack">
-            <span class={`rw-d a d${p.swap}`}>{p.swap === 'up' ? '\u25B2 1' : '\u25BC 1'}</span>
-            <span class={`rw-d b d${p.swap === 'up' ? 'down' : 'up'}`}>{p.swap === 'up' ? '\u25BC 1' : '\u25B2 1'}</span>
-          </span>
-        )}
-      </span>
-      {p.out && <span class="rw-out">Sold out</span>}
-    </div>
-  ))}
 </div>
-<p class="rw-cap">Illustration &mdash; on your store it is your products, your signals and your numbers.</p>

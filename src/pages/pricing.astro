@@ -16,9 +16,8 @@ const check = '<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>';
 const cellClass = (v: string) => (v === '✓' ? 'yes' : v === '—' ? 'no' : '');
 ---
 <Base title={title} description={description} breadcrumb="Pricing">
-  <section class="phero">
+  <section class="phero phero-mint">
     <div class="wrap">
-      <div class="crumb"><a href="/">~</a> / pricing</div>
       <h1>Start free. Stay free until it pays for itself.</h1>
       <p>
         Every install opens with <strong>{REVERSE_TRIAL_DAYS} days of full access</strong> — every feature,
@@ -62,7 +61,6 @@ const cellClass = (v: string) => (v === '✓' ? 'yes' : v === '—' ? 'no' : '')
   <section class="sec" style="padding-top:0">
     <div class="wrap">
       <div class="shead ctr rv" style="margin-bottom:2rem">
-        <span class="eyebrow" style="justify-content:center"><span class="dot"></span> Compare</span>
         <h2>What's in each plan</h2>
       </div>
       <div class="rv" style="overflow-x:auto">
@@ -96,7 +94,6 @@ const cellClass = (v: string) => (v === '✓' ? 'yes' : v === '—' ? 'no' : '')
   <section class="sec" style="padding-top:0">
     <div class="narrow">
       <div class="shead ctr rv" style="margin-bottom:2rem">
-        <span class="eyebrow" style="justify-content:center"><span class="dot"></span> Which one</span>
         <h2>Pick by what you're trying to fix</h2>
       </div>
       <div class="faq rv">
@@ -112,7 +109,6 @@ const cellClass = (v: string) => (v === '✓' ? 'yes' : v === '—' ? 'no' : '')
   <section class="sec" style="padding-top:0">
     <div class="narrow">
       <div class="shead ctr rv" style="margin-bottom:2.5rem">
-        <span class="eyebrow" style="justify-content:center"><span class="dot"></span> Billing</span>
         <h2>How billing works</h2>
       </div>
       <div class="faq rv">
@@ -134,7 +130,6 @@ const cellClass = (v: string) => (v === '✓' ? 'yes' : v === '—' ? 'no' : '')
   <section class="sec" style="padding-top:0">
     <div class="wrap">
       <div class="cta rv">
-        <span class="eyebrow"><span class="dot"></span> Get started</span>
         <h2>Install free. Decide with <em>your own numbers.</em></h2>
         <p>{REVERSE_TRIAL_DAYS} days of everything, then Free forever. No card to start.</p>
         <div class="hero-cta" style="justify-content:center">

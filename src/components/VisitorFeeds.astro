@@ -1,6 +1,6 @@
 ---
 // Lead-card visual: the SAME four products, ranked two different ways at the
-// same moment — one feed for a first-time visitor, one for a returning VIP.
+// same moment — one feed per behavior segment, not per identity.
 //
 // This replaces an animated two-row list that swapped positions. That version
 // only made its point if you happened to be watching the swap; a still frame
@@ -21,8 +21,8 @@ const VIP         = ['watch', 'headphones', 'tee', 'sneaker'];
 const HERO = 'watch';
 
 const feeds = [
-  { label: 'First-time visitor', order: NEW_VISITOR, accent: false },
-  { label: 'Returning VIP',      order: VIP,         accent: true  },
+  { label: 'Segment: Browsing', order: NEW_VISITOR, accent: false },
+  { label: 'Segment: Ready to buy', order: VIP,     accent: true  },
 ];
 const rankIn = (order: string[], slug: string) => order.indexOf(slug) + 1;
 ---
@@ -43,4 +43,4 @@ const rankIn = (order: string[], slug: string) => order.indexOf(slug) + 1;
     </div>
   ))}
 </div>
-<p class="pf-cap">Same catalog, same moment — two different front rows.</p>
+<p class="pf-cap">Same catalog, same moment — two segments, two different front rows.</p>

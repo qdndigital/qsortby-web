@@ -13,6 +13,14 @@ const description =
 // being published to every sales channel. The metafield card claimed QSortby
 // WRITES per-product ranks — it doesn't; the metafields it provisions are
 // inputs the merchant fills in for the ranker to read.
+const ecosystem = [
+  { cat: 'Review apps', apps: 'Judge.me, Fera, REVIEWS.io, Stamped', note: 'Read automatically', svg: '<path d="M12 3l2.6 5.6 6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.4l6-.8z"/>' },
+  { cat: 'Email Marketing', apps: 'Klaviyo', note: 'OAuth built, opening in stages', svg: '<path d="M3 5h18v14H3z"/><path d="M3 7l9 6 9-6"/>' },
+  { cat: 'Analytics', apps: 'Google Analytics (GA4)', note: 'Opening in stages', svg: '<path d="M4 19V5M4 19h16M8 16V9M13 16v-5M18 16v-8"/>' },
+  { cat: 'Ads & Catalogs', apps: 'Meta, Google feeds', note: 'Via Shopify collections', svg: '<path d="M20.6 8.5L12 3 3.4 8.5 12 14z"/><path d="M3.4 12.5L12 18l8.6-5.5"/>' },
+  { cat: 'Helpdesk', apps: 'Gorgias, Zendesk', note: 'Via order tags', svg: '<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>' },
+];
+
 const native = [
   { nm: 'Online Store', sub: 'Theme & collections', d: 'QSortby maintains real Shopify collections, sorted by your chosen signal. Add them to your nav, homepage or any section like any other collection.' },
   { nm: 'Metafields', sub: 'Catalog attributes', d: 'QSortby provisions metafields for margin, launch date, replenishment and your own product taxonomy. Fill them in and the ranker uses them — in the app and in your theme.' },
@@ -23,9 +31,8 @@ const native = [
 ];
 ---
 <Base title={title} description={description} breadcrumb="Integrations">
-  <section class="phero">
+  <section class="phero phero-mint">
     <div class="wrap">
-      <div class="crumb"><a href="/">~</a> / integrations</div>
       <h1>Native to Shopify. Connected to your stack.</h1>
       <p>QSortby reads orders and inventory, and writes sorted collections back through standard Shopify surfaces — no brittle middleware, no theme rebuild.</p>
     </div>
@@ -35,7 +42,6 @@ const native = [
   <section class="sec">
     <div class="wrap">
       <div class="shead rv" style="margin-bottom:2.5rem">
-        <span class="eyebrow"><span class="dot"></span> Shopify-native</span>
         <h2>The surfaces QSortby uses.</h2>
       </div>
       <div class="cards">
@@ -54,7 +60,6 @@ const native = [
   <section class="sec" style="padding-top:0">
     <div class="wrap">
       <div class="shead rv" style="margin-bottom:2.5rem">
-        <span class="eyebrow"><span class="dot"></span> Setup</span>
         <h2>Connected in three steps.</h2>
       </div>
       <div class="steps">
@@ -69,16 +74,16 @@ const native = [
   <section class="sec" style="padding-top:0">
     <div class="wrap">
       <div class="shead ctr rv" style="margin-bottom:2.5rem">
-        <span class="eyebrow" style="justify-content:center"><span class="dot"></span> Your stack</span>
         <h2>Feeds the tools you already run.</h2>
         <p class="lead-c">Review apps are read automatically — nothing to connect. Klaviyo and GA4 have their OAuth flow built and are opening to merchants in stages. Everything else travels through Shopify's own collections and metafields, so there's no proprietary lock-in.</p>
       </div>
       <div class="intg rv">
-        <div class="i"><span class="lg"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.4l6-.8z"/></svg></span><span class="nm">Review apps<small>Judge.me, Fera, REVIEWS.io, Stamped &mdash; read automatically</small></span></div>
-        <div class="i"><span class="lg"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3z"/><path d="M3 7l9 6 9-6"/></svg></span><span class="nm">Klaviyo<small>OAuth built, opening in stages</small></span></div>
-        <div class="i"><span class="lg"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 16V9M13 16v-5M18 16v-8"/></svg></span><span class="nm">Google Analytics<small>GA4, opening in stages</small></span></div>
-        <div class="i"><span class="lg"><svg viewBox="0 0 24 24"><path d="M20.6 8.5L12 3 3.4 8.5 12 14z"/><path d="M3.4 12.5L12 18l8.6-5.5"/></svg></span><span class="nm">Ads &amp; catalogs<small>Meta, Google feeds</small></span></div>
-        <div class="i"><span class="lg"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span><span class="nm">Helpdesk<small>Gorgias, Zendesk</small></span></div>
+        {ecosystem.map((n) => (
+          <div class="i">
+            <span class="lg"><svg viewBox="0 0 24 24" set:html={n.svg} /></span>
+            <span class="nm">{n.cat}<span class="apps">{n.apps}</span><small>{n.note}</small></span>
+          </div>
+        ))}
       </div>
       <p class="snote rv" style="margin-top:1.25rem">Review scores are picked up from whichever review app you already run &mdash; no keys, no setup &mdash; and can be used as a ranking signal straight away. Klaviyo and GA4 are built and rolling out. Everything else reads QSortby's work through standard Shopify collections, metafields and order tags.</p>
     </div>
@@ -87,7 +92,6 @@ const native = [
   <section class="sec" style="padding-top:0">
     <div class="wrap">
       <div class="cta rv">
-        <span class="eyebrow"><span class="dot"></span> Get started</span>
         <h2>Plug it into your <em>storefront</em>.</h2>
         <p>Install free and your sorted collections show up everywhere Shopify already does.</p>
         <div class="hero-cta" style="justify-content:center">

@@ -1,7 +1,8 @@
 ---
-import { NAV, APP_STORE_URL } from '../consts';
+import { NAV, FEATURES_NAV, APP_STORE_URL } from '../consts';
 import BookDemo from './BookDemo.astro';
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const onFeatures = path.startsWith('/features/');
 ---
 <header class="site">
   <div class="wrap nav">
@@ -15,6 +16,15 @@ const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
       <span>QSortby</span>
     </a>
     <nav class="nav-links" id="nav-links">
+      <div class="nav-menu">
+        <button type="button" class="nav-menu-btn" aria-haspopup="true" aria-expanded="false">
+          <span class={onFeatures ? 'active' : ''}>Features</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="nav-dropdown">
+          {FEATURES_NAV.map(([href, label]) => <a href={href} class={path === href ? 'active' : ''}>{label}</a>)}
+        </div>
+      </div>
       {NAV.map(([href, label]) => <a href={href} class={path === href ? 'active' : ''}>{label}</a>)}
     </nav>
     {/* Install is the primary action: QSortby is a self-serve app with a $0 tier,

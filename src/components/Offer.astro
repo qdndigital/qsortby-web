@@ -1,0 +1,440 @@
+---
+// "What you get" overview — three jobs, one engine. Sits right under the intro
+// video: a visitor who just watched the whole journey (sort → cart → checkout)
+// lands here to see the three buckets that journey came from, each with its
+// own short case and a picture. Tabs default to Merchandising; all three
+// panels render in markup (SSR) so a no-JS visitor still gets the first one
+// complete rather than an empty shell — the script only toggles which is shown.
+import VisitorFeeds from './VisitorFeeds.astro';
+
+interface Row { title: string; desc: string; }
+interface Tab { key: string; label: string; sub: string; rows: Row[]; }
+
+// Ordered by where a shopper actually meets them, browse → cart → checkout →
+// post-purchase — not alphabetically, not by tier. Drives both the chip list
+// in the copy and the matching scene in the illustration (data-tp ↔ data-scene).
+const TOUCHPOINTS = [
+  { key: 'product', label: 'Product page', path: '/products/trail-runner' },
+  { key: 'fbt', label: 'Frequently bought together', path: '/products/trail-runner' },
+  { key: 'popup', label: 'Pop-up', path: '/collections/new-in' },
+  { key: 'cart', label: 'Cart drawer', path: '/cart' },
+  { key: 'shipbar', label: 'Free-shipping progress bar', path: '/cart' },
+  { key: 'checkout', label: 'Checkout page', path: '/checkout' },
+  { key: 'thankyou', label: 'Thank-you page', path: '/thank-you' },
+];
+
+const TABS: Tab[] = [
+  {
+    key: 'merch',
+    label: 'Merchandising',
+    sub: 'Automated collection sorting for Shopify — data-driven, not manual.',
+    rows: [
+      { title: 'Live sorting, tested and attributed', desc: 'Collections re-rank continuously on live signals like sales, margin, conversion and stock, then run as A/B tests against the current order, with attributed revenue behind every result.' },
+      { title: 'Grouping by your own rules', desc: 'Products follow the grouping rules you define, by vendor, product type or tag, staying together in the order you set within each group as the collection re-sorts.' },
+      { title: 'Decisions backed by real behavior', desc: 'Every sort is evaluated against real shopper behavior, including clicks, add-to-carts and purchases, grounding each merchandising decision in data rather than guesswork.' },
+    ],
+  },
+  {
+    key: 'personalize',
+    label: 'Personalization',
+    sub: 'Segment-based personalization from the first visit — no login, no purchase history required.',
+    rows: [
+      { title: 'Segmentation, built from behavior', desc: 'Shoppers are grouped into segments based on what this visit is actually doing — pace, dwell time, revisits, hesitation before the cart — with no login or purchase history needed.' },
+      { title: 'Recommendations, matched to each segment', desc: 'Product suggestions adjust to the segment a shopper falls into, wherever you place them — product page, collection, or cart.' },
+      { title: 'Collection sorting, personalized per segment', desc: 'The same collection reorders itself per segment, blending the signals you weight against the segment this shopper belongs to.' },
+    ],
+  },
+  {
+    key: 'upsell',
+    label: 'Upsell',
+    sub: 'Add upsell blocks to any touchpoint, and personalize what they recommend.',
+    rows: [
+      { title: 'Add upsell blocks anywhere', desc: 'Add a block to the cart drawer, checkout, thank-you page, home or product page, and set the rule it follows — frequently bought together, best sellers, or trending.' },
+      { title: 'Personalize what each block recommends', desc: 'Show different products to each shopper based on their browsing behavior, session activity, and what’s actually selling.' },
+    ],
+  },
+];
+---
+<section class="sec offersec" style="padding-top:0">
+  <div class="wrap">
+    <div class="shead ctr shead-lg rv" style="margin-bottom:2.25rem">
+      <h2>From sorting to selling, <em>powered by one engine.</em></h2>
+    </div>
+
+    <div class="offer rv">
+      <div class="offer-tabs" id="offer-tabs" role="tablist" aria-label="What QSortby does">
+        {TABS.map((t, i) => (
+          <button data-tab={t.key} role="tab" aria-selected={i === 0}>{t.label}</button>
+        ))}
+      </div>
+
+      {TABS.map((t, i) => (
+        <div class="offer-panel" data-panel={t.key} hidden={i !== 0}>
+          <div class="offer-grid">
+            <div class="offer-copy">
+              <p class="offer-sub">{t.sub}</p>
+
+              {t.key === 'upsell' && (
+                <div class="offer-tp">
+                  <span class="offer-ck">Try a touchpoint</span>
+                  <div class="offer-chips" id="tp-chips" role="tablist" aria-label="Upsell touchpoint">
+                    {TOUCHPOINTS.map((tp, i) => (
+                      <button type="button" class="us-chip" data-tp={tp.key} data-path={tp.path} role="tab" aria-pressed={i === 0}>{tp.label}</button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div class="offer-list">
+                {t.rows.map((r) => (
+                  <div class="offer-row">
+                    <span class="offer-arrow">&rarr;</span>
+                    <div>
+                      <b>{r.title}</b>
+                      <p>{r.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div class="offer-viz">
+              {t.key === 'merch' && (
+                <div class="offer-card">
+                  <span class="offer-ck">Sorting strategy &middot; live</span>
+                  <div class="offer-sliders">
+                    <div class="offer-sl"><span>Sales</span><i style="--w:75%"></i><b>75</b></div>
+                    <div class="offer-sl"><span>Margin</span><i style="--w:40%"></i><b>40</b></div>
+                    <div class="offer-sl"><span>Conversion</span><i style="--w:60%"></i><b>60</b></div>
+                    <div class="offer-sl"><span>Stock</span><i style="--w:90%"></i><b>90</b></div>
+                  </div>
+                  <div class="offer-verdict">96% significant &mdash; <b>B wins</b><span class="offer-vtag">Attributed revenue</span></div>
+
+                  <span class="offer-ck" style="margin-top:22px">Grouped &middot; Outerwear</span>
+                  <div class="offer-thumbs">
+                    <span class="gthumb"><img src="/products/tee.svg" alt="" /></span>
+                    <span class="gthumb"><img src="/products/sneaker.svg" alt="" /></span>
+                    <span class="gthumb"><img src="/products/cap.svg" alt="" /></span>
+                    <span class="gthumb"><img src="/products/tote.svg" alt="" /></span>
+                  </div>
+
+                  <span class="offer-ck" style="margin-top:22px">Evaluated against</span>
+                  <div class="offer-chips">
+                    <span>Clicks</span><span>Add-to-carts</span><span>Purchases</span>
+                  </div>
+                </div>
+              )}
+              {t.key === 'personalize' && (
+                <div class="offer-card dark">
+                  <span class="offer-ck">Segment signals</span>
+                  <div class="offer-chips">
+                    <span>Pace</span><span>Dwell time</span><span>Revisits</span><span>Hesitation before cart</span>
+                  </div>
+
+                  <div style="margin-top:20px"><VisitorFeeds /></div>
+
+                  <span class="offer-ck" style="margin-top:20px">Shown on</span>
+                  <div class="offer-chips">
+                    <span>Product page</span><span>Collection</span><span>Cart</span>
+                  </div>
+                </div>
+              )}
+              {t.key === 'upsell' && (
+                <div class="offer-card us-stage">
+                  <div class="us-chrome"><i></i><i></i><i></i><span id="us-url">your-store.com/products/trail-runner</span></div>
+                  <div class="us-body">
+                    <div class="us-scene active" data-scene="product">
+                      <span class="us-loc"><i></i>Product page</span>
+                      <div class="us-hero"><span class="us-himg"></span><span class="us-hl"></span><span class="us-hl short"></span></div>
+                      <div class="us-block">
+                        <span class="us-btag">Upsell block added</span>
+                        <div class="us-plist">
+                          <div class="us-prow"><span class="gthumb"><img src="/products/cap.svg" alt="" /></span><span class="offer-cn">Classic Cap</span></div>
+                          <div class="us-prow"><span class="gthumb"><img src="/products/tote.svg" alt="" /></span><span class="offer-cn">Canvas Tote</span></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="us-scene" data-scene="fbt">
+                      <span class="us-loc"><i></i>Product page</span>
+                      <div class="us-hero"><span class="us-himg"></span><span class="us-hl"></span><span class="us-hl short"></span></div>
+                      <div class="us-block">
+                        <span class="us-btag">Upsell block added</span>
+                        <div class="us-bundle">
+                          <span class="gthumb"><img src="/products/sneaker.svg" alt="" /></span>
+                          <span class="us-plus">+</span>
+                          <span class="gthumb"><img src="/products/cap.svg" alt="" /></span>
+                          <span class="us-plus">+</span>
+                          <span class="gthumb"><img src="/products/tote.svg" alt="" /></span>
+                          <span class="us-add">Add all 3</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="us-scene" data-scene="popup">
+                      <div class="us-hero dim">
+                        <span class="us-loc muted"><i></i>Collection page</span>
+                        <span class="us-himg"></span><span class="us-hl"></span><span class="us-hl short"></span>
+                      </div>
+                      <div class="us-modal">
+                        <span class="us-modalx" aria-hidden="true">&times;</span>
+                        <span class="us-btag ctr">Pop-up &middot; Upsell block added</span>
+                        <b>Complete the look</b>
+                        <div class="us-grid2">
+                          <span class="gthumb"><img src="/products/headphones.svg" alt="" /></span>
+                          <span class="gthumb"><img src="/products/watch.svg" alt="" /></span>
+                          <span class="gthumb"><img src="/products/cap.svg" alt="" /></span>
+                          <span class="gthumb"><img src="/products/sneaker.svg" alt="" /></span>
+                          <span class="gthumb"><img src="/products/tee.svg" alt="" /></span>
+                          <span class="gthumb"><img src="/products/tote.svg" alt="" /></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="us-scene" data-scene="cart">
+                      <span class="us-loc"><i></i>Cart drawer</span>
+                      <div class="us-drawer">
+                        <span class="us-dtitle">Your cart &middot; 1 item</span>
+                        <div class="offer-cartrow"><span class="gthumb"><img src="/products/tee.svg" alt="" /></span><span class="offer-cn">Everyday Tee</span><span class="us-price">$28</span></div>
+
+                        <span class="offer-ck" style="margin:12px 0 8px">Recommended for you</span>
+                        <div class="offer-cartrow up"><span class="gthumb"><img src="/products/bottle.svg" alt="" /></span><span class="offer-cn">Steel Bottle</span><span class="us-price">$18</span><span class="us-add">Add</span></div>
+                      </div>
+                    </div>
+
+                    <div class="us-scene" data-scene="shipbar">
+                      <span class="us-loc"><i></i>Cart drawer</span>
+                      <div class="us-drawer">
+                        <span class="us-dtitle">Your cart</span>
+                        <div class="us-shiprow">$12 away from free shipping &mdash; add one:</div>
+                        <div class="us-shipbar"><i class="us-fill"></i></div>
+                        <div class="offer-cartrow up"><span class="gthumb"><img src="/products/sneaker.svg" alt="" /></span><span class="offer-cn">Trail Runner</span><span class="us-price">$64</span><span class="us-add">Add</span></div>
+                        <div class="offer-cartrow up"><span class="gthumb"><img src="/products/bottle.svg" alt="" /></span><span class="offer-cn">Steel Bottle</span><span class="us-price">$18</span><span class="us-add">Add</span></div>
+                      </div>
+                    </div>
+
+                    <div class="us-scene" data-scene="checkout">
+                      <span class="us-loc"><i></i>Checkout page</span>
+                      <div class="us-summary">
+                        <span class="offer-ck">Order summary</span>
+                        <div class="offer-cartrow"><span class="gthumb"><img src="/products/tee.svg" alt="" /></span><span class="offer-cn">Everyday Tee</span><span class="us-price">$28</span></div>
+                        <div class="us-total"><span>Total</span><b>$28</b></div>
+                      </div>
+                      <div class="us-block">
+                        <span class="us-btag">Recommended for you</span>
+                        <div class="offer-cartrow"><span class="gthumb"><img src="/products/candle-tin.svg" alt="" /></span><span class="offer-cn">Travel Candle</span><span class="us-price">$9</span><span class="us-add">Add</span></div>
+                      </div>
+                    </div>
+
+                    <div class="us-scene" data-scene="thankyou">
+                      <span class="us-loc"><i></i>Thank-you page</span>
+                      <div class="us-confirm"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg> Order #1042 confirmed</div>
+                      <div class="us-block">
+                        <span class="us-btag">Upsell block added</span>
+                        <div class="offer-cartrow"><span class="gthumb"><img src="/products/mug.svg" alt="" /></span><span class="offer-cn">20% off your next order</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .offer { width:100%; }
+  .offer-tabs { display:flex; width:fit-content; background:var(--bg-2); border:1px solid var(--line);
+    border-radius:999px; padding:4px; margin:0 auto 2rem; }
+  .offer-tabs button { font-family:var(--font-sans); font-size:.9rem; font-weight:600;
+    color:var(--ink-2); background:none; border:0; border-radius:999px; padding:9px 20px;
+    cursor:pointer; transition:all .2s var(--ease); white-space:nowrap; }
+  .offer-tabs button[aria-selected="true"] { background:var(--ink); color:#fff; }
+
+  .offer-grid { display:grid; gap:2.5rem; align-items:stretch; }
+  @media (min-width:900px){ .offer-grid { grid-template-columns:.85fr 1.15fr; gap:3.5rem; } }
+
+  /* The card fills the row's full height (matching the copy column) and
+     centers its own content in it, so the two sides stay visually balanced
+     regardless of how long either one's content is. */
+  .offer-viz { display:flex; }
+  .offer-card { flex:1; display:flex; flex-direction:column; justify-content:center; }
+
+  .offer-sub { font-size:1.125rem; color:var(--ink-2); line-height:1.625; margin-bottom:1.75rem; }
+  .offer-list { display:flex; flex-direction:column; }
+  .offer-row { display:flex; gap:12px; padding:1.1rem 0; border-top:1px solid var(--line); }
+  .offer-row:first-child { border-top:0; padding-top:0; }
+  .offer-arrow { flex:none; color:var(--green-ink); font-weight:700; line-height:1.5; }
+  .offer-row b { display:block; font-weight:650; font-size:1.02rem; color:var(--ink);
+    letter-spacing:-.012em; margin-bottom:5px; }
+  .offer-row p { font-size:1rem; line-height:var(--lh-body); color:var(--ink-2); }
+
+  .offer-card { background:var(--surface); border:1px solid var(--line); border-radius:18px;
+    padding:22px; box-shadow:0 1px 2px rgba(16,24,40,.04), 0 24px 48px -30px rgba(16,24,40,.25); }
+  .offer-card.dark { background:linear-gradient(165deg,#123227,#08160F);
+    border-color:rgba(120,220,170,.16); }
+  .offer-card.dark .pfeeds { margin-top:0; }
+  .offer-card.dark .offer-ck { color:rgba(255,255,255,.42); }
+  .offer-card.dark .offer-chips span { background:rgba(255,255,255,.06);
+    border-color:rgba(120,220,170,.18); color:rgba(255,255,255,.75); }
+  .offer-ck { display:block; font-family:var(--mono); font-size:12px; font-weight:700;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:13px; }
+
+  .offer-verdict { display:flex; align-items:center; gap:8px; margin-top:12px;
+    font-family:var(--mono); font-size:11px; color:var(--muted); }
+  .offer-verdict b { color:var(--green-ink); }
+  .offer-vtag { margin-left:auto; font-size:10px; font-weight:700; color:var(--green-ink);
+    background:var(--green-soft); border-radius:999px; padding:3px 9px; }
+
+  .offer-sliders { display:grid; gap:12px; }
+  .offer-sl { display:grid; grid-template-columns:82px 1fr 28px; align-items:center; gap:10px; }
+  .offer-sl span { font-size:.82rem; color:var(--ink-2); }
+  .offer-sl i { display:block; height:7px; border-radius:4px; background:var(--line); position:relative; overflow:hidden; }
+  .offer-sl i::before { content:""; position:absolute; inset:0; width:var(--w); border-radius:4px;
+    background:linear-gradient(90deg,var(--green),var(--green-bright)); }
+  .offer-sl b { font-family:var(--mono); font-size:.8rem; font-weight:700; color:var(--ink);
+    text-align:right; font-variant-numeric:tabular-nums; }
+
+  .offer-thumbs { display:flex; gap:8px; }
+  .offer-thumbs .gthumb { width:38px; height:38px; border-radius:9px; }
+
+  .offer-chips { display:flex; flex-wrap:wrap; gap:7px; }
+  .offer-chips span, .offer-chips button { font-family:var(--mono); font-size:13px; font-weight:600;
+    color:var(--ink-2); background:var(--bg-2); border:1px solid var(--line); border-radius:999px;
+    padding:6px 12px; }
+  .offer-chips span.on { background:var(--green-soft); border-color:var(--green-line); color:var(--green-ink); }
+
+  .offer-tp { margin-bottom:1.75rem; padding-bottom:1.5rem; border-bottom:1px solid var(--line); }
+  .us-chip { cursor:pointer; transition:all .18s var(--ease); }
+  .us-chip:hover { border-color:var(--green-line); color:var(--green-ink); }
+  .us-chip[aria-pressed="true"] { background:var(--green-soft); border-color:var(--green-line); color:var(--green-ink); }
+
+  .offer-cartrow { display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:11px;
+    background:var(--bg-2); border:1px solid var(--line); margin-bottom:8px; }
+  .offer-cartrow:last-child { margin-bottom:0; }
+  .offer-cn { flex:1; font-size:.86rem; font-weight:600; color:var(--ink); white-space:nowrap;
+    overflow:hidden; text-overflow:ellipsis; }
+  .offer-cartrow.up { background:var(--green-soft); border-color:var(--green-line); }
+  .us-price { flex:none; font-family:var(--mono); font-size:.78rem; color:var(--muted); margin-left:8px; }
+
+  /* ---- upsell stage — a tiny "browser" whose body swaps scenes ----
+     One scene per touchpoint, all in the DOM (so the illustration is complete
+     even with JS off — the first shows), absolutely stacked in `.us-body` so
+     switching never reflows the card. `.active` drives a fade + rise; a couple
+     of scenes (popup, cart) get their own extra motion on top for variety. */
+  .us-stage { padding:16px; }
+  .us-chrome { display:flex; align-items:center; gap:6px; padding-bottom:12px; margin-bottom:12px;
+    border-bottom:1px solid var(--line); }
+  .us-chrome i { width:7px; height:7px; border-radius:50%; background:var(--line); }
+  .us-chrome span { margin-left:6px; font-family:var(--mono); font-size:10px; color:var(--muted); }
+
+  .us-body { position:relative; height:280px; overflow:hidden; }
+  .us-scene { position:absolute; inset:0; display:flex; flex-direction:column; gap:10px;
+    opacity:0; transform:translateY(10px) scale(.98); transition:opacity .35s var(--ease), transform .35s var(--ease);
+    pointer-events:none; }
+  .us-scene.active { opacity:1; transform:none; pointer-events:auto; }
+
+  /* the location label — the whole point of this rework: every scene says,
+     unambiguously, where it is before it says what got added there */
+  .us-loc { display:flex; align-items:center; gap:6px; flex:none; font-size:.82rem;
+    font-weight:700; color:var(--ink); }
+  .us-loc i { width:6px; height:6px; border-radius:50%; background:var(--green); flex:none; }
+  .us-loc.muted { font-size:.72rem; font-weight:600; color:var(--muted); }
+  .us-loc.muted i { background:var(--faint); }
+
+  .us-hero { display:flex; flex-direction:column; gap:7px; }
+  .us-hero.dim { opacity:.4; filter:blur(.3px); gap:9px; }
+  .us-himg { width:64px; height:64px; border-radius:10px; background:#f1efe9; }
+  .us-hl { display:block; height:8px; border-radius:4px; background:var(--line); width:70%; }
+  .us-hl.short { width:38%; }
+
+  /* the green box is the "added block" signal — everything inside it reads as
+     new; nothing inside also gets its own green fill, or the highlight loses
+     meaning (two greens read as "no contrast" rather than "look here"). */
+  .us-block { margin-top:auto; padding:12px 13px; border-radius:12px; background:var(--green-soft);
+    border:1px solid var(--green-line); }
+  .us-btag { display:block; font-family:var(--mono); font-size:9.5px; font-weight:700;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--green-ink); margin-bottom:9px; }
+  .us-btag.ctr { display:inline-block; text-align:center; background:var(--green-soft);
+    border:1px solid var(--green-line); border-radius:999px; padding:3px 10px; margin:0 0 10px; }
+
+  .us-plist { display:flex; flex-direction:column; gap:7px; }
+  .us-prow { display:flex; align-items:center; gap:8px; }
+  .us-prow .offer-cn { font-size:.82rem; }
+
+  .us-grid2 { display:inline-grid; grid-template-columns:repeat(3,44px); gap:12px 22px; margin:10px 0; }
+
+  .us-bundle { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+  .us-plus { font-family:var(--mono); font-size:12px; color:var(--muted); }
+  .us-add { margin-left:auto; flex:none; font-family:var(--mono); font-size:10.5px; font-weight:700;
+    color:#fff; background:var(--green-ink); border-radius:999px; padding:5px 11px; }
+
+  .us-modal { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:82%;
+    padding:16px; border-radius:14px; background:var(--surface); border:1px solid var(--line);
+    text-align:center; box-shadow:0 20px 40px -20px rgba(16,24,40,.35);
+    animation:usPop .35s var(--ease) backwards; }
+  .us-modal b { display:block; font-size:.92rem; margin-bottom:6px; }
+  .us-modalx { position:absolute; top:8px; right:10px; font-size:13px; color:var(--faint); }
+  @keyframes usPop { from { opacity:0; transform:translate(-50%,-50%) scale(.9); } }
+
+  .us-drawer { margin-left:auto; width:78%; flex:1; padding:14px; border-radius:14px 0 0 14px;
+    background:var(--surface); border:1px solid var(--line); border-right:0;
+    box-shadow:-16px 0 32px -20px rgba(16,24,40,.3); animation:usSlide .35s var(--ease) backwards; }
+  .us-dtitle { display:block; font-size:.82rem; font-weight:650; color:var(--ink); margin-bottom:10px; }
+  @keyframes usSlide { from { transform:translateX(24px); opacity:0; } }
+
+  .us-shiprow { font-family:var(--mono); font-size:10.5px; color:var(--ink-2); }
+  .us-shipbar { height:6px; border-radius:3px; background:var(--line); overflow:hidden; margin-bottom:2px; }
+  .us-fill { display:block; height:100%; width:0%; border-radius:3px;
+    background:linear-gradient(90deg,var(--green),var(--green-bright));
+    transition:width .6s var(--ease) .2s; }
+  .us-scene.active .us-fill { width:74%; }
+
+  /* order summary — neutral (not green): it's existing page content, not the
+     block that got added, so it reads distinct from `.us-block` below it */
+  .us-summary { padding:12px 13px; border-radius:12px; background:var(--bg-2); border:1px solid var(--line); }
+  .us-summary .offer-cartrow { background:var(--surface); }
+  .us-total { display:flex; align-items:center; justify-content:space-between; margin-top:8px;
+    padding-top:8px; border-top:1px solid var(--line); font-size:.85rem; color:var(--ink); }
+  .us-total b { font-family:var(--mono); }
+
+  .us-confirm { display:flex; align-items:center; gap:8px; font-size:.92rem; font-weight:650; color:var(--ink); }
+  .us-confirm svg { width:18px; height:18px; flex:none; fill:none; stroke:var(--green-ink); stroke-width:2.6; }
+
+  @media (prefers-reduced-motion:reduce){
+    .us-scene, .us-modal, .us-drawer, .us-fill { animation:none!important; transition:none!important; }
+  }
+
+  @media (max-width:640px){
+    .offer-tabs { width:100%; }
+    .offer-tabs button { flex:1; padding:9px 8px; }
+  }
+</style>
+
+<script>
+  const tabsEl = document.getElementById('offer-tabs');
+  if (tabsEl) {
+    const buttons = Array.from(tabsEl.querySelectorAll('button'));
+    const panels = Array.from(document.querySelectorAll('.offer-panel')) as HTMLElement[];
+    buttons.forEach((b) => {
+      b.addEventListener('click', () => {
+        buttons.forEach((x) => x.setAttribute('aria-selected', String(x === b)));
+        panels.forEach((p) => { p.hidden = p.dataset.panel !== b.getAttribute('data-tab'); });
+      });
+    });
+  }
+
+  const tpChips = Array.from(document.querySelectorAll('.us-chip'));
+  const scenes = Array.from(document.querySelectorAll('.us-scene')) as HTMLElement[];
+  const urlEl = document.getElementById('us-url');
+  tpChips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      tpChips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+      scenes.forEach((s) => s.classList.toggle('active', s.dataset.scene === chip.getAttribute('data-tp')));
+      if (urlEl) urlEl.textContent = 'your-store.com' + chip.getAttribute('data-path');
+    });
+  });
+</script>

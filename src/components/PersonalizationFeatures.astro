@@ -1,0 +1,120 @@
+---
+/**
+ * PERSONALIZATION — "how it works" detail, three sections under the page's
+ * How-it-works steps. Same shape as MerchandisingFeatures.astro /
+ * UpsellFeatures.astro: copy + one illustration per claim, alternating
+ * sides via the sitewide `.split`/`.split-rev`/`.split-list` classes.
+ * Self-contained `pf-*` styling — this page never renders Offer.astro,
+ * MerchandisingHero/Features, VisitorFeeds or UpsellHero/Features, so none
+ * of THEIR classes exist here (see the astro-style-scoping memory).
+ */
+const SEGMENTS = [
+  { label: 'First-time visitor', accent: false, products: ['New: Trail Jacket', 'New: Camp Mug', 'Trail Runner'] },
+  { label: 'Returning VIP', accent: true, products: ['Trail Runner', 'Classic Cap', 'Steel Bottle'] },
+];
+
+const APPLY_TO = ['Collection ranking', 'Storefront block', 'Upsell offer'];
+---
+<div class="split-list">
+  <!-- 1 — group shoppers, give each group its own ranking -->
+  <div class="split rv">
+    <div>
+      <h2>Group shoppers, give each group its own ranking</h2>
+      <p class="lead">Create a segment rule and QSortby routes every visitor into the group that fits, checked top to bottom, first match wins. Each segment gets its own ranking, so a first-time visitor and a returning VIP see different orders from the exact same catalog.</p>
+    </div>
+    <div class="pf-viz">
+      <div class="pf-panel">
+        <span class="pf-label">Same catalog &middot; two segments</span>
+        <div class="pf-seg2">
+          {SEGMENTS.map((s) => (
+            <div class={s.accent ? 'pf-scol accent' : 'pf-scol'}>
+              <span class="pf-scol-h">{s.label}</span>
+              {s.products.map((p) => <div class="pf-srow">{p}</div>)}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 — one rule, applied anywhere it matters -->
+  <div class="split split-rev rv">
+    <div>
+      <h2>One rule, applied anywhere it matters</h2>
+      <p class="lead">A segment rule isn't tied to one feed. Apply it to a collection's ranking, a storefront block, or an upsell offer, wherever you want the order to change per shopper instead of staying fixed.</p>
+    </div>
+    <div class="pf-viz">
+      <div class="pf-panel">
+        <span class="pf-label">Rule</span>
+        <div class="pf-rule"><span>Returning VIP</span><b>Best sellers first</b></div>
+        <span class="pf-label" style="margin-top:18px">Applied to</span>
+        <div class="pf-applylist">
+          {APPLY_TO.map((a) => (
+            <div class="pf-arow"><span>{a}</span><span class="pf-astat">Live</span></div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 — drop it wherever you place it -->
+  <div class="split rv">
+    <div>
+      <h2>Drop it wherever you place it</h2>
+      <p class="lead">Wherever a segment rule is applied, the result renders per-visitor, with its own cache, so personalization doesn't slow the page down.</p>
+    </div>
+    <div class="pf-viz">
+      <div class="pf-panel dark">
+        <div class="pf-perf">
+          <div class="pf-pstat"><span class="pf-pstat-n">41<small>ms</small></span><span class="pf-pstat-l">Per-visitor render</span></div>
+          <div class="pf-pstat"><span class="pf-pstat-n">96<small>%</small></span><span class="pf-pstat-l">Cache hit rate</span></div>
+        </div>
+        <p class="pf-perf-cap">Personalized, cached, and still fast &mdash; on every page it touches.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  .pf-viz { display:flex; }
+  .pf-panel { flex:1; background:var(--surface); border:1px solid var(--line); border-radius:18px;
+    padding:22px; box-shadow:0 1px 2px rgba(16,24,40,.04), 0 24px 48px -28px rgba(16,24,40,.22); }
+  .pf-panel.dark { background:linear-gradient(165deg,#123227,#08160F); border-color:rgba(120,220,170,.16); }
+
+  .pf-label { display:block; font-family:var(--mono); font-size:10px; font-weight:700;
+    letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:14px; }
+
+  /* section 1 — same catalog, two segments, two different top orders */
+  .pf-seg2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .pf-scol { display:flex; flex-direction:column; gap:8px; }
+  .pf-scol-h { font-family:var(--mono); font-size:9.5px; font-weight:700; text-transform:uppercase;
+    letter-spacing:.08em; color:var(--muted); }
+  .pf-scol.accent .pf-scol-h { color:var(--green-ink); }
+  .pf-srow { padding:8px 9px; border-radius:9px; background:var(--bg-2); border:1px solid var(--line);
+    font-size:.82rem; font-weight:600; color:var(--ink-2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .pf-scol.accent .pf-srow { background:var(--green-soft); border-color:var(--green-line); color:var(--ink); }
+
+  /* section 2 — rule + where it's applied */
+  .pf-rule { display:flex; align-items:center; justify-content:space-between;
+    padding-bottom:14px; margin-bottom:6px; border-bottom:1px solid var(--line); }
+  .pf-rule span { font-size:var(--fs-body); color:var(--ink-2); }
+  .pf-rule b { font-size:1.02rem; font-weight:650; color:var(--ink); letter-spacing:-.01em; }
+  .pf-applylist { display:flex; flex-direction:column; }
+  .pf-arow { display:flex; align-items:center; justify-content:space-between;
+    padding:10px 0; border-top:1px solid var(--line); }
+  .pf-arow:first-child { border-top:0; padding-top:0; }
+  .pf-arow span:first-child { font-size:var(--fs-body); font-weight:600; color:var(--ink); }
+  .pf-astat { font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--green-ink); }
+
+  /* section 3 — per-visitor render performance, dark card */
+  .pf-perf { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .pf-pstat { display:flex; flex-direction:column; gap:4px; padding:16px; border-radius:12px;
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); }
+  .pf-pstat-n { font-family:var(--mono); font-size:1.5rem; font-weight:700; color:#fff; letter-spacing:-.02em; }
+  .pf-pstat-n small { font-size:.85rem; font-weight:600; color:rgba(255,255,255,.5); margin-left:1px; }
+  .pf-pstat-l { font-family:var(--mono); font-size:9.5px; font-weight:600; text-transform:uppercase;
+    letter-spacing:.08em; color:rgba(255,255,255,.42); }
+  .pf-perf-cap { margin-top:14px; text-align:center; font-family:var(--mono); font-size:9.5px;
+    font-weight:600; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.34); }
+</style>

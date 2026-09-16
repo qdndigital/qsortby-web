@@ -1,88 +1,30 @@
 ---
 import Base from '../layouts/Base.astro';
 import RankWhy from '../components/RankWhy.astro';
-import SortConsole from '../components/SortConsole.astro';
 import IntroVideo from '../components/IntroVideo.astro';
+import Offer from '../components/Offer.astro';
 import { APP_STORE_URL } from '../consts';
 import BookDemo from '../components/BookDemo.astro';
-import { PLANS, REVERSE_TRIAL_DAYS, TEASER_BULLETS } from '../plans';
-import { FAQS } from '../faqs';
 
 const title = 'QSortby — Collection Sorting & Upsells for Shopify';
 const description =
   'Auto-sort Shopify collections on a rule you write — then check the result: why each product ranks where it does, what the last run changed, and what it earned.';
-
-// Teaser shows the whole four-tier LADDER, not two anchors — the point of the
-// section is that each step adds one thing, which two cards can't show. The full
-// list per plan is on /pricing.
-//
-// The count itself lives in plans.ts next to the lists it slices, because each
-// `features` array is ORDERED so that its first TEASER_BULLETS entries are the
-// teaser set (marked with a comment at the boundary). Keeping the number here
-// let an inserted bullet change the home page without anyone touching this file.
-
-const mk = '<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>';
-const x = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M6 18L18 6"/></svg>';
 ---
-<Base title={title} description={description} faq={FAQS}>
+<Base title={title} description={description}>
   <!-- ===================== HERO ===================== -->
   <section class="hero">
     <div class="wrap herogrid">
       <div class="hero-copy">
-        <span class="eyebrow"><span class="dot"></span> Built for Shopify</span>
-        <h1>Sort your collections. See why. <em>Prove it worked.</em></h1>
+        <h1>Turn Every Collection Into a Sales Machine — Sort Smarter, Sell More.</h1>
         <p class="lead">
-          QSortby re-ranks every collection by live demand on a rule <b>you</b> write — the signals and
-          their weights, in plain words — and A/B-tests it against your current order. You preview the new
-          order before it publishes, so nothing goes live behind your back. No theme code.
+          Real-time sorting by trending, best-selling, or your own custom rules — fully automated, always up to date.
         </p>
         <div class="hero-cta">
           <a href={APP_STORE_URL} class="btn btn-accent btn-lg">Install free <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           <BookDemo class="btn btn-line btn-lg">Book a demo</BookDemo>
         </div>
-        <p class="hero-note">Free plan forever · {REVERSE_TRIAL_DAYS} days full access on install · No card · GDPR-ready</p>
       </div>
       <div class="hero-viz"><RankWhy /></div>
-    </div>
-  </section>
-
-  <!-- ===================== SCOPE STRIP =====================
-       This replaced a five-chip trust bar that restated the eyebrow ("Built for
-       Shopify") and the hero note ("Free plan, no card", "No theme code") a
-       second time, and carried a bare "Real-time" claim. Three of five items
-       were duplicates, so the strip cost a screenful and said nothing new.
-
-       What sits here now is the first thing on the page a visitor can CHECK:
-       four counts, each traceable to the app. Specific beats adjectival — "13
-       sorting rules" survives scrutiny in a way "Real-time" does not.
-
-       ── This is the slot for real numbers. ──
-       The moment there is a store figure worth quoting (lift, orders ranked,
-       revenue attributed), swap a cell for it: `.hero-meta` is built for
-       label-over-number and takes 3–5 cells. A sourced number outranks every
-       count below, so replace, don't append. Never put an unsourced figure
-       here — the site already had to walk back a "+37% revenue" that was only
-       ever an illustration. -->
-  <section style="padding:0 0 .5rem">
-    <div class="wrap">
-      <div class="hero-meta wide rv">
-        <div>
-          <span class="k">Ways to sort</span>
-          <span class="n">11<span class="u">+ per-visitor</span></span>
-        </div>
-        <div>
-          <span class="k">Ranking window</span>
-          <span class="n">1h<span class="u">to 1 year</span></span>
-        </div>
-        <div>
-          <span class="k">Ranking signals</span>
-          <span class="n">10<span class="u">you set the weights</span></span>
-        </div>
-        <div>
-          <span class="k">Upsell surfaces</span>
-          <span class="n">6<span class="u">cart to thank-you</span></span>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -96,83 +38,12 @@ const x = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M6 18L18 6"/></svg>';
        page is complete with or without it. -->
   <IntroVideo duration="1:37" />
 
-  <!-- ===================== IS THIS YOU =====================
-       Recognition before argument. Everything below this point argues that
-       QSortby is worth installing; nothing above it named the merchant's own
-       problem in their own words, and the home page linked to /use-cases
-       exactly nowhere — the page was reachable only from the nav.
-
-       Five sentences, each a deep link into the situation it names. Kept to one
-       low strip rather than a section: its whole job is the half-second where a
-       merchant thinks "that is my store", and a taller block would delay the
-       argument it is supposed to set up. -->
-  <section class="sec" style="padding-bottom:0">
-    <div class="wrap">
-      <div class="shead ctr rv" style="margin-bottom:1.75rem">
-        <span class="eyebrow"><span class="dot"></span> Is this you</span>
-        <h2>Five things merchants say <em>before</em> they go looking.</h2>
-      </div>
-      <div class="saidstrip rv">
-        <a href="/use-cases#buried-launch"><q>The drop I launched last week is still buried behind last season.</q><span class="go">New arrivals &rarr;</span></a>
-        <a href="/use-cases#out-of-stock"><q>By Friday half my front row is out of stock.</q><span class="go">Live stock &rarr;</span></a>
-        <a href="/use-cases#too-many-skus"><q>I stopped merchandising when the catalog passed a thousand SKUs.</q><span class="go">Scale &rarr;</span></a>
-        <a href="/use-cases#flat-grid"><q>Forty products look identical &mdash; position is the only thing deciding the sale.</q><span class="go">Position &rarr;</span></a>
-        <a href="/use-cases#browse-no-buy"><q>People browse for ten minutes and leave without buying anything.</q><span class="go">Per shopper &rarr;</span></a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== WHY NOT THE BUILT-IN SORT ===================== -->
-  <!-- This section exists to answer the objection that kills most installs:
-       "Shopify already has a Best selling sort — why would I pay for this?"
-       Keep it high on the page; it precedes every feature argument. -->
-  <section class="sec">
-    <div class="wrap">
-      <div class="shead ctr rv" style="margin-bottom:2.5rem">
-        <span class="eyebrow"><span class="dot"></span> Why not the built-in sort</span>
-        <h2>Shopify can sort by best selling. It can't tell you <em>what that cost you.</em></h2>
-        <p class="lead-c">Shopify's native sort is one fixed rule applied blindly to everyone, forever. That's the bar QSortby is measured against — so here it is, side by side.</p>
-      </div>
-
-      <div class="ps rv">
-        <div class="ps-col bad">
-          <span class="tag">Shopify “Best selling”</span>
-          <ul>
-            <li><span class="mk" set:html={x} /><span>One sort key for the whole collection — no window you can tune</span></li>
-            <li><span class="mk" set:html={x} /><span>Sold-out products hold their position until you step in</span></li>
-            <li><span class="mk" set:html={x} /><span>Same order for every shopper, first visit or fiftieth</span></li>
-            <li><span class="mk" set:html={x} /><span>No margin, conversion-rate or stock-cover option</span></li>
-            <li><span class="mk" set:html={x} /><span>Products that belong together scatter across the grid</span></li>
-            <li><span class="mk" set:html={x} /><span>No before/after — you reorder and find out once it's live</span></li>
-            <li><span class="mk" set:html={x} /><span>No attributed revenue — you can't tell whether it worked</span></li>
-          </ul>
-        </div>
-        <div class="ps-col good">
-          <span class="tag">QSortby</span>
-          <ul>
-            <li><span class="mk" set:html={mk} /><span>A window <b>you</b> choose — an hour for trends, a year for stability, or a set month</span></li>
-            <li><span class="mk" set:html={mk} /><span>Sold-out demoted within minutes of hitting zero, promoted back on restock</span></li>
-            <li><span class="mk" set:html={mk} /><span>Optional per-shopper feed — each visitor gets their own order</span></li>
-            <li><span class="mk" set:html={mk} /><span>Eleven signals: velocity, revenue, margin, conversion, trend, selling-fast, reviews</span></li>
-            <li><span class="mk" set:html={mk} /><span>Pairing rules keep matching products side by side — shirt, trousers, then shoes</span></li>
-            <li><span class="mk" set:html={mk} /><span>Preview the exact new order side by side, approve it, then publish</span></li>
-            <li><span class="mk" set:html={mk} /><span>Every sort A/B-tested with attributed revenue and a significance verdict</span></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== FEATURE SHOWCASE (interactive) =====================
-       Replaces the old static feature-bento grid with one live, interactive
-       console: pick a signal (or a shopper) and the storefront re-ranks itself —
-       demonstrating auto-sort + real-time + inventory-aware + personalization in a
-       single object. See src/components/SortConsole.astro. -->
-  <section class="sec alt">
-    <div class="wrap">
-      <SortConsole />
-    </div>
-  </section>
+  <!-- ===================== WHAT YOU GET =====================
+       The three jobs the app does, each with its own short case and picture —
+       merchandising, personalization, upsell. Sits right under the intro
+       video: whoever just watched the whole journey lands here to see the
+       three buckets it came from. See src/components/Offer.astro. -->
+  <Offer />
 
   <!-- ===================== SHOWS ITS WORK =====================
        Sits immediately after the console because the console raises the exact
@@ -194,193 +65,46 @@ const x = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M6 18L18 6"/></svg>';
        manual membership, sort snapshot + config history, the run/pixel/sync
        state on the app home, and last-touch attribution. Nothing may be added
        here unless a merchant can verify it inside the app on the Free plan. -->
-  <section class="sec">
+  <section class="sec" style="padding-top:0">
     <div class="wrap">
-      <div class="shead ctr rv" style="margin-bottom:2.5rem">
-        <span class="eyebrow"><span class="dot"></span> Nothing happens in the dark</span>
-        <h2>Plenty of apps re-order a collection. <em>This one shows its work.</em></h2>
-        <p class="lead-c">Auto-sorting and sold-out demotion are the whole category now, ours included. What is <em>not</em> the category is being able to check any of it. Every answer below is on screen inside the app.</p>
+      <div class="shead ctr shead-lg rv" style="margin-bottom:2.5rem">
+        <h2>If you've said any of these, you're in the right place.</h2>
+        <p class="lead-c">Nobody wakes up wanting to re-order a collection. Something looked wrong, and you went looking for a way to stop fixing it by hand.</p>
       </div>
 
-      <div class="steps rv">
-        <div class="step">
-          <div class="sn">Why this order</div>
-          <h3>The rule is yours to read</h3>
-          <p>You pick the criteria and how much each one counts, in plain words, and you can change either. On any product, the Similar tab goes further and names the signal behind every match &mdash; same type, shared tags, similar price. You read the reasoning instead of taking a score on faith.</p>
-          <span class="utag on">On every plan</span>
+      <div class="bento rv">
+        <div class="b">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v13M6 13l6 6 6-6"/></svg></span>
+          <h3>Sold-out products hog the front row</h3>
+          <p>Shopify's default sort leaves a sold-out product right where it was, someone has to notice and move it by hand. QSortby drops it within minutes automatically, and brings it back the moment it's restocked.</p>
         </div>
-        <div class="step">
-          <div class="sn">Before it publishes</div>
-          <h3>See the exact new order</h3>
-          <p>A side-by-side of what is live now against what the next run would produce &mdash; real product cards, not row numbers. Added, removed and reordered are counted for you.</p>
-          <span class="utag on">On every plan</span>
+        <div class="b">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 4.9L19 9.7l-4.9 1.8L12 16.4l-1.8-4.9L5 9.7l4.9-1.8z"/></svg></span>
+          <h3>New drops get buried before they have a chance</h3>
+          <p>A brand-new product has no sales history yet, so a best-seller sort puts it at the bottom on day one. QSortby factors in how new it is too, so it can actually rise.</p>
         </div>
-        <div class="step">
-          <div class="sn">Your call</div>
-          <h3>Approve, then push</h3>
-          <p>Switch auto-publish off and a new order waits for your approval instead of going live. Or keep the collection manual: you choose which products belong in it, QSortby only decides their order.</p>
-          <span class="utag on">On every plan</span>
+        <div class="b">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.9 3.1-6 7-6s7 2.1 7 6"/></svg></span>
+          <h3>Every visitor sees the exact same order</h3>
+          <p>No matter what a shopper is looking for, the collection looks the same for everyone. QSortby builds a feed from what this visit is actually doing, no login or purchase history needed.</p>
         </div>
-        <div class="step">
-          <div class="sn">Right now</div>
-          <h3>Is it still running?</h3>
-          <p>The app home carries the last run alongside the state of the pixel and the catalogue sync. A sort that quietly stopped is the failure that costs the most and takes longest to notice &mdash; so the app tells you, rather than leaving you to spot it on your own storefront.</p>
-          <span class="utag on">On every plan</span>
+        <div class="b">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span>
+          <h3>You reorder a collection and have no idea if it helped</h3>
+          <p>The order changes, then you wait two weeks and guess whether sales moved because of it or for ten other reasons. QSortby runs the new order as an A/B test against the old one, so you get real numbers instead of a guess.</p>
         </div>
-        <div class="step">
-          <div class="sn">After the fact</div>
-          <h3>Every change on record</h3>
-          <p>Config history keeps every ranking change with its date, so &ldquo;which rule was live on the 12th, and what did that week earn&rdquo; is a question with an answer rather than a guess.</p>
-          <span class="utag on">On every plan</span>
+        <div class="b">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg></span>
+          <h3>Merchandising breaks down past a few hundred products</h3>
+          <p>Dragging products around by hand works fine with twenty items. With a thousand, it's just not possible anymore. QSortby lets you set the rule once and apply it to every collection, new products sort themselves in without you touching a thing.</p>
         </div>
-        <div class="step">
-          <div class="sn">Is the number real</div>
-          <h3>Attribution that says what it is</h3>
-          <p>Revenue is credited last-touch, and the app calls it <b>influenced</b> &mdash; never <em>caused</em>. A test result is <b>directional</b>, never <em>proven</em>, and the minimum sample per arm stays on screen whether or not you have reached it. You always know what the number is, and what it is not.</p>
-          <span class="utag on">On every plan</span>
+        <div class="b">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span>
+          <h3>Nobody can explain why a product ranks where it does</h3>
+          <p>Someone asks why a product is sitting where it is, and most apps just don't tell you. QSortby shows you the rule behind every ranking in plain language, and you can change it anytime.</p>
         </div>
       </div>
 
-      <!-- The A/B report used to open a section of its own, under the heading
-           "Every sort has to prove it made you money" — a second H2 arguing the
-           same thing the six cards above argue, which is the "one section, one
-           job" rule broken in the open. The panel is the EVIDENCE for the last
-           card, so it now sits under it; the 161 words of lead that framed it
-           were saying what the card already says. -->
-      <p class="snote rv" style="margin-top:2.25rem;margin-bottom:1.75rem">
-        Sold-out demotion is the one thing that never waits &mdash; a product that hits zero sinks within
-        minutes, and climbs back to its earned position on restock.
-      </p>
-
-      <div class="ab-panel rv">
-        <div class="ab-exp" aria-hidden="true">
-          <div class="ab-col">
-            <span class="ab-hd">A · Control</span>
-            <span class="ab-bar b1"></span><span class="ab-bar b2"></span><span class="ab-bar b3"></span>
-            <span class="ab-cvr">CVR 1.9%</span>
-          </div>
-          <div class="ab-vs">vs</div>
-          <div class="ab-col ab-b">
-            <span class="ab-hd">B · QSortby sort</span>
-            <span class="ab-bar b1 win"></span><span class="ab-bar b2"></span><span class="ab-bar b3"></span>
-            <span class="ab-cvr ab-up">CVR 2.6% <em>▲</em></span>
-          </div>
-        </div>
-        <div class="ab-meterwrap" aria-hidden="true">
-          <span class="ab-meter"><i></i></span>
-          <span class="ab-verdict">96% significant — <b>B wins</b></span>
-        </div>
-        <p class="ab-cap">
-          Illustration of the experiment report, not a result claim. Every sort can be A/B-tested against your
-          current order; QSortby tracks clicks → add-to-cart → attributed revenue and calls significance, so the
-          numbers you act on are your store's own.
-        </p>
-      </div>
-
-      <p class="rv" style="text-align:center;margin-top:2rem">
-        <a href="/how-it-works" class="btn btn-line">See exactly how it ranks <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-      </p>
-
-    </div>
-  </section>
-
-  <!-- ===================== THE SAME RANKING, ELSEWHERE =====================
-       Replaces two PEER sections — "Per-shopper feeds" (504 words, 1,711px, the
-       heaviest block on the page) and "Upsell surfaces" (290 words). Together
-       they held a third of the home page's words, and neither is why a merchant
-       picks this app over the dozen beside it.
-
-       The v14 design system decides this rather than taste: "a set is a modifier
-       on a surface, not a feature of its own." A per-shopper feed and a cart
-       offer are both modifiers on one decision — which product goes in which
-       slot — so they belong UNDER that decision at a line each, with the long
-       version on /how-it-works. The IntentRead diagram moved there with them,
-       where it also gives that page the visual relief it was short of.
-
-       Ordered by where a SHOPPER meets each one, never by which tier sells it. -->
-  <section class="sec alt">
-    <div class="wrap">
-      <div class="shead ctr rv" style="margin-bottom:2.25rem">
-        <span class="eyebrow" style="justify-content:center"><span class="dot"></span> Everywhere else</span>
-        <h2>The same ranking, <em>in the other slots.</em></h2>
-        <p class="lead-c">A collection page is not the only place your store picks products for somebody. Each surface below is filled from the same live ranking, so none of them is a second list to keep up to date.</p>
-      </div>
-
-      <div class="slots rv">
-        <div class="slot"><b>For you</b><span class="where">Collection page &amp; feed</span><p>Each visitor can get their own order of the same collection, built from what this visit is doing &mdash; no login, no purchase history.</p><span class="utag">Growth</span></div>
-        <div class="slot"><b>Best sellers</b><span class="where">Any theme block</span><p>A block that ranks itself on live demand and stays ranked.</p><span class="utag on">Free</span></div>
-        <div class="slot"><b>Cart drawer &amp; cart page</b><span class="where">Cart</span><p>What is selling fastest right now, minus whatever is already in the cart.</p><span class="utag on">Free</span></div>
-        <div class="slot"><b>Free-shipping progress</b><span class="where">Cart</span><p>How far the cart is from your threshold, and a product that actually closes the gap.</p><span class="utag on">Free</span></div>
-        <div class="slot"><b>Frequently bought together</b><span class="where">Product page</span><p>Real co-purchase pairs from your own orders &mdash; and labelled as padded when there are not enough yet.</p><span class="utag">Starter</span></div>
-        <div class="slot"><b>Thank-you page</b><span class="where">After payment</span><p>The order is already placed, so an offer here cannot cost you the conversion.</p><span class="utag">Starter</span></div>
-        <div class="slot"><b>Popup</b><span class="where">Any page</span><p>Fires on a moment you choose, behind AND/OR rules so it does not fire at everyone.</p><span class="utag">Pro</span></div>
-        <div class="slot"><b>In-checkout</b><span class="where">Checkout</span><p>Runs before payment, so an accepted offer joins the same order. Shopify limits this surface to Plus stores.</p><span class="utag">Growth</span></div>
-      </div>
-
-      <p class="snote rv" style="margin-top:2rem">
-        <a href="/how-it-works">How the per-shopper feed reads a session &rarr;</a>
-      </p>
-    </div>
-  </section>
-
-
-  <!-- ===================== PRICING TEASER ===================== -->
-  <section class="sec alt">
-    <div class="wrap">
-      <div class="shead ctr rv" style="margin-bottom:2.5rem">
-        <span class="eyebrow"><span class="dot"></span> Pricing</span>
-        <h2>Start free. Upgrade when <em>your numbers</em> say so.</h2>
-        <p class="lead-c">Every install opens with {REVERSE_TRIAL_DAYS} days of full access — then settles onto the Free plan and keeps running. The app is never locked or switched off. Each step up adds exactly one thing.</p>
-      </div>
-      <div class="plans plans-4 rv">
-        {PLANS.map((p) => (
-          <div class={p.feat ? 'plan feat' : 'plan'}>
-            {p.badge && <span class="badge">{p.badge}</span>}
-            <span class="ptag">{p.name}</span>
-            <div class="price"><b>{p.price}</b><span>/ month</span></div>
-            <p class="pdesc">{p.desc}</p>
-            <ul>
-              {p.features.slice(0, TEASER_BULLETS).map((f) => <li><span set:html={mk} /> {f}</li>)}
-            </ul>
-            <a href={APP_STORE_URL} class={p.feat ? 'btn btn-accent w-full' : 'btn btn-line w-full'}>
-              {p.price === '$0' ? 'Install free' : 'Start free'}
-            </a>
-          </div>
-        ))}
-      </div>
-      <p class="snote" style="margin-top:1.75rem">
-        <a href="/pricing" style="text-decoration:underline">Compare all four plans in full →</a>
-        <span style="display:block;margin-top:.6rem">Billed via Shopify · cancel anytime</span>
-      </p>
-
-      <!-- "Live in three steps" was its own 468px section between the upsell
-           surfaces and pricing — a whole screen for thirty-six words, and it sat
-           where nobody was asking the question. Effort is the LAST objection, so
-           it belongs here, right under the price, as a strip rather than a
-           section. Same three steps, a tenth of the height. -->
-      <div class="setup3 rv" aria-label="Setup in three steps">
-        <div><span class="s3n">01</span><b>Install</b><span>Add QSortby from the App Store. No code, no card.</span></div>
-        <div><span class="s3n">02</span><b>Switch it on</b><span>Flip the QSortby embed on in your theme editor. One toggle.</span></div>
-        <div><span class="s3n">03</span><b>Pick a signal</b><span>Choose how each collection sorts, preview the before/after, done.</span></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== FAQ ===================== -->
-  <section class="sec">
-    <div class="narrow">
-      <div class="shead ctr rv" style="margin-bottom:2.5rem">
-        <span class="eyebrow"><span class="dot"></span> Questions</span>
-        <h2>Good to know</h2>
-      </div>
-      <div class="faq rv">
-      {FAQS.map((f) => (
-        <details>
-          <summary>{f.q}<span class="pm"></span></summary>
-          <div class="ans" set:html={f.a}></div>
-        </details>
-      ))}
-      </div>
     </div>
   </section>
 
@@ -388,7 +112,6 @@ const x = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M6 18L18 6"/></svg>';
   <section class="sec" style="padding-top:0">
     <div class="wrap">
       <div class="cta rv">
-        <span class="eyebrow"><span class="dot"></span> Get started</span>
         <h2>Let your storefront optimize itself — and <em>prove it did.</em></h2>
         <p>Install free, run it on one collection, and read the attributed revenue in your own dashboard.</p>
         <div class="hero-cta" style="justify-content:center">

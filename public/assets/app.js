@@ -36,6 +36,23 @@
     (mq.addEventListener ? mq.addEventListener.bind(mq, 'change') : mq.addListener.bind(mq))(function (e) { if (e.matches) setMenu(false); });
   }
 
+  /* "Features" nav dropdown — click to toggle, same on every breakpoint;
+     closes on an outside click or Escape. */
+  document.querySelectorAll('.nav-menu').forEach(function (menu) {
+    var trg = menu.querySelector('.nav-menu-btn');
+    if (!trg) return;
+    var setOpen = function (open) {
+      menu.classList.toggle('open', open);
+      trg.setAttribute('aria-expanded', open ? 'true' : 'false');
+    };
+    trg.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setOpen(!menu.classList.contains('open'));
+    });
+    document.addEventListener('click', function (e) { if (!menu.contains(e.target)) setOpen(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
+  });
+
   /* ============ LIVE RANKING TABLE ============
      Rows are absolutely positioned inside #js-board; we translateY each to its
      rank slot so a reorder slides rows past one another (Linear-quiet motion). */

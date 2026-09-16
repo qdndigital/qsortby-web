@@ -1,0 +1,53 @@
+---
+import Base from '../layouts/Base.astro';
+import { FAQS, FAQ_CATEGORIES } from '../faqs';
+import { APP_STORE_URL } from '../consts';
+import BookDemo from '../components/BookDemo.astro';
+
+const title = 'FAQs — QSortby for Shopify';
+const description =
+  'Answers to the questions merchants actually ask about QSortby: getting started, pricing, sorting & personalization, and analytics & support.';
+---
+<Base title={title} description={description} faq={FAQS} breadcrumb="FAQs">
+  <section class="phero phero-mint">
+    <div class="wrap">
+      <h1>Good to know.</h1>
+      <p>Everything merchants ask before installing — and a few things they ask after.</p>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:2rem">
+    <div class="narrow">
+      {FAQ_CATEGORIES.map((cat, i) => (
+        <div class="faq-cat rv">
+          <div class="faq-cat-h">
+            <span class="faq-cat-n">{String(i + 1).padStart(2, '0')}</span>
+            <h2>{cat.title}</h2>
+          </div>
+          <div class="faq">
+          {cat.items.map((f) => (
+            <details>
+              <summary>{f.q}<span class="pm"></span></summary>
+              <div class="ans" set:html={f.a}></div>
+            </details>
+          ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ===================== FINAL CTA ===================== -->
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="cta rv">
+        <h2>Let your storefront optimize itself — and <em>prove it did.</em></h2>
+        <p>Install free, run it on one collection, and read the attributed revenue in your own dashboard.</p>
+        <div class="hero-cta" style="justify-content:center">
+          <a href={APP_STORE_URL} class="btn btn-accent btn-lg">Install free <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <BookDemo class="btn btn-ghost btn-lg">Book a demo</BookDemo>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
