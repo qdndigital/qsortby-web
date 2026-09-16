@@ -37,6 +37,17 @@
        monospaced face. Point it elsewhere if a real mono is ever wanted. */
     --mono:var(--font-sans);
     --row-h:58px;
+    /* Content typography scale — the site had ~10 near-duplicate body sizes
+       (.85rem–1rem) scattered across cards/steps/bento/use-cases, no two
+       quite matching. Two tokens now cover every section's PROSE content
+       (paragraphs, list items, descriptions): `--fs-body` for regular copy,
+       `--fs-caption` for a secondary note under a visual. Headings, UI-chrome
+       labels inside mockups/illustrations (mono badges, price tags, chips)
+       and the larger lead/intro paragraph under a section heading (text-lg,
+       unchanged) are deliberately out of scope. Use these for any new page's
+       body copy too, rather than a fresh one-off rem value. */
+    --fs-body:0.9375rem; --lh-body:1.6;
+    --fs-caption:0.85rem;
   }
   html { scroll-behavior:smooth; }
   body { @apply bg-bg text-ink font-sans antialiased; letter-spacing:-.011em; }
@@ -72,7 +83,7 @@
      footnote under a section use .snote instead: sentence case, no tracking,
      readable size. All-caps + .2em tracking over four lines is unreadable. */
   .snote { @apply mx-auto text-center; max-width:62ch; font-family:var(--font-sans);
-           font-size:.9375rem; line-height:1.66; letter-spacing:0; text-transform:none;
+           font-size:var(--fs-body); line-height:var(--lh-body); letter-spacing:0; text-transform:none;
            color:var(--muted); }
   .snote b, .snote strong { font-weight:650; color:var(--ink-2); }
   .snote i, .snote em { font-style:italic; }
@@ -80,24 +91,19 @@
   .snote a:hover { color:var(--green-ink); }
   .snote.lt { text-align:left; margin-inline:0; max-width:76ch; }
 
-  /* Three-step setup strip — the compact replacement for the old Setup section.
-     Sits under the pricing teaser, where "how much work is this?" is actually
-     the question being asked. */
-  .setup3 { display:grid; gap:1px; background:var(--line); border:1px solid var(--line);
-            border-radius:14px; overflow:hidden; margin-top:2rem; }
-  @media (min-width:760px){ .setup3 { grid-template-columns:repeat(3,1fr); } }
-  .setup3 > div { background:var(--surface); padding:16px 18px 18px; display:grid; gap:4px; align-content:start; }
-  .setup3 .s3n { font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:.14em;
-                 text-transform:uppercase; color:var(--green-ink); }
-  .setup3 b { font-weight:650; font-size:1rem; letter-spacing:-.018em; color:var(--ink); }
-  .setup3 span:last-child { font-size:.88rem; line-height:1.55; color:var(--ink-2); }
-
   /* ---- section heads ---- */
   .shead { @apply max-w-2xl; }
   .shead.ctr { @apply mx-auto text-center; }
   .shead.ctr h2 { @apply mx-auto; max-width:22ch; }
   .shead h2 { @apply font-display font-semibold text-h2 mt-3.5; }
   .shead p { @apply text-lg text-ink-2 mt-3.5 leading-relaxed; }
+
+  /* ---- section heads, larger variant (homepage only — index.astro, Offer.astro,
+     IntroVideo.astro) — bigger type and a wider line so a long headline breaks
+     into two balanced lines instead of three short, cramped ones. Extra class
+     so the default .shead sizing used across other pages is untouched. ---- */
+  .shead.shead-lg h2 { font-size:clamp(2rem, 3.8vw, 3rem); }
+  .shead.ctr.shead-lg h2 { max-width:36ch; }
   .lead-c { @apply text-lg text-ink-2 leading-relaxed mx-auto text-center; max-width:58ch; }
 
   /* ---- buttons (premium pills, subtle lift) ---- */
@@ -119,16 +125,41 @@
   .nav { @apply flex items-center justify-between h-16; }
   .logo { @apply flex items-center gap-2.5 font-display font-bold text-lg text-ink; letter-spacing:-.02em; }
   .logomark { @apply w-7 h-7 shrink-0; }
-  .nav-links { @apply hidden lg:flex gap-7 text-sm font-medium text-ink-2; }
+  .nav-links { @apply hidden lg:flex items-center gap-7 text-sm font-medium text-ink-2; }
   .nav-links a { @apply transition-colors; }
   .nav-links a:hover { @apply text-ink; }
   .nav-links a.active { color:var(--green-ink); }
+
+  /* ---- "Features" nav dropdown ----
+     One trigger, click-to-toggle on every breakpoint (see .nav-menu handling
+     in app.js) rather than hover-on-desktop/accordion-on-mobile as two code
+     paths — click is the one interaction that works identically with a mouse,
+     a touch screen and a keyboard, so the component has a single a11y story. */
+  .nav-menu { position:relative; }
+  .nav-menu-btn { display:inline-flex; align-items:center; gap:5px; font:inherit; color:inherit; background:none; border:0; padding:0; cursor:pointer; }
+  .nav-menu-btn:hover span, .nav-menu.open .nav-menu-btn span { color:var(--ink); }
+  .nav-menu-btn span.active { color:var(--green-ink); }
+  .nav-menu-btn svg { width:13px; height:13px; fill:none; stroke:currentColor; stroke-width:2; transition:transform .18s var(--ease); }
+  .nav-menu.open .nav-menu-btn svg { transform:rotate(180deg); }
+  .nav-dropdown { position:absolute; top:calc(100% + 16px); left:50%; transform:translateX(-50%) translateY(6px);
+    min-width:200px; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:6px;
+    box-shadow:var(--shadow-float); opacity:0; visibility:hidden; pointer-events:none;
+    transition:opacity .18s var(--ease), transform .18s var(--ease), visibility .18s; z-index:70; }
+  .nav-menu.open .nav-dropdown { opacity:1; visibility:visible; pointer-events:auto; transform:translateX(-50%) translateY(0); }
+  .nav-dropdown a { display:block; padding:9px 12px; border-radius:8px; font-size:.9rem; color:var(--ink-2); white-space:nowrap; }
+  .nav-dropdown a:hover, .nav-dropdown a:focus-visible { background:var(--bg-2); color:var(--ink); }
+  .nav-dropdown a.active { color:var(--green-ink); background:var(--green-soft); }
   .nav-cta { @apply flex items-center gap-2.5; }
   .menu-btn { @apply inline-flex lg:hidden items-center justify-center w-9 h-9 rounded-lg2 border bg-surface cursor-pointer; border-color:var(--line-2); }
   .menu-btn svg { @apply w-5 h-5 fill-none; stroke:var(--ink); stroke-width:2; }
 
   /* ---- hero (split: outcome copy left · live storefront right) ---- */
-  .hero { @apply relative pt-12 pb-12 md:pt-16 md:pb-20 overflow-hidden; }
+  /* Flat mint-to-white wash, same treatment as `.phero-mint` on the /features
+     pages — the ::before aurora below is a soft accent on top of it, not the
+     section's only color, so the hero reads as its own green-tinted block
+     against the white sections under it instead of blending into them. */
+  .hero { @apply relative pt-12 pb-12 md:pt-16 md:pb-20 overflow-hidden;
+    background:linear-gradient(180deg, var(--mint) 0%, var(--bg) 100%); }
   /* soft mint aurora + faint dotted grid behind the hero */
   .hero::before { content:""; @apply absolute inset-x-0 top-0 pointer-events-none; height:680px; z-index:-2;
     background:
@@ -150,40 +181,33 @@
   @media (min-width:1000px){ .herogrid { grid-template-columns:1.04fr 1fr; gap:3.25rem; } }
   @media (max-width:999px){ .hero-viz { margin-top:.5rem; } }
 
-  /* split (2-col) for "inside the app" etc. */
+  /* split (2-col): a claim + its own illustration. First authored for a
+     single "inside the app" row, now the repeating unit for a /features/*
+     page's detail sections (MerchandisingFeatures.astro, UpsellFeatures.astro)
+     — several in a row down one page, so `h2`/`.lead` are sized a step below
+     the full `text-h2`/`text-lg` scale a LONE section heading gets elsewhere;
+     at full size, five or six of them stacked read as five separate pages. */
   .split { @apply grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center; }
-  .split h2 { @apply font-display font-semibold text-h2; letter-spacing:-.028em; }
-  .split .lead { @apply text-lg text-ink-2 mt-4 leading-relaxed; max-width:42ch; }
-  .checklist { @apply list-none flex flex-col gap-3 mt-6; }
-  .checklist li { @apply flex items-start gap-2.5 text-[0.95rem] text-ink-2; }
-  .checklist li svg { @apply w-[18px] h-[18px] mt-0.5 shrink-0 fill-none; stroke:var(--green); stroke-width:2.4; }
-
-  /* hero meta stat row */
-  .hero-meta { @apply flex flex-wrap items-stretch justify-center divide-x mt-12 mx-auto; max-width:680px; border:1px solid var(--line); border-radius:14px; background:var(--surface); }
-  .hero-meta > div { @apply px-6 py-4 flex-1; border-color:var(--line); }
-  .hero-meta .k { @apply font-mono text-label uppercase text-muted; }
-  .hero-meta .n { @apply font-display font-semibold text-stat mt-1 tabular-nums; }
-  /* Wider variant + an inline unit, for the four-cell scope strip under the
-     hero. `.hero-meta` was already styled for label-over-number but unused;
-     these two rules are all it needed to hold values like "1h to 1 year"
-     without the cell text wrapping mid-number. */
-  /* Own section now, so it drops `.hero-meta`'s own mt-12 — the hero's pb-20
-     already supplies the gap, and stacking both left ~170px of dead air. */
-  .hero-meta.wide { @apply mt-0; max-width:840px; }
-  .hero-meta .n { @apply flex flex-col; }
-  .hero-meta .n .u { @apply font-sans font-normal text-muted mt-1; font-size:.8125rem; line-height:1.3; letter-spacing:0; }
-  /* A wrapped label pushes its own number down and breaks the row's shared
-     baseline, so the labels never wrap and the strip stacks before they would. */
-  .hero-meta .k { @apply whitespace-nowrap; }
-  @media (max-width:879px){
-    /* Below ~880px four cells are under 200px each and the longest label wraps.
-       Stack to a 2×2 grid instead, and drop the vertical dividers `divide-x`
-       puts between flex children. */
-    .hero-meta { @apply grid grid-cols-2; }
-    .hero-meta > div { @apply border-l-0 border-t; flex:none; }
-    .hero-meta > div:nth-child(-n+2) { @apply border-t-0; }
-    .hero-meta > div:nth-child(even) { border-left:1px solid var(--line); }
+  .split h2 { @apply font-display font-semibold; font-size:1.6rem; line-height:1.18; }
+  .split .lead { font-size:1.0625rem; color:var(--ink-2); line-height:1.6; margin-top:.85rem; max-width:46ch; }
+  .split .eyebrow { margin-bottom:1rem; }
+  /* reverse copy/illustration order at the same breakpoint `.split` itself
+     switches to two columns — below it everything stacks copy-first
+     regardless, which is the right reading order no matter the desktop
+     layout. Apply to whichever two children hold the copy and the
+     illustration (class names vary per page: `.mf-copy`/`.mf-viz`,
+     `.uf-copy`/`.uf-viz`, …). */
+  @media (min-width:1024px){
+    .split-rev > *:first-child { order:2; }
+    .split-rev > *:last-child { order:1; }
   }
+  /* vertical stack of `.split` rows — a /features/* page's whole detail
+     section is one of these. */
+  .split-list { display:flex; flex-direction:column; gap:4.5rem; }
+  @media (max-width:900px){ .split-list { gap:3.5rem; } }
+  .checklist { @apply list-none flex flex-col gap-3 mt-6; }
+  .checklist li { @apply flex items-start gap-2.5 text-[length:var(--fs-body)] text-ink-2; }
+  .checklist li svg { @apply w-[18px] h-[18px] mt-0.5 shrink-0 fill-none; stroke:var(--green); stroke-width:2.4; }
 
   /* ---- cards ---- */
   .cards { @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4; }
@@ -192,14 +216,14 @@
   .card .ic { @apply grid place-items-center w-10 h-10 rounded-lg2 mb-5; background:var(--green-soft); }
   .card .ic svg { @apply w-5 h-5 fill-none; stroke:var(--green-ink); stroke-width:1.8; }
   .card h3 { @apply font-display text-h3 font-semibold tracking-tight2 mb-2; }
-  .card p { @apply text-sm text-ink-2 leading-relaxed; }
+  .card p { @apply text-[length:var(--fs-body)] text-ink-2 leading-relaxed; }
 
   /* ---- steps ---- */
   .steps { @apply grid grid-cols-1 md:grid-cols-3 gap-4; }
   .step { @apply relative bg-surface border rounded-xl2 p-6; border-color:var(--line); }
   .step .sn { @apply font-mono text-label uppercase; color:var(--green-ink); }
   .step h3 { @apply font-display text-h3 font-semibold tracking-tight2 mt-3 mb-2; }
-  .step p { @apply text-sm text-ink-2 leading-relaxed; }
+  .step p { @apply text-[length:var(--fs-body)] text-ink-2 leading-relaxed; }
 
   /* ---- plan tag inside a step card ----
      Names the tier a feature starts on. Muted by default and green only for the
@@ -227,9 +251,9 @@
   .plan .price { @apply mt-5 mb-1 flex items-end gap-2; }
   .plan .price b { @apply font-display font-semibold text-5xl tracking-tightest leading-none tabular-nums; }
   .plan .price span { @apply font-mono text-sm text-muted mb-1.5; }
-  .plan .pdesc { @apply text-sm text-ink-2 mt-3 mb-6 pb-6 border-b leading-relaxed; border-color:var(--line); }
+  .plan .pdesc { @apply text-[length:var(--fs-body)] text-ink-2 mt-3 mb-6 pb-6 border-b leading-relaxed; border-color:var(--line); }
   .plan ul { @apply list-none flex flex-col gap-3 mb-8 flex-1; }
-  .plan li { @apply flex gap-2.5 text-sm text-ink-2; }
+  .plan li { @apply flex gap-2.5 text-[length:var(--fs-body)] text-ink-2; }
   .plan li svg { @apply w-4 h-4 mt-0.5 shrink-0 fill-none; stroke:var(--green); stroke-width:2.6; }
 
   /* 4-tier layout (Free / Starter / Pro / Growth). The 2-up `.plans` grid above
@@ -268,11 +292,27 @@
   .plans-4 .plan:not(:has(.badge)) { padding-top:calc(1.5rem + var(--badge-slot)); }
 
   /* ---- faq ---- */
-  .faq { @apply max-w-3xl mx-auto; }
+  .faq { @apply w-full; max-width:640px; }
   .faq details { @apply border-b; border-color:var(--line); }
   .faq summary { @apply flex items-center justify-between gap-4 cursor-pointer py-5 font-display font-medium text-lg; list-style:none; }
   .faq .pm { @apply relative w-4 h-4 shrink-0; }
+  .faq .pm::before, .faq .pm::after { background:var(--green); }
+  .faq details[open] summary { color:var(--green-ink); }
   .faq .ans { @apply pb-5 -mt-1 text-base text-ink-2 leading-relaxed; max-width:64ch; }
+  .faq .ans a { color:var(--green-ink); text-decoration:underline; text-underline-offset:2px; }
+
+  /* ---- faq categories: group label left, questions right (sortwise.net-style) ---- */
+  .faq-cat { display:grid; grid-template-columns:220px 1fr; gap:2.5rem; align-items:start; }
+  .faq-cat + .faq-cat { @apply mt-14 pt-14; border-top:1px solid var(--line); }
+  .faq-cat-h { display:flex; flex-direction:column; gap:.6rem; position:sticky; top:96px; }
+  .faq-cat-n { font-family:var(--mono); font-size:13px; font-weight:700; letter-spacing:.08em; color:var(--green-ink); }
+  .faq-cat-h h2 { @apply font-display font-semibold; font-size:1.4rem; line-height:1.25; }
+  .faq-cat-h::before { content:""; width:28px; height:3px; border-radius:2px; background:var(--green); }
+  @media (max-width:820px) {
+    .faq-cat { grid-template-columns:1fr; gap:1rem; }
+    .faq-cat-h { position:static; flex-direction:row; align-items:baseline; gap:.75rem; }
+    .faq-cat-h::before { display:none; }
+  }
 
   /* ---- final CTA (dark panel, emerald accent) ---- */
   .cta { @apply relative overflow-hidden text-center rounded-2xl px-6 py-14 md:px-10 md:py-20; background:var(--d-bg); color:#dfe3e8; }
@@ -306,6 +346,13 @@
   .phero .crumb a:hover { color:var(--green-ink); }
   .phero h1 { @apply font-display font-semibold text-h1; max-width:18ch; }
   .phero p { @apply text-lg text-ink-2 mt-5 max-w-2xl leading-relaxed; }
+
+  /* ---- page hero, mint variant ----
+     A flat wash behind the existing ::before/::after texture, fading to the
+     page background at the foot of the section — so a /features/* hero reads
+     as its own block against the white sections under it, without a hard
+     edge where the tint ends. */
+  .phero.phero-mint { background:linear-gradient(180deg, var(--mint) 0%, var(--bg) 100%); }
 
   /* ---- prose ---- */
   .prose { @apply max-w-3xl; }
@@ -346,21 +393,12 @@
   .trustbar .ti svg { @apply w-3.5 h-3.5 fill-none; stroke:var(--green-ink); stroke-width:2; }
   .trustbar .sep { @apply hidden sm:block w-px h-3.5; background:var(--line-2); }
 
-  /* ---- problem / solution ---- */
-  .ps { @apply grid grid-cols-1 md:grid-cols-2 gap-4; }
-  .ps-col { @apply rounded-xl2 p-6 md:p-8 border; }
-  .ps-col.bad { @apply bg-surface; border-color:var(--line); }
-  .ps-col.good { border-color:var(--green-line); background:var(--green-soft); }
-  .ps-col .tag { @apply font-mono text-label uppercase mb-4; }
-  .ps-col.bad .tag { color:var(--muted); }
-  .ps-col.good .tag { color:var(--green-ink); }
-  .ps-col ul { @apply list-none flex flex-col gap-3.5; }
-  .ps-col li { @apply flex items-start gap-3 text-[0.95rem] leading-snug; }
-  .ps-col li .mk { @apply grid place-items-center w-5 h-5 rounded-full shrink-0 mt-0.5; }
-  .ps-col.bad li .mk { background:#f3f0ef; color:var(--muted); }
-  .ps-col.bad li { color:var(--muted); }
-  .ps-col.good li .mk { background:var(--green); color:#fff; }
-  .ps-col li .mk svg { @apply w-3 h-3 fill-none; stroke:currentColor; stroke-width:3; }
+  /* ---- tag row (e.g. the touchpoint list on /features/upsell-blocks) ----
+     Same pill look as `.fb .ch`, standalone so a page can use it outside a
+     bento card. */
+  .tag-row { @apply flex flex-wrap justify-center gap-2; }
+  .tag-row .tag { font-family:var(--mono); font-size:11px; font-weight:600; padding:6px 12px;
+    border-radius:999px; background:var(--bg-2); border:1px solid var(--line); color:var(--muted); }
 
   /* ---- bento ---- */
   .bento { @apply grid grid-cols-1 md:grid-cols-3 gap-4; }
@@ -368,8 +406,10 @@
   .bento .b:hover { border-color:var(--line-2); @apply shadow-sm; }
   .bento .b.wide { @apply md:col-span-2; }
   .bento .b .kicker { @apply block mb-3; }
+  .bento .b .ic { @apply grid place-items-center w-10 h-10 rounded-lg2 shrink-0 mb-4; background:var(--green-soft); }
+  .bento .b .ic svg { @apply w-5 h-5 fill-none; stroke:var(--green-ink); stroke-width:1.8; }
   .bento .b h3 { @apply font-display text-h3 font-semibold tracking-tight2 mb-2; }
-  .bento .b p { @apply text-sm text-ink-2 leading-relaxed; max-width:46ch; }
+  .bento .b p { @apply text-[length:var(--fs-body)] text-ink-2 leading-relaxed; max-width:46ch; }
 
   /* ---- stat band (light, bordered) ---- */
   .band { @apply rounded-2xl border px-6 py-10 md:px-10 md:py-12; background:var(--bg-2); border-color:var(--line); }
@@ -379,20 +419,21 @@
   .stats .s span { @apply block font-mono text-label uppercase mt-2 text-muted; }
 
   /* ---- integrations ---- */
-  .intg { @apply grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3; }
-  .intg .i { @apply flex items-center gap-3 bg-surface border rounded-xl2 p-4 transition-colors; border-color:var(--line); }
+  .intg { @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3; }
+  .intg .i { @apply flex items-start gap-3 bg-surface border rounded-xl2 p-5 transition-colors; border-color:var(--line); }
   .intg .i:hover { border-color:var(--line-2); }
   .intg .i .lg { @apply grid place-items-center w-10 h-10 rounded-lg2 shrink-0; background:var(--green-soft); }
   .intg .i .lg svg { @apply w-5 h-5 fill-none; stroke:var(--green-ink); stroke-width:1.8; }
-  .intg .i .nm { @apply font-semibold text-sm leading-tight; }
-  .intg .i .nm small { @apply block font-mono text-[0.625rem] uppercase tracking-wider text-muted mt-0.5; }
+  .intg .i .nm { @apply font-display font-semibold text-base leading-tight; }
+  .intg .i .apps { @apply block text-[length:var(--fs-body)] text-ink-2 font-normal mt-1.5; }
+  .intg .i .nm small { @apply block font-mono text-[0.625rem] uppercase tracking-wider text-muted mt-2; }
 
   /* ---- testimonials ---- */
   .quotes { @apply grid grid-cols-1 md:grid-cols-3 gap-4; }
   .quote { @apply flex flex-col bg-surface border rounded-xl2 p-6 transition-all duration-150; border-color:var(--line); }
   .quote:hover { border-color:var(--line-2); @apply shadow-sm; }
   .quote .stars { @apply text-sm tracking-[0.2em] mb-4; color:var(--green); }
-  .quote .q { @apply text-[0.95rem] leading-relaxed text-ink flex-1; }
+  .quote .q { @apply text-[length:var(--fs-body)] leading-relaxed text-ink flex-1; }
   .quote .who { @apply flex items-center gap-3 mt-5 pt-5 border-t; border-color:var(--line); }
   .quote .av { @apply grid place-items-center w-10 h-10 rounded-full shrink-0 font-display font-semibold text-sm text-white; background:var(--green); }
   .quote .who b { @apply block text-sm font-semibold; }
@@ -403,9 +444,9 @@
   .uc { @apply grid grid-cols-1 md:grid-cols-[0.9fr_1.1fr] gap-6 md:gap-10 items-center bg-surface border rounded-xl2 p-6 md:p-9; border-color:var(--line); }
   .uc .tag { @apply font-mono text-label uppercase; color:var(--green-ink); }
   .uc h3 { @apply font-display text-h3 font-semibold tracking-tight2 mt-3 mb-3; }
-  .uc p { @apply text-[0.95rem] text-ink-2 leading-relaxed mb-4; }
+  .uc p { @apply text-[length:var(--fs-body)] text-ink-2 leading-relaxed mb-4; }
   .uc ul { @apply list-none flex flex-col gap-2; }
-  .uc li { @apply flex gap-2.5 text-sm text-ink-2; }
+  .uc li { @apply flex gap-2.5 text-[length:var(--fs-body)] text-ink-2; }
   .uc li svg { @apply w-4 h-4 mt-0.5 shrink-0 fill-none; stroke:var(--green); stroke-width:2.4; }
 
   /* ---- comparison matrix ---- */
@@ -533,6 +574,17 @@ body.nav-open .nav-overlay { opacity:1; visibility:visible; }
   header.site .nav-links a:last-child { border-bottom:0; }
   body.nav-open { overflow:hidden; }
   header.site .nav-cta > a.btn { display:none; }
+
+  /* dropdown becomes an inline accordion under its own trigger row, instead
+     of the floating panel used at lg — same open state, no floating layer
+     needed when the whole nav is already a full-width column. */
+  header.site .nav-menu { display:flex; flex-direction:column; border-bottom:1px solid var(--line); }
+  header.site .nav-menu-btn { width:100%; justify-content:space-between; padding:14px 4px; font-size:1.0625rem; }
+  header.site .nav-dropdown { position:static; opacity:1; visibility:visible; pointer-events:auto; transform:none;
+    background:none; border:0; box-shadow:none; padding:0 0 6px; min-width:0;
+    max-height:0; overflow:hidden; transition:max-height .22s var(--ease); }
+  header.site .nav-menu.open .nav-dropdown { max-height:220px; }
+  header.site .nav-dropdown a { padding:10px 4px 10px 14px; font-size:1rem; }
 }
 .menu-btn .ic-close { display:none; }
 body.nav-open .menu-btn .ic-open { display:none; }
@@ -556,7 +608,7 @@ body.nav-open .menu-btn .ic-close { display:block; }
 .fb:hover { transform:translateY(-3px); border-color:var(--green-line); box-shadow:var(--shadow-float); }
 .fb .kicker { display:block; margin-bottom:9px; color:var(--green-ink); }
 .fb h3 { font-family:var(--font-sans); font-weight:600; font-size:1.18rem; letter-spacing:-.02em; margin-bottom:8px; color:var(--ink); }
-.fb p { font-size:.92rem; color:var(--ink-2); line-height:1.6; max-width:42ch; }
+.fb p { font-size:var(--fs-body); color:var(--ink-2); line-height:var(--lh-body); max-width:42ch; }
 .fb .fb-viz { margin-top:18px; }
 .fb.wide { grid-column:span 2; }
 @media (min-width:768px){
@@ -679,9 +731,9 @@ body.nav-open .menu-btn .ic-close { display:block; }
 .aud-col.feat { border-color:var(--green-line); background:linear-gradient(180deg,#fff,var(--mint)); box-shadow:var(--shadow-float); }
 .aud-col .badge { position:absolute; top:22px; right:22px; font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:#fff; background:var(--green); padding:4px 9px; border-radius:999px; }
 .aud-col h3 { font-family:var(--font-sans); font-weight:600; font-size:1.32rem; letter-spacing:-.02em; margin:6px 0 8px; color:var(--ink); }
-.aud-col p { font-size:.95rem; color:var(--ink-2); line-height:1.6; margin-bottom:16px; }
+.aud-col p { font-size:var(--fs-body); color:var(--ink-2); line-height:var(--lh-body); margin-bottom:16px; }
 .aud-col ul { list-style:none; display:flex; flex-direction:column; gap:10px; }
-.aud-col li { display:flex; align-items:flex-start; gap:10px; font-size:.92rem; color:var(--ink-2); }
+.aud-col li { display:flex; align-items:flex-start; gap:10px; font-size:var(--fs-body); color:var(--ink-2); }
 .aud-col li svg { width:17px; height:17px; margin-top:1px; flex:none; fill:none; stroke:var(--green); stroke-width:2.6; }
 
 /* ---- video testimonial placeholders ---- */
@@ -786,7 +838,7 @@ a:focus-visible, .btn:focus-visible, summary:focus-visible, input:focus-visible,
 .hero h1 em, .cta h2 em, .shead h2 em, .phero h1 em { color:inherit; font-style:italic; }
 
 /* labels / kickers / tags → quiet neutral (were green) */
-.eyebrow, .fb .kicker, .step .sn, .plan .ptag, .uc .tag, .ps-col.good .tag { color:var(--muted); font-weight:600; }
+.eyebrow, .fb .kicker, .step .sn, .plan .ptag, .uc .tag { color:var(--muted); font-weight:600; }
 .eyebrow .dot { background:var(--ink); }
 .nav-links a.active { color:var(--ink); font-weight:600; }
 .hero .eyebrow, .cta .eyebrow { border-color:var(--line-2); }
@@ -797,9 +849,8 @@ a:focus-visible, .btn:focus-visible, summary:focus-visible, input:focus-visible,
 .intg .i .lg { background:var(--paper); }
 .intg .i .lg svg { stroke:var(--ink-2); }
 
-/* trust bar + faq toggle → ink, not green */
+/* trust bar → ink, not green (faq toggle keeps brand green — see .faq .pm) */
 .trustbar .ti svg { stroke:var(--ink-2); }
-.faq .pm::before, .faq .pm::after { background:var(--ink); }
 
 /* bento → neutral hover + neutral active chip */
 .fb:hover { border-color:var(--line-2); }
@@ -862,20 +913,6 @@ body { background:#fcfcfa; }
 
 /* editorial accent on headline emphasis (italic serif) */
 .hero h1 em, .shead h2 em, .cta h2 em, .phero h1 em { color:var(--accent); font-style:italic; }
-
-/* The four signal cards were painted #15171c here, overriding the light `.fb`
-   definition further up. Four black slabs on a light page read as heavy, and
-   they were the last surviving instance of a second visual language — the same
-   thing the use-case panels had. `.fb` now keeps the light treatment it is
-   defined with; `.fb.lead` (the one cell that was meant to stay dark, per the
-   bento note below) is not used anywhere, so nothing is left to make dark.
-
-   Cards also stop stretching to the tallest sibling: two of the four groups
-   hold two signals and two hold four, so an equal-height row left half of the
-   grid as empty black. Content sets the height now. */
-.hiw-grid { align-items:start; }
-
-/* lift the product thumbnails further out of their cards (float) */
 
 /* =====================================================================
    GLASSMORPHISM — frosted-glass surfaces; the bento product panels become
@@ -982,29 +1019,6 @@ header.site { background:rgba(252,252,250,.62); -webkit-backdrop-filter:blur(16p
 .fb.lead:hover .fb-viz > div { transform:rotateY(-1deg) rotateX(.4deg); }
 
 /* =====================================================================
-   SOLUTIONS PAGE — per-category narrative animations. Each vertical's
-   demo dramatizes the ONE feature that matters most to it. Dark glass
-   tilted panels (homepage language), real category product photos.
-   ===================================================================== */
-/* ---- Pro (look) → Growth (apply), the two tier cards inside IntentRead ----
-   Restored: these rules sat inside the emotional-map CSS block and were
-   removed with it, which left `Pro$99` / `Growth$199` rendering as bare
-   run-together text on the home page. The component still uses them. */
-/* Pro (look) → Growth (apply) — the upgrade hook, stated as two tiers */
-.etiers { display:grid; gap:12px; margin-top:28px; }
-@media (min-width:560px){ .etiers { grid-template-columns:1fr 1fr; } }
-.etier { padding:17px 18px; border-radius:14px; border:1px solid var(--line); background:var(--surface); }
-.etier.on { border-color:var(--green-line); background:var(--green-soft); }
-.etier .et-h { display:flex; align-items:baseline; gap:8px; margin-bottom:7px; }
-.etier .et-p { font-family:var(--mono); font-size:10px; font-weight:700; text-transform:uppercase;
-  letter-spacing:.1em; color:var(--muted); }
-.etier.on .et-p { color:var(--green-ink); }
-.etier .et-pr { font-family:var(--mono); font-size:11px; color:var(--muted); }
-.etier b { display:block; font-family:var(--font-sans); font-weight:600; font-size:.97rem;
-  color:var(--ink); margin-bottom:4px; }
-.etier p { font-size:.88rem; color:var(--ink-2); line-height:1.55; }
-
-/* =====================================================================
    HERO VISUAL — the ranked list with its reasoning open (RankWhy.astro).
    Light, flat, no perspective: the storefront mockup it replaces leaned on a
    3-D tilt and a five-act animation to look impressive, and neither survived
@@ -1012,45 +1026,24 @@ header.site { background:rgba(252,252,250,.62); -webkit-backdrop-filter:blur(16p
    nothing else in the category can draw the arithmetic behind a position.
    ===================================================================== */
 .rw { position:relative; background:var(--surface); border:1px solid var(--line); border-radius:18px;
-  padding:14px; max-width:520px; margin:0 auto; box-shadow:0 1px 2px rgba(16,24,40,.05), 0 30px 60px -34px rgba(16,24,40,.28); }
+  padding:18px; max-width:620px; margin:0 auto; box-shadow:0 1px 2px rgba(16,24,40,.05), 0 30px 60px -34px rgba(16,24,40,.28); }
 .rw-top { display:flex; align-items:center; justify-content:space-between; gap:12px;
-  padding:4px 8px 13px; border-bottom:1px solid var(--line); margin-bottom:8px; }
+  padding:4px 8px 13px; border-bottom:1px solid var(--line); margin-bottom:10px; }
 .rw-coll { display:inline-flex; align-items:center; gap:8px; font-size:.95rem; font-weight:700; }
 .rw-dot { width:8px; height:8px; border-radius:50%; background:var(--green); flex:none; }
 .rw-run { font-family:var(--mono); font-size:10px; font-weight:600; letter-spacing:.1em;
   text-transform:uppercase; color:var(--muted); }
 .rw-run b { color:var(--ink); font-weight:700; }
 
-.rw-row { display:flex; align-items:center; gap:12px; padding:9px 8px; border-radius:11px; }
-.rw-n { width:16px; text-align:center; flex:none; font-family:var(--mono); font-size:12px;
-  font-weight:700; color:var(--faint); font-variant-numeric:tabular-nums; }
 .rw-th { width:34px; height:34px; border-radius:9px; overflow:hidden; background:#f1efe9; flex:none; }
 .rw-th img { width:100%; height:100%; object-fit:cover; display:block; }
-.rw-nm { flex:1; font-size:.92rem; font-weight:600; color:var(--ink); white-space:nowrap;
-  overflow:hidden; text-overflow:ellipsis; }
+.rw-nm { font-size:.92rem; font-weight:600; color:var(--ink); }
 
-.rw-row.lead { background:var(--green-soft); border:1px solid var(--green-line); padding:8px 7px; }
-.rw-row.lead .rw-n { color:var(--green-ink); }
-.rw-move { flex:none; font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px;
-  background:var(--green); color:#fff; letter-spacing:.02em; }
-.rw-row.out { opacity:.6; }
 .rw-out { flex:none; font-size:10px; font-weight:700; padding:3px 8px; border-radius:999px;
   background:var(--bg-2); color:var(--muted); }
-
-/* the part that is the point */
-.rw-why { margin:8px 0 6px; padding:13px 14px 14px; border-radius:12px;
-  background:var(--bg-2); border:1px solid var(--line); display:grid; gap:9px; }
-.rw-whyh { font-family:var(--mono); font-size:9.5px; font-weight:700; letter-spacing:.13em;
-  text-transform:uppercase; color:var(--muted); }
-.rw-sig { display:grid; grid-template-columns:1fr 96px 26px; align-items:center; gap:0 12px; }
-.rw-sl { font-size:.8rem; color:var(--ink-2); }
-.rw-sb { height:7px; border-radius:4px; background:var(--line); overflow:hidden; }
-.rw-sb i { display:block; height:100%; width:var(--w); border-radius:4px;
-  background:linear-gradient(90deg,var(--green),var(--green-bright)); transform-origin:left;
-  animation:rwGrow 12s var(--ease) infinite; }
-.rw-sig:nth-of-type(2) .rw-sb i { animation-delay:.09s; }
-.rw-sig:nth-of-type(3) .rw-sb i { animation-delay:.18s; }
-.rw-sig:nth-of-type(4) .rw-sb i { animation-delay:.27s; }
+/* invisible stand-in on tiles with neither badge, so every tile reserves the
+   same bottom-line height and the grid stays even */
+.rw-tag-ph { flex:none; font-size:10px; font-weight:700; padding:3px 8px; visibility:hidden; }
 
 /* ===== THE LOOP IS TWO RUNS, NOT ONE =====================================
    The previous cycle moved two products, held, then slid them back — and the
@@ -1065,24 +1058,9 @@ header.site { background:rgba(252,252,250,.62); -webkit-backdrop-filter:blur(16p
    those two marks, so the card beats as one thing instead of three loops of
    different lengths drifting against each other.
 
-   Values never change — only order does. The weights are the merchant's rule,
-   and re-drawing a bar is the rule being re-applied, not a number moving. */
-@keyframes rwGrow {
-  0% { transform:scaleX(0); }
-  7%, 49.99% { transform:scaleX(1); }
-  50% { transform:scaleX(0); }
-  57%, 100% { transform:scaleX(1); }
-}
-
-/* the leader's ▲3 never blinks off — it re-asserts on each run */
-.rw-move { animation:rwMovePulse 12s var(--ease) infinite; }
-@keyframes rwMovePulse {
-  0% { transform:scale(1); }
-  4% { transform:scale(1.1); }
-  13%, 50% { transform:scale(1); }
-  54% { transform:scale(1.1); }
-  63%, 100% { transform:scale(1); }
-}
+   The whole list is treated as one signal — every swapping row moves on the
+   same two marks, so the picture reads as one feed re-ranking, not several
+   rows drifting independently. */
 
 /* live dot — a 6s ping is exactly one beat, so it lands with each run */
 .rw-dot { position:relative; }
@@ -1104,49 +1082,47 @@ header.site { background:rgba(252,252,250,.62); -webkit-backdrop-filter:blur(16p
   66%, 100% { top:104%; }
 }
 
-.rw-sp { font-family:var(--mono); font-size:.78rem; font-weight:700; color:var(--ink);
-  text-align:right; font-variant-numeric:tabular-nums; }
-.rw-sp.ok svg { width:15px; height:15px; fill:none; stroke:var(--green-ink); stroke-width:3; display:block; margin-left:auto; }
-.rw-sig.tie .rw-sl { color:var(--muted); }
-.tiebar { background:repeating-linear-gradient(90deg,var(--line) 0 5px,transparent 5px 9px); }
+/* ---- the products sit in a tile grid ----
+   Three columns, so each swapping pair sits side by side in its row. `.rw-card`
+   is only the SLOT — its grid position never changes. `.rw-cbody` carries the
+   actual tile face (background, border, thumb, name) and is what travels: 100%
+   of its own width is exactly one column, so translating by that plus the grid
+   gap lands it dead center in the neighboring slot. No rank number on either —
+   the ▲/▼ badges are what say "this moved", not a position count a shopper
+   never sees.
 
-.rw-cap { margin-top:12px; text-align:center; font-size:.78rem; color:var(--muted); }
-
-/* ---- the list actually re-ranks ----
-   Two products trade places under position numbers that stay where they are.
-   ROW_H is the row's own height (9px padding twice + a 34px thumb), so the two
-   bodies land exactly in each other's slot. Both start and end at 0, which is
-   why every resting frame is the true order.
-
-   The travelling row lifts a shadow while in flight and sets it back down on
-   arrival — the eye follows the product, not a sliding rectangle. The move
-   starts at 12% (1.44s), after the entrance below has finished, so the card is
-   never assembling and re-ranking at the same time. */
-.rw-body { display:flex; align-items:center; gap:12px; flex:1; min-width:0;
-  will-change:transform; }
-.rw-row.swapdown .rw-body { animation:rwDown 12s var(--ease) infinite; }
-.rw-row.swapup   .rw-body { animation:rwUp   12s var(--ease) infinite; }
-@keyframes rwDown {
-  0%, 12% { transform:translateY(0);    filter:drop-shadow(0 0 0 rgba(16,24,40,0)); }
+   The travelling tile lifts a shadow while in flight and sets it back down on
+   arrival — the eye follows the product, not a sliding box. The move starts
+   at 12% (1.44s), after the entrance below has finished, so the card is never
+   assembling and re-ranking at the same time. */
+.rw-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; }
+.rw-card { position:relative; }
+.rw-cbody { display:flex; flex-direction:column; align-items:center; gap:7px; text-align:center;
+  width:100%; box-sizing:border-box; padding:18px 10px 14px; border-radius:12px;
+  background:var(--bg-2); border:1px solid var(--line); will-change:transform; z-index:1; }
+.rw-cbody .rw-th { width:48px; height:48px; }
+.rw-cbody .rw-nm { white-space:normal; line-height:1.15; }
+.rw-card.out .rw-cbody { opacity:.6; }
+.rw-card.swapr .rw-cbody { animation:rwRight 12s var(--ease) infinite; }
+.rw-card.swapl .rw-cbody { animation:rwLeft  12s var(--ease) infinite; z-index:2; }
+@keyframes rwRight {
+  0%, 12% { transform:translateX(0);    filter:drop-shadow(0 0 0 rgba(16,24,40,0)); }
   17%     {                             filter:drop-shadow(0 7px 11px rgba(16,24,40,.15)); }
-  22%, 62% { transform:translateY(52px); filter:drop-shadow(0 0 0 rgba(16,24,40,0)); }
+  22%, 62% { transform:translateX(calc(100% + 12px)); filter:drop-shadow(0 0 0 rgba(16,24,40,0)); }
   67%     {                             filter:drop-shadow(0 7px 11px rgba(16,24,40,.15)); }
-  72%, 100% { transform:translateY(0);  filter:drop-shadow(0 0 0 rgba(16,24,40,0)); }
+  72%, 100% { transform:translateX(0);  filter:drop-shadow(0 0 0 rgba(16,24,40,0)); }
 }
-@keyframes rwUp {
-  0%, 12% { transform:translateY(0);     filter:drop-shadow(0 0 0 rgba(16,24,40,0)); }
+@keyframes rwLeft {
+  0%, 12% { transform:translateX(0);     filter:drop-shadow(0 0 0 rgba(16,24,40,0)); }
   17%     {                              filter:drop-shadow(0 7px 11px rgba(16,24,40,.15)); }
-  22%, 62% { transform:translateY(-52px); filter:drop-shadow(0 0 0 rgba(16,24,40,0)); }
+  22%, 62% { transform:translateX(calc(-100% - 12px)); filter:drop-shadow(0 0 0 rgba(16,24,40,0)); }
   67%     {                              filter:drop-shadow(0 7px 11px rgba(16,24,40,.15)); }
-  72%, 100% { transform:translateY(0);   filter:drop-shadow(0 0 0 rgba(16,24,40,0)); }
+  72%, 100% { transform:translateX(0);   filter:drop-shadow(0 0 0 rgba(16,24,40,0)); }
 }
-/* the row that moves has to sit above the one it passes */
-.rw-row.swapup { position:relative; z-index:2; }
-
 /* Both badges share one grid cell, so swapping which is visible never changes
    the row's width. `a` is the outbound run, `b` the return — see RankWhy.astro. */
 .rw-dstack { flex:none; display:inline-grid; }
-.rw-d { grid-area:1/1; font-size:10px; font-weight:700; padding:2px 7px; border-radius:999px;
+.rw-d { grid-area:1/1; font-size:10px; font-weight:700; padding:3px 8px; border-radius:999px;
   opacity:0; }
 .rw-d.dup { background:var(--green-soft); color:var(--green-ink); }
 .rw-d.ddown { background:var(--bg-2); color:var(--muted); }
@@ -1164,13 +1140,6 @@ header.site { background:rgba(252,252,250,.62); -webkit-backdrop-filter:blur(16p
   100% { opacity:0; transform:translateY(-4px) scale(.82); }
 }
 
-/* "last sorted" flips to `just now` on each run, then decays back */
-.rw-ago { position:relative; display:inline-grid; }
-.rw-ago i { grid-area:1/1; font-style:normal; white-space:nowrap; animation:rwAgo 12s steps(1,end) infinite; }
-.rw-ago i.now { color:var(--green-ink); animation-name:rwNow; }
-@keyframes rwAgo { 0% { opacity:1; } 2% { opacity:0; } 38% { opacity:1; } 52% { opacity:0; } 88% { opacity:1; } 100% { opacity:1; } }
-@keyframes rwNow { 0% { opacity:0; } 2% { opacity:1; } 38% { opacity:0; } 52% { opacity:1; } 88% { opacity:0; } 100% { opacity:0; } }
-
 /* ---- entrance: the card assembles once, top to bottom ----
    Every rule here is `backwards`-filled with no `to`, so each element animates
    from the offset state INTO whatever it already computes to — the resting look
@@ -1182,16 +1151,9 @@ header.site { background:rgba(252,252,250,.62); -webkit-backdrop-filter:blur(16p
   from { opacity:0; transform:translateY(16px) scale(.984);
          box-shadow:0 1px 2px rgba(16,24,40,.05), 0 10px 20px -18px rgba(16,24,40,.28); }
 }
-.rw-top, .rw-row.lead, .rw-why,
-.rw-row.swapdown, .rw-row.swapup, .rw-row.out,
-.rw-cap { animation:rwPartIn .6s var(--ease) backwards; }
-.rw-top          { animation-delay:.14s; }
-.rw-row.lead     { animation-delay:.22s; }
-.rw-why          { animation-delay:.32s; }
-.rw-row.swapdown { animation-delay:.42s; }
-.rw-row.swapup   { animation-delay:.50s; }
-.rw-row.out      { animation-delay:.58s; }
-.rw-cap          { animation-delay:.66s; }
+.rw-top, .rw-grid { animation:rwPartIn .6s var(--ease) backwards; }
+.rw-top  { animation-delay:.14s; }
+.rw-grid { animation-delay:.22s; }
 @keyframes rwPartIn { from { opacity:0; transform:translateY(10px); } }
 
 /* the ambient wash behind the card breathes very slowly — enough to keep the
@@ -1200,74 +1162,13 @@ header.site { background:rgba(252,252,250,.62); -webkit-backdrop-filter:blur(16p
 @keyframes rwAura { 0%, 100% { transform:scale(1); opacity:1; } 50% { transform:scale(1.05); opacity:.85; } }
 
 @media (prefers-reduced-motion: reduce){
-  .rw, .rw-top, .rw-why, .rw-cap, .rw-row,
-  .rw-sb i, .rw-move, .rw-dot::after, .rw::after,
-  .rw-body, .rw-d, .rw-ago i, .hero-viz::before { animation:none; }
+  .rw, .rw-top, .rw-grid,
+  .rw-dot::after, .rw::after,
+  .rw-cbody, .rw-d, .hero-viz::before { animation:none; }
   .rw { opacity:1; transform:none; }
-  .rw-sb i { transform:scaleX(1); }
-  .rw-move { transform:none; }
-  .rw-body { transform:none; filter:none; }
-  .rw-d, .rw-ago i.now { display:none; }
+  .rw-cbody { transform:none; filter:none; }
   .rw::after { display:none; }
 }
-
-/* ---- step rail (how-it-works) ----
-   Numbered because the steps ARE a sequence — the order is information here,
-   unlike most numbered lists on marketing pages. Sized so all seven sit on one
-   line at desktop: the point is to show the whole shape at once. */
-.steprail { display:flex; flex-wrap:wrap; gap:8px; margin-top:26px; }
-.steprail a { display:inline-flex; align-items:center; gap:8px; text-decoration:none;
-  font-size:.86rem; line-height:1; padding:9px 14px 9px 9px; border-radius:999px;
-  border:1px solid var(--line); background:var(--surface); color:var(--ink-2);
-  transition:border-color .15s, color .15s; }
-.steprail a:hover, .steprail a:focus-visible { border-color:var(--green); color:var(--green-ink); }
-.steprail i { display:grid; place-items:center; width:20px; height:20px; flex:none;
-  border-radius:50%; background:var(--bg-2); font-family:var(--mono); font-style:normal;
-  font-size:11px; font-weight:700; color:var(--muted); }
-.steprail a:hover i, .steprail a:focus-visible i { background:var(--green-soft); color:var(--green-ink); }
-section[id^="s"] { scroll-margin-top:88px; }
-
-/* ---- the other slots ----
-   Eight surfaces as ROWS, not as eight cards. Cards would have given each one
-   the weight of a feature, which is exactly the billing the v14 rule takes away
-   from them ("a modifier on a surface, not a feature of its own"). A row list
-   also says the true thing about them at a glance: they are all the same kind
-   of object — a slot the ranking fills. */
-.slots { border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--surface); }
-.slot { display:grid; grid-template-columns:200px 150px 1fr 96px; align-items:baseline;
-  gap:0 20px; padding:16px 20px; border-top:1px solid var(--line); }
-.slot:first-child { border-top:0; }
-.slot b { font-size:.97rem; font-weight:700; }
-.slot .where { font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:.11em;
-  text-transform:uppercase; color:var(--muted); }
-.slot p { font-size:.9rem; line-height:1.55; color:var(--ink-2); }
-.slot .utag { margin-top:0; justify-self:end; }
-@media (max-width:900px){
-  .slot { grid-template-columns:1fr auto; gap:4px 14px; padding:16px 18px; }
-  .slot b { grid-column:1; }
-  .slot .utag { grid-column:2; grid-row:1; }
-  .slot .where { grid-column:1/-1; }
-  .slot p { grid-column:1/-1; margin-top:4px; }
-}
-
-/* ---- home recognition strip ----
-   The half-second in which a merchant reads their own store in a sentence. The
-   home page linked to /use-cases exactly nowhere before this; each cell is a
-   deep link into the situation it names. The jump index that does the same job
-   on /use-cases itself lives with that page's CSS further down. */
-.saidstrip { display:grid; grid-template-columns:repeat(5,1fr); gap:1px;
-  background:var(--line); border:1px solid var(--line); border-radius:14px;
-  overflow:hidden; }
-@media (max-width:1080px){ .saidstrip { grid-template-columns:repeat(2,1fr); } }
-@media (max-width:560px){ .saidstrip { grid-template-columns:1fr; } }
-.saidstrip a { background:var(--surface); padding:18px 18px 16px; text-decoration:none;
-  display:flex; flex-direction:column; gap:9px; transition:background .15s; }
-.saidstrip a:hover, .saidstrip a:focus-visible { background:var(--paper); }
-.saidstrip q { font-family:var(--font-sans); font-size:.97rem; line-height:1.4;
-  color:var(--ink); quotes:"\201C" "\201D"; }
-.saidstrip .go { font-family:var(--mono); font-size:.7rem; letter-spacing:.09em;
-  text-transform:uppercase; color:var(--muted); margin-top:auto; }
-.saidstrip a:hover .go, .saidstrip a:focus-visible .go { color:var(--green-ink); }
 
 /* =====================================================================
    USE CASES — nine situations, one format.
@@ -1316,14 +1217,14 @@ section[id^="s"] { scroll-margin-top:88px; }
 .ucba-r.win s::after { background:linear-gradient(90deg,var(--green),var(--green-bright)); }
 .ucba-mid { display:grid; place-items:center; color:var(--muted); font-size:20px; }
 @media (max-width:760px){ .ucba-mid { transform:rotate(90deg); } }
-.ucba-cap { margin-top:14px; text-align:center; font-size:.85rem; color:var(--muted); }
+.ucba-cap { margin-top:14px; text-align:center; font-size:var(--fs-caption); line-height:var(--lh-body); color:var(--muted); }
 
 /* ---- the nine, in three bands ---- */
 .ucband + .ucband { margin-top:52px; }
 .ucband-h { max-width:60ch; margin-bottom:20px; }
 .ucband-h h2 { font-family:var(--font-sans); font-size:1.36rem; font-weight:700;
   letter-spacing:-.022em; line-height:1.25; }
-.ucband-h p { margin-top:6px; font-size:.94rem; line-height:1.55; color:var(--ink-2); }
+.ucband-h p { margin-top:6px; font-size:var(--fs-body); line-height:var(--lh-body); color:var(--ink-2); }
 
 .ucgrid { display:grid; gap:16px; grid-template-columns:1fr; }
 @media (min-width:720px){ .ucgrid { grid-template-columns:repeat(2,1fr); } }
@@ -1345,15 +1246,15 @@ section[id^="s"] { scroll-margin-top:88px; }
 .uccard dl { margin:0; display:grid; gap:5px; }
 .uccard dt { font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:.1em;
   text-transform:uppercase; color:var(--faint); }
-.uccard dt + dd { margin:0 0 12px; font-size:.9rem; line-height:1.55; color:var(--ink-2); }
+.uccard dt + dd { margin:0 0 12px; font-size:var(--fs-body); line-height:var(--lh-body); color:var(--ink-2); }
 .uccard dd:last-of-type { margin-bottom:0; color:var(--ink); }
 .uccard dd em { font-style:italic; }
 
 .uc-mech { margin-top:auto; padding-top:16px; font-family:var(--mono); font-size:11px;
   color:var(--muted); }
 
-.ucgrid-note { margin:26px auto 0; max-width:70ch; text-align:center; font-size:.88rem;
-  line-height:1.6; color:var(--muted); }
+.ucgrid-note { margin:26px auto 0; max-width:70ch; text-align:center; font-size:var(--fs-caption);
+  line-height:var(--lh-body); color:var(--muted); }
 
 /* ---- A/B "prove the loop" panel (ranking-engine section on the home page).
    Every animated element's BASE state is its resolved look, so the global
@@ -1381,18 +1282,9 @@ section[id^="s"] { scroll-margin-top:88px; }
 .ab-verdict { font-family:var(--mono); font-size:12px; color:var(--muted); white-space:nowrap; animation:abVerdict 5s var(--ease) infinite; }
 .ab-verdict b { color:var(--green-ink); }
 @keyframes abVerdict { 0%,55%{opacity:0} 68%,90%{opacity:1} 100%{opacity:0} }
-.ab-cap { margin-top:16px; font-size:.9rem; color:var(--ink-2); line-height:1.6; max-width:60ch; margin-inline:auto; text-align:center; }
+.ab-cap { margin-top:16px; font-size:var(--fs-body); color:var(--ink-2); line-height:var(--lh-body); max-width:60ch; margin-inline:auto; text-align:center; }
 @media (max-width:560px) { .ab-exp{ flex-direction:column; align-items:stretch } .ab-vs{ display:none } .ab-col{ max-width:none } }
 
-/* ---- /how-it-works layout ---- */
-.hiw-grid { display:grid; gap:16px; grid-template-columns:1fr; }
-.hiw-two { display:grid; gap:14px 44px; grid-template-columns:1fr; }
-@media (min-width:768px) {
-  .hiw-grid { grid-template-columns:1fr 1fr; }
-  .hiw-two { grid-template-columns:1fr 1fr; }
-}
-/* checklist rows on this page carry a name + description in a nested span;
-   keep the tick top-aligned with the first line. */
 /* ---- claim, then the reasoning behind it on request ----
    Forty-five checklist items, each 40–54 words, were all open at once: the page
    read as 2,500 words of prose when what it actually holds is forty-five short
@@ -1419,12 +1311,9 @@ section[id^="s"] { scroll-margin-top:88px; }
 .cl-i[open] > summary::after { transform:rotate(-135deg); }
 .cl-i > summary:hover, .cl-i > summary:focus-visible { color:var(--green-ink); }
 .cl-i > summary:hover::after, .cl-i > summary:focus-visible::after { border-color:var(--green); }
-.cl-i > span { display:block; padding:0 8px 13px 28px; font-size:.9rem; line-height:1.6;
+.cl-i > span { display:block; padding:0 8px 13px 28px; font-size:var(--fs-body); line-height:var(--lh-body);
   color:var(--ink-2); max-width:62ch; }
 .cl-i > span b { color:var(--ink); }
-
-.hiw-grid .checklist, .hiw-two .checklist { margin-top:0; }
-.hiw-grid .fb .checklist { margin-top:14px; }
 
 /* =====================================================================
    BENTO — break the dark slab.
@@ -1433,8 +1322,8 @@ section[id^="s"] { scroll-margin-top:88px; }
    Now only `.fb.lead` keeps the dark treatment (it IS the hero statement) and
    the rest return to the page's warm editorial surface.
 
-   Scoped to `.fbento` on purpose — `.hiw-grid .fb` on /how-it-works is a
-   different context (four equal signal-group cards, no lead) and stays dark.
+   Scoped to `.fbento` on purpose — a bare `.fb` elsewhere may be a different
+   context and stay dark.
 
    The mini-UI pieces inside each viz were already authored in light-surface
    tokens (#fff rows, --ink text, --green-soft pills); the frosted-glass block
@@ -1546,3 +1435,47 @@ section[id^="s"] { scroll-margin-top:88px; }
 /* The CTA band is light, not dark — it was inverted at some point and the
    inversion was removed. So no special case: same brand green as the hero.
    (Checked on the built page; --green-bright reads mint on paper.) */
+
+/* =====================================================================
+   TWO-PANEL FEATURE HERO — shared layout for a /features/* hero
+   illustration: a smaller "app" card behind, a larger "storefront" card in
+   front overlapping it. First built inline in MerchandisingHero.astro, then
+   promoted here once a second page (Upsell) needed the identical composition
+   — content differs per page, the geometry doesn't, so only the geometry is
+   shared. Content-specific classes (labels, chips, grid tiles, etc.) stay
+   local to each component's own <style> block; only these structural rules
+   are sitewide.
+
+   Deliberately a plain flex row, not absolutely-positioned/guessed offsets —
+   the two cards have very different, non-fixed content heights, and anything
+   that tried to PREDICT a total stage height (e.g. a padding-bottom
+   aspect-ratio box) drifted out of sync with the real content and the cards
+   overlapped each other's text. Flex just measures the real boxes. Every
+   child also needs its own `min-width:0` (a flex item's default is `auto`,
+   i.e. its content's min-content width) — without it, nowrap/ellipsis text
+   or a fixed-column grid inside either card can refuse to shrink below its
+   own natural width and blow the whole row wider than the viewport. */
+.fx-stage { max-width:580px; margin:0 auto; }
+.fx-row { display:flex; align-items:flex-end; }
+.fx-back { position:relative; z-index:1; flex:0 0 46%; min-width:0; margin-bottom:15%;
+  background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:18px;
+  box-shadow:0 1px 2px rgba(16,24,40,.04), 0 24px 48px -28px rgba(16,24,40,.24);
+  animation:fxIn .6s var(--ease) backwards; }
+/* Overlap is deliberately shallow (~16px) — just enough for the two cards to
+   read as one composition without the front card covering content near the
+   back card's right edge (a heavier overlap did exactly that on the first
+   pass of this pattern). */
+.fx-front { position:relative; z-index:2; flex:0 0 60%; min-width:0; margin-left:-16px;
+  background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px;
+  box-shadow:0 24px 48px -20px rgba(16,24,40,.32);
+  animation:fxIn .6s var(--ease) .12s backwards; }
+@keyframes fxIn { from { opacity:0; transform:translateY(14px) scale(.98); } }
+@media (max-width:640px){
+  /* Side by side at a shrunk scale reads as clutter on a phone — stack
+     instead, full width, with just enough overlap to still read as one
+     composition. */
+  .fx-row { flex-direction:column; align-items:stretch; }
+  .fx-back { flex-basis:auto; width:88%; margin:0 0 -22px auto; }
+  .fx-front { flex-basis:auto; width:100%; margin-left:0; }
+}
+@media (prefers-reduced-motion:reduce){ .fx-back, .fx-front { animation:none; } }

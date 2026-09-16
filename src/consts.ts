@@ -37,9 +37,18 @@ export const SUPPORT_EMAIL = "hello@qdn.vn";
 
 // Primary nav.
 export const NAV = [
-  ["/use-cases", "Use cases"],
-  ["/how-it-works", "How it works"],
   ["/integrations", "Integrations"],
   ["/pricing", "Pricing"],
+  ["/faqs", "FAQs"],
   [GUIDE_URL, "Guide"],
+] as const;
+
+// "Features" nav dropdown — one page per pillar, same three jobs the "What
+// you get" tabs on the homepage (components/Offer.astro) already describe.
+// Order matches the buying journey those tabs use: merchandise the
+// collection, personalize it per shopper, then upsell around the purchase.
+export const FEATURES_NAV = [
+  ["/features/merchandising", "Merchandising"],
+  ["/features/personalization", "Personalization"],
+  ["/features/upsell-blocks", "Upsell blocks"],
 ] as const;

@@ -1,0 +1,64 @@
+---
+import Base from '../../layouts/Base.astro';
+import { APP_STORE_URL } from '../../consts';
+import BookDemo from '../../components/BookDemo.astro';
+import PersonalizationHero from '../../components/PersonalizationHero.astro';
+import PersonalizationFeatures from '../../components/PersonalizationFeatures.astro';
+
+const title = 'Personalization — QSortby';
+const description =
+  '1:1 product recommendations and personalized collection sorting for Shopify, built from behavior on this visit — no login and no purchase history required.';
+---
+<Base title={title} description={description} breadcrumb="Personalization">
+  <section class="phero phero-mint">
+    <div class="wrap herogrid">
+      <div>
+        <div class="crumb">Personalization</div>
+        <h1>One catalog, a different front row for every visitor.</h1>
+        <p>1:1 product recommendations and personalized collection sorting, built from this visit's own behavior — no login, no purchase history, no quiz.</p>
+        <div class="hero-cta" style="margin-top:2rem">
+          <a href={APP_STORE_URL} class="btn btn-accent btn-lg">Try it free <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </div>
+      <PersonalizationHero />
+    </div>
+  </section>
+
+  <!-- ===================== HOW IT WORKS ===================== -->
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="shead ctr rv" style="margin-bottom:2.5rem">
+        <h2>How it works</h2>
+      </div>
+      <div class="steps">
+        <div class="step rv"><div class="sn">01</div><h3>Build a segment rule</h3><p>Group shoppers by the behavior that matters, then give each group its own ranking.</p></div>
+        <div class="step rv"><div class="sn">02</div><h3>Preview the routing</h3><p>Check which segment a shopper lands in, and what order they'll see.</p></div>
+        <div class="step rv"><div class="sn">03</div><h3>Apply and publish</h3><p>Drop the rule into any block on your theme, collection, storefront block, or upsell offer, and it runs there automatically, live, per visitor.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FEATURE DETAIL =====================
+       Three sections, each a claim + its own illustration, alternating
+       sides (components/PersonalizationFeatures.astro) — same shape as the
+       Merchandising and Upsell pages' detail sections. -->
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <PersonalizationFeatures />
+    </div>
+  </section>
+
+  <!-- ===================== CTA ===================== -->
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="cta rv">
+        <h2>Ready to see it in <em>action?</em></h2>
+        <p>Start your free trial or book a demo with our personalization experts.</p>
+        <div class="hero-cta" style="justify-content:center">
+          <a href={APP_STORE_URL} class="btn btn-accent btn-lg">Get started <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <BookDemo class="btn btn-ghost btn-lg">Book a demo</BookDemo>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

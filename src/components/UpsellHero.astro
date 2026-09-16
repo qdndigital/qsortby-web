@@ -1,0 +1,152 @@
+---
+/**
+ * UPSELL HERO ILLUSTRATION — /features/upsell-blocks.
+ *
+ * Same two-panel composition as MerchandisingHero.astro (the `.fx-*` classes
+ * in global.css): a rule card behind — which touchpoint, which recommendation
+ * rule, is it live — and the storefront surface it produces in front. Here
+ * that surface is a cart drawer, the most recognizable of the six touchpoints
+ * named on this page, with its "Recommended for you" row animating in and
+ * pulsing an "Added" badge on a loop, so the block reads as live rather than
+ * a static screenshot.
+ *
+ * Fully self-contained (its own `uh-` classes) rather than reusing
+ * Offer.astro's `.offer-*`/`.us-*` or MerchandisingHero's `.mh-*` — this page
+ * never renders either of those components, so their classes don't exist
+ * here. See the astro-style-scoping note this exact mistake produced once
+ * already.
+ */
+
+// Same six surfaces as the "Six surfaces, one engine" section below
+// (components/UpsellFeatures.astro's SURFACES) — kept in sync so the hero
+// and the detail section never disagree on which touchpoints are live.
+const TOUCHPOINTS = [
+  { name: 'Cart drawer', on: true },
+  { name: 'Checkout', on: true },
+  { name: 'Thank-you page', on: true },
+  { name: 'Product page', on: false },
+  { name: 'Popups', on: false },
+  { name: 'Free-shipping bar', on: true },
+];
+const liveCount = TOUCHPOINTS.filter((t) => t.on).length;
+---
+<div class="fx-stage" aria-hidden="true">
+  <div class="fx-row">
+    <div class="fx-back">
+      <div class="uh-brand">
+        <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="27" height="27" rx="7" stroke="#191a12" stroke-width="2"/>
+          <rect x="13.25" y="7.6" width="5.5" height="5.5" rx="1.5" fill="#0e9d63"/>
+          <rect x="13.25" y="13.75" width="5.5" height="5.5" rx="1.5" fill="#0e9d63" fill-opacity="0.55"/>
+          <rect x="13.25" y="19.9" width="5.5" height="5.5" rx="1.5" fill="#0e9d63" fill-opacity="0.28"/>
+        </svg>
+        <span>QSortby</span>
+      </div>
+      <span class="uh-kicker">Touchpoints &middot; live</span>
+      <div class="uh-tplist">
+        {TOUCHPOINTS.map((t) => (
+          <div class="uh-tprow">
+            <span>{t.name}</span>
+            <span class={t.on ? 'uh-tpstat on' : 'uh-tpstat'}>{t.on ? 'Live' : 'Off'}</span>
+          </div>
+        ))}
+      </div>
+      <div class="uh-run"><i></i>Live on <b>{liveCount}</b> of {TOUCHPOINTS.length} touchpoints</div>
+    </div>
+
+    <div class="fx-front">
+      <div class="uh-chrome"><i></i><i></i><i></i><span>your-store.com/cart</span></div>
+      <div class="uh-head"><span>Your cart</span><span class="uh-count">2 items</span></div>
+      <div class="uh-row">
+        <span class="gthumb"><img src="/products/sneaker.svg" alt="" loading="eager" decoding="async" /></span>
+        <span class="uh-name">Trail Runner</span>
+        <span class="uh-price">$64</span>
+      </div>
+      <span class="uh-label">Recommended for you</span>
+      <div class="uh-row up">
+        <span class="gthumb"><img src="/products/bottle.svg" alt="" loading="lazy" decoding="async" /></span>
+        <span class="uh-name">Steel Bottle</span>
+        <span class="uh-price">$18</span>
+        <span class="uh-add">Add</span>
+        <span class="uh-pip">Added</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  /* The shared .fx-back 15% bottom margin (in global.css) was tuned for
+     Merchandising's short rule card and a narrow 46/60 back/front split.
+     This page's back card is a two-column touchpoint list, so instead:
+     give it more of the stage's width (and the front card less) so it
+     reads as a wide, short landscape card, and a smaller bottom offset —
+     enough for the two cards to read as a staggered composition rather
+     than either a big gap (15%) or perfectly flush (0). Scoped to this
+     page only: ships only where UpsellHero is rendered, so Merchandising's
+     hero (still 46/60/15%) is untouched. */
+  .fx-back { margin-bottom:32px; flex-basis:66%; }
+  .fx-front { flex-basis:40%; }
+
+  .uh-brand { display:flex; align-items:center; gap:8px; margin-bottom:16px; }
+  .uh-brand svg { width:22px; height:22px; flex:none; }
+  .uh-brand span { font-size:.95rem; font-weight:700; color:var(--ink); letter-spacing:-.01em; }
+
+  .uh-kicker { display:block; font-family:var(--mono); font-size:10px; font-weight:700;
+    letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:12px; }
+
+  /* Two columns instead of one long column — halves the list's height so
+     the card reads as a wide, short rectangle instead of a tall, narrow
+     one, now that .fx-back has more of the stage's width to work with. */
+  .uh-tplist { display:grid; grid-template-columns:1fr 1fr; gap:0 14px; margin-bottom:14px; }
+  .uh-tprow { display:flex; align-items:center; justify-content:space-between; gap:8px;
+    padding:9px 0; border-top:1px solid var(--line); }
+  .uh-tprow:nth-child(-n+2) { border-top:0; padding-top:0; }
+  .uh-tprow span:first-child { font-size:.86rem; font-weight:600; color:var(--ink);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
+  .uh-tpstat { flex:none; font-family:var(--mono); font-size:9.5px; font-weight:700; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--faint); }
+  .uh-tpstat.on { color:var(--green-ink); }
+
+  .uh-run { display:flex; align-items:center; gap:7px; padding-top:14px; border-top:1px solid var(--line);
+    font-family:var(--mono); font-size:11px; color:var(--muted); }
+  .uh-run i { width:6px; height:6px; border-radius:50%; background:var(--green); flex:none;
+    animation:qpulse 1.9s var(--ease) infinite; }
+  .uh-run b { color:var(--ink); font-weight:700; }
+
+  .uh-chrome { display:flex; align-items:center; gap:6px; padding-bottom:12px; margin-bottom:14px;
+    border-bottom:1px solid var(--line); }
+  .uh-chrome i { width:7px; height:7px; border-radius:50%; background:var(--line); }
+  .uh-chrome span { margin-left:6px; font-family:var(--mono); font-size:10px; color:var(--muted);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; }
+
+  .uh-head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px; }
+  .uh-head span:first-child { font-size:1rem; font-weight:650; color:var(--ink); }
+  .uh-count { font-family:var(--mono); font-size:10px; color:var(--muted); }
+
+  .uh-row { position:relative; display:flex; align-items:center; gap:10px; padding:10px 11px;
+    border-radius:11px; background:var(--bg-2); border:1px solid var(--line); margin-bottom:10px; }
+  .uh-row:last-child { margin-bottom:0; }
+  .uh-name { flex:1; min-width:0; font-size:.86rem; font-weight:600; color:var(--ink);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .uh-price { flex:none; font-family:var(--mono); font-size:.78rem; color:var(--muted); }
+  .uh-row.up { background:var(--green-soft); border-color:var(--green-line); }
+  .uh-add { flex:none; font-family:var(--mono); font-size:10.5px; font-weight:700; color:#fff;
+    background:var(--green-ink); border-radius:999px; padding:5px 11px; }
+
+  .uh-label { display:block; font-family:var(--mono); font-size:9.5px; font-weight:700;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin:14px 0 10px; }
+
+  /* the "it just converted" pulse — a badge appears over the Add button,
+     rises slightly and fades, on a loop, so the recommended row reads as
+     live rather than a static mock. */
+  .uh-pip { position:absolute; right:9px; top:-9px; font-family:var(--mono); font-size:9.5px;
+    font-weight:800; color:#fff; background:var(--green); padding:2px 7px; border-radius:999px;
+    opacity:0; box-shadow:0 6px 12px -4px rgba(0,163,107,.55); animation:uhPip 3.2s var(--ease) infinite; }
+  @keyframes uhPip {
+    0%, 40% { opacity:0; transform:translateY(6px) scale(.85); }
+    55% { opacity:1; transform:translateY(0) scale(1); }
+    82% { opacity:1; transform:translateY(-3px) scale(1); }
+    100% { opacity:0; transform:translateY(-9px) scale(.9); }
+  }
+  @media (prefers-reduced-motion:reduce){ .uh-pip { animation:none; opacity:1; transform:none; } }
+</style>

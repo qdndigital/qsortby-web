@@ -1,0 +1,170 @@
+---
+/**
+ * MERCHANDISING — "how it works" detail, five sections under the page's
+ * How-it-works steps. Each is copy + one illustration, alternating sides so
+ * the eye has to reset less often scanning down the page (`.split`, an
+ * existing 2-col grid class that had no callers yet).
+ *
+ * Self-contained on purpose: every class either lives in the sitewide
+ * src/styles/global.css (`.gthumb`, `.utag`, `.pfeeds`/VisitorFeeds, `.ab-panel`,
+ * `qpulse`, `.rv`) or is defined in THIS component's own style block below —
+ * none of it depends on components/Offer.astro's `.offer-*` classes, which
+ * only ship on pages that render <Offer/> (this page doesn't). See the
+ * astro-style-scoping note this mistake produced once already.
+ */
+import VisitorFeeds from './VisitorFeeds.astro';
+---
+<div class="split-list">
+  <!-- 1 — build & sort themselves -->
+  <div class="split rv">
+    <div class="mf-copy">
+      <h2>Collections that build and sort themselves</h2>
+      <p class="lead">Point QSortby at any Shopify collection and set the rule it should follow. From there it re-sorts on the schedule you pick, rolling, period, or snapshot, no dragging products around by hand.</p>
+    </div>
+    <div class="mf-viz">
+      <div class="mf-panel">
+        <span class="mf-label">Collection &middot; Summer Essentials</span>
+        <div class="mf-rule"><span>Ranking rule</span><b>Best selling</b></div>
+        <div class="mf-sched">
+          <span class="mf-chip on">Rolling &middot; 24h</span>
+          <span class="mf-chip">Period</span>
+          <span class="mf-chip">Snapshot</span>
+        </div>
+        <div class="mf-run"><i></i>Auto re-sorts &middot; next run in <b>18m</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 — more than best selling -->
+  <div class="split split-rev rv">
+    <div class="mf-copy">
+      <h2>Sort by more than &ldquo;Best selling&rdquo;</h2>
+      <p class="lead">One fixed order works until it doesn't. QSortby lets each collection rank on whichever signal actually drives it, sales, margin, trending, conversion, stock, dwell time, and more, so you're not forcing every collection through the same lens.</p>
+    </div>
+    <div class="mf-viz">
+      <div class="mf-panel">
+        <span class="mf-label">Ranking signal &middot; per collection</span>
+        <div class="mf-sigrow"><span>New Arrivals</span><span class="utag on">Trending</span></div>
+        <div class="mf-sigrow"><span>Clearance</span><span class="utag on">Margin</span></div>
+        <div class="mf-sigrow"><span>Best Sellers</span><span class="utag on">Sales</span></div>
+        <div class="mf-sigrow"><span>Loyalty Picks</span><span class="utag on">Dwell time</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 — grouping -->
+  <div class="split rv">
+    <div class="mf-copy">
+      <h2>Group related products to guide discovery</h2>
+      <p class="lead">Pairing rules keep the products you want shown together, by vendor, type, or tag, actually together, holding their spot through every re-sort so shoppers see the full look, not scattered pieces they have to hunt for.</p>
+    </div>
+    <div class="mf-viz">
+      <div class="mf-panel">
+        <span class="mf-label">Grouped &middot; Outerwear</span>
+        <div class="mf-groupbox">
+          <span class="gthumb mf-gt"><img src="/products/tee.svg" alt="" loading="lazy" decoding="async" /></span>
+          <span class="gthumb mf-gt"><img src="/products/sneaker.svg" alt="" loading="lazy" decoding="async" /></span>
+          <span class="gthumb mf-gt"><img src="/products/cap.svg" alt="" loading="lazy" decoding="async" /></span>
+          <span class="gthumb mf-gt"><img src="/products/tote.svg" alt="" loading="lazy" decoding="async" /></span>
+        </div>
+        <div class="mf-run"><i></i>Held together through every re-sort</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 — personalized -->
+  <div class="split split-rev rv">
+    <div class="mf-copy">
+      <h2>Collections personalized for every shopper</h2>
+      <p class="lead">The For You feed doesn't wait for a login or a purchase history, it reads this session and reorders around it. Your ranking rule stays the foundation, personalization just tunes the result per shopper on top of it.</p>
+    </div>
+    <div class="mf-viz">
+      <div class="mf-panel dark">
+        <span class="mf-label">Segment signals</span>
+        <div class="mf-sched">
+          <span class="mf-chip dk">Pace</span>
+          <span class="mf-chip dk">Dwell time</span>
+          <span class="mf-chip dk">Revisits</span>
+        </div>
+        <div style="margin-top:16px"><VisitorFeeds /></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 — prove it -->
+  <div class="split rv">
+    <div class="mf-copy">
+      <h2>Prove it worked</h2>
+      <p class="lead">Every new order goes live as an A/B test against the one before it, revenue attributed, significance called. Whether it worked is something you check, not something you assume.</p>
+    </div>
+    <div class="mf-viz">
+      <div class="ab-panel mf-ab">
+        <div class="ab-exp" aria-hidden="true">
+          <div class="ab-col">
+            <span class="ab-hd">A &middot; Previous order</span>
+            <span class="ab-bar b1"></span><span class="ab-bar b2"></span><span class="ab-bar b3"></span>
+            <span class="ab-cvr">CVR 1.9%</span>
+          </div>
+          <div class="ab-vs">vs</div>
+          <div class="ab-col ab-b">
+            <span class="ab-hd">B &middot; New order</span>
+            <span class="ab-bar b1 win"></span><span class="ab-bar b2"></span><span class="ab-bar b3"></span>
+            <span class="ab-cvr ab-up">CVR 2.6% <em>&#9650;</em></span>
+          </div>
+        </div>
+        <div class="ab-meterwrap" aria-hidden="true">
+          <span class="ab-meter"><i></i></span>
+          <span class="ab-verdict">96% significant — <b>B wins</b></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  /* `.split h2`/`.split .lead`/`.eyebrow` sizing and `.split-rev` reordering
+     are sitewide now (src/styles/global.css) — promoted there once
+     UpsellFeatures.astro needed the identical repeating-section pattern.
+     Only this illustration's own `.mf-*` content styling stays local. */
+  .mf-viz { display:flex; }
+
+  .mf-panel { flex:1; background:var(--surface); border:1px solid var(--line); border-radius:18px;
+    padding:22px; box-shadow:0 1px 2px rgba(16,24,40,.04), 0 24px 48px -28px rgba(16,24,40,.22); }
+  .mf-panel.dark { background:linear-gradient(165deg,#123227,#08160F); border-color:rgba(120,220,170,.16); }
+  .mf-panel.dark .mf-label { color:rgba(255,255,255,.42); }
+
+  .mf-label { display:block; font-family:var(--mono); font-size:10px; font-weight:700;
+    letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:16px; }
+
+  .mf-rule { display:flex; align-items:center; justify-content:space-between;
+    padding-bottom:14px; margin-bottom:14px; border-bottom:1px solid var(--line); }
+  .mf-rule span { font-size:var(--fs-body); color:var(--ink-2); }
+  .mf-rule b { font-size:1.05rem; font-weight:650; color:var(--ink); letter-spacing:-.01em; }
+
+  .mf-sched { display:flex; flex-wrap:wrap; gap:8px; }
+  .mf-chip { font-family:var(--mono); font-size:11px; font-weight:600; color:var(--ink-2);
+    background:var(--bg-2); border:1px solid var(--line); border-radius:999px; padding:6px 12px; }
+  .mf-chip.on { background:var(--green-soft); border-color:var(--green-line); color:var(--green-ink); }
+  .mf-chip.dk { background:rgba(255,255,255,.06); border-color:rgba(120,220,170,.18); color:rgba(255,255,255,.75); }
+
+  .mf-sigrow { display:flex; align-items:center; justify-content:space-between;
+    padding:12px 0; border-top:1px solid var(--line); }
+  .mf-sigrow:first-of-type { border-top:0; padding-top:0; }
+  .mf-sigrow span:first-child { font-size:var(--fs-body); font-weight:600; color:var(--ink); }
+
+  .mf-groupbox { display:flex; justify-content:center; gap:12px; padding:20px;
+    margin-bottom:16px; border-radius:14px; background:var(--green-soft); border:1px dashed var(--green-line); }
+  .mf-gt { width:42px; height:42px; }
+
+  .mf-run { display:flex; align-items:center; gap:7px; font-family:var(--mono); font-size:11px; color:var(--muted); }
+  .mf-run i { width:6px; height:6px; border-radius:50%; background:var(--green); flex:none;
+    animation:qpulse 1.9s var(--ease) infinite; }
+  .mf-run b { color:var(--ink); font-weight:700; }
+  .mf-panel.dark .mf-run { color:rgba(255,255,255,.5); }
+
+  /* the A/B panel is normally a centered, full-width homepage section; here
+     it lives in a ~50% split column, so drop its own auto side-margins and
+     let the column set the width instead of the panel's own 760px cap. */
+  .mf-ab { margin:0; width:100%; max-width:480px; }
+
+</style>

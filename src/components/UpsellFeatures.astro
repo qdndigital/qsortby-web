@@ -1,0 +1,167 @@
+---
+/**
+ * UPSELL — "how it works" detail, four sections under the page's How-it-works
+ * steps. Same shape as components/MerchandisingFeatures.astro: copy + one
+ * illustration per claim, alternating sides via the sitewide `.split`/
+ * `.split-rev` classes. Self-contained `uf-*` styling — this page never
+ * renders Offer.astro, MerchandisingHero/Features, or VisitorFeeds, so none
+ * of THEIR classes exist here (see the astro-style-scoping memory).
+ */
+const SURFACES = [
+  { name: 'Cart drawer', on: true },
+  { name: 'Checkout', on: true },
+  { name: 'Thank-you page', on: true },
+  { name: 'Product page', on: false },
+  { name: 'Popups', on: false },
+  { name: 'Free-shipping bar', on: true },
+];
+---
+<div class="split-list">
+  <!-- 1 — six surfaces, one engine -->
+  <div class="split rv">
+    <div class="uf-copy">
+      <h2>Turn every touchpoint into a chance to upsell</h2>
+      <p class="lead">Cart drawer, checkout, product page, and more, each one is a spot where a shopper is already paying attention. Add a block to any of them and set the rule it follows, frequently bought together, best sellers, or trending, so it's suggesting the right thing at the right moment.</p>
+    </div>
+    <div class="uf-viz">
+      <div class="uf-panel">
+        <span class="uf-label">Touchpoints &middot; connected</span>
+        {SURFACES.map((s) => (
+          <div class="uf-srow">
+            <span>{s.name}</span>
+            <span class={s.on ? 'uf-stat on' : 'uf-stat'}>{s.on ? 'Live' : 'Off'}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 — set the rule -->
+  <div class="split split-rev rv">
+    <div class="uf-copy">
+      <h2>Set the rule behind each block</h2>
+      <p class="lead">Frequently bought together, best sellers, or trending, pick what a block suggests, then layer display rules on top, cart over $50, contains a tag, comes from a vendor, so it only shows when it actually fits.</p>
+    </div>
+    <div class="uf-viz">
+      <div class="uf-panel">
+        <span class="uf-label">Block rule</span>
+        <div class="uf-rule"><span>Recommends</span><b>Best sellers</b></div>
+        <span class="uf-label" style="margin-top:18px">Only show when</span>
+        <div class="uf-chips">
+          <span class="uf-chip">Cart &gt; $50</span>
+          <span class="uf-chip">Tag: outdoor</span>
+          <span class="uf-chip">Vendor: Trailhead</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 — never the wrong offer -->
+  <div class="split rv">
+    <div class="uf-copy">
+      <h2>Never the wrong offer</h2>
+      <p class="lead">A block skips what's already in the cart and never suggests something out of stock. The free-shipping bar only offers something that actually closes the gap, not a $5 item against $40 missing.</p>
+    </div>
+    <div class="uf-viz">
+      <div class="uf-panel">
+        <div class="uf-grow skip">
+          <span class="gthumb"><img src="/products/sneaker.svg" alt="" loading="lazy" decoding="async" /></span>
+          <span class="uf-gn">Trail Runner</span>
+          <span class="uf-gtag">Already in cart</span>
+        </div>
+        <div class="uf-grow skip">
+          <span class="gthumb"><img src="/products/headphones.svg" alt="" loading="lazy" decoding="async" /></span>
+          <span class="uf-gn">Studio Headphones</span>
+          <span class="uf-gtag">Out of stock</span>
+        </div>
+        <div class="uf-grow ok">
+          <span class="gthumb"><img src="/products/bottle.svg" alt="" loading="lazy" decoding="async" /></span>
+          <span class="uf-gn">Steel Bottle</span>
+          <span class="uf-gtag ok">$18 &middot; closes the gap</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 — personalized to mood -->
+  <div class="split split-rev rv">
+    <div class="uf-copy">
+      <h2>Personalized to how the shopper feels</h2>
+      <p class="lead">Emotional suggest reads the session and picks between your ranked candidates accordingly, an anxious shopper and a celebratory one can see different suggestions from the same cart.</p>
+    </div>
+    <div class="uf-viz">
+      <div class="uf-panel dark">
+        <div class="uf-moods">
+          <div class="uf-mood">
+            <span class="uf-mood-h">Anxious</span>
+            <div class="uf-mrow"><span class="gthumb"><img src="/products/box.svg" alt="" loading="lazy" decoding="async" /></span><span>Extended Warranty</span></div>
+            <div class="uf-mrow"><span class="gthumb"><img src="/products/candle-tin.svg" alt="" loading="lazy" decoding="async" /></span><span>Care Kit</span></div>
+          </div>
+          <div class="uf-mood accent">
+            <span class="uf-mood-h b">Celebratory</span>
+            <div class="uf-mrow on"><span class="gthumb"><img src="/products/mug.svg" alt="" loading="lazy" decoding="async" /></span><span>Gift Wrap</span></div>
+            <div class="uf-mrow"><span class="gthumb"><img src="/products/watch.svg" alt="" loading="lazy" decoding="async" /></span><span>Premium Upgrade</span></div>
+          </div>
+        </div>
+        <p class="uf-mood-cap">Same cart, same moment — two moods, two different suggestions.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  .uf-viz { display:flex; }
+  .uf-panel { flex:1; background:var(--surface); border:1px solid var(--line); border-radius:18px;
+    padding:22px; box-shadow:0 1px 2px rgba(16,24,40,.04), 0 24px 48px -28px rgba(16,24,40,.22); }
+  .uf-panel.dark { background:linear-gradient(165deg,#123227,#08160F); border-color:rgba(120,220,170,.16); }
+
+  .uf-label { display:block; font-family:var(--mono); font-size:10px; font-weight:700;
+    letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:14px; }
+
+  /* section 1 — connected surfaces */
+  .uf-srow { display:flex; align-items:center; justify-content:space-between;
+    padding:11px 0; border-top:1px solid var(--line); }
+  .uf-srow:first-of-type { border-top:0; padding-top:0; }
+  .uf-srow span:first-child { font-size:var(--fs-body); font-weight:600; color:var(--ink); }
+  .uf-stat { font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--faint); }
+  .uf-stat.on { color:var(--green-ink); }
+
+  /* section 2 — rule + display-rule chips */
+  .uf-rule { display:flex; align-items:center; justify-content:space-between;
+    padding-bottom:14px; margin-bottom:6px; border-bottom:1px solid var(--line); }
+  .uf-rule span { font-size:var(--fs-body); color:var(--ink-2); }
+  .uf-rule b { font-size:1.02rem; font-weight:650; color:var(--ink); letter-spacing:-.01em; }
+  .uf-chips { display:flex; flex-wrap:wrap; gap:8px; }
+  .uf-chip { font-family:var(--mono); font-size:11px; font-weight:600; color:var(--ink-2);
+    background:var(--bg-2); border:1px solid var(--line); border-radius:999px; padding:6px 12px; }
+
+  /* section 3 — guardrails: skipped vs. valid rows */
+  .uf-grow { display:flex; align-items:center; gap:10px; padding:10px 11px; border-radius:11px;
+    background:var(--bg-2); border:1px solid var(--line); margin-bottom:10px; }
+  .uf-grow:last-child { margin-bottom:0; }
+  .uf-grow.skip { opacity:.55; }
+  .uf-grow.skip .gthumb img { filter:grayscale(1); }
+  .uf-grow.ok { background:var(--green-soft); border-color:var(--green-line); opacity:1; }
+  .uf-gn { flex:1; min-width:0; font-size:.86rem; font-weight:600; color:var(--ink);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .uf-gtag { flex:none; font-family:var(--mono); font-size:10px; font-weight:600; color:var(--muted); }
+  .uf-gtag.ok { color:var(--green-ink); font-weight:700; }
+
+  /* section 4 — two segments, dark card (matches the site's other
+     "segment/personalize" panels: components/Offer.astro's dark tab card) */
+  .uf-moods { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .uf-mood { display:flex; flex-direction:column; gap:8px; }
+  .uf-mood-h { font-family:var(--mono); font-size:9.5px; font-weight:700; text-transform:uppercase;
+    letter-spacing:.1em; color:rgba(255,255,255,.42); }
+  .uf-mood-h.b { color:var(--green-bright); }
+  .uf-mrow { display:flex; align-items:center; gap:8px; padding:7px 9px; border-radius:9px;
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.07); }
+  .uf-mrow span:last-child { font-size:11.5px; font-weight:600; color:rgba(255,255,255,.78);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .uf-mrow.on { background:rgba(0,163,107,.18); border-color:rgba(43,217,150,.4); }
+  .uf-mrow.on span:last-child { color:#fff; }
+  .uf-mrow .gthumb { width:22px; height:22px; border-radius:6px; }
+  .uf-mood-cap { margin-top:14px; text-align:center; font-family:var(--mono); font-size:9.5px;
+    font-weight:600; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.34); }
+</style>

@@ -1,0 +1,104 @@
+---
+/**
+ * PERSONALIZATION HERO ILLUSTRATION — /features/personalization.
+ *
+ * Same two-panel composition as MerchandisingHero.astro / UpsellHero.astro
+ * (the `.fx-*` classes in global.css): a rule card behind — the segment
+ * rules, checked top to bottom, first match wins — and the storefront
+ * result it produces in front, the ranked order the matched segment
+ * actually sees. That pairing is the page's whole pitch: "one catalog, a
+ * different front row for every visitor."
+ *
+ * Fully self-contained (its own `ph-` classes) rather than reusing
+ * Offer.astro's `.offer-*`, MerchandisingHero's `.mh-*` or UpsellHero's
+ * `.uh-*` — this page never renders any of those components, so their
+ * classes don't exist here. See the astro-style-scoping memory.
+ */
+const RULES = [
+  { n: '01', name: 'Cart abandoner (24h)', target: 'Restock urgency', status: 'skip' },
+  { n: '02', name: 'Returning VIP', target: 'Best sellers first', status: 'match' },
+  { n: '03', name: 'First-time visitor', target: 'New arrivals', status: 'idle' },
+];
+const STATUS_LABEL = { skip: 'Skipped', match: 'Match', idle: 'Not reached' };
+
+const PRODUCTS = [
+  { name: 'Trail Runner', price: '$64', img: '/products/sneaker.svg' },
+  { name: 'Classic Cap', price: '$32', img: '/products/cap.svg' },
+  { name: 'Steel Bottle', price: '$18', img: '/products/bottle.svg' },
+];
+---
+<div class="fx-stage" aria-hidden="true">
+  <div class="fx-row">
+    <div class="fx-back">
+      <span class="ph-kicker">Segment rules &middot; checked top to bottom</span>
+      <div class="ph-rules">
+        {RULES.map((r) => (
+          <div class={`ph-rule ${r.status}`}>
+            <div class="ph-rule-top">
+              <span class="ph-rule-n">{r.n}</span>
+              <span class="ph-rule-name">{r.name}</span>
+              <span class="ph-rule-stat">{r.status === 'match' && <i></i>}{STATUS_LABEL[r.status]}</span>
+            </div>
+            <div class="ph-rule-target">&rarr; {r.target}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class="fx-front">
+      <div class="ph-chrome"><i></i><i></i><i></i><span>your-store.com/collections/all</span></div>
+      <div class="ph-seg"><i class="ph-live"></i>This visitor &middot; <b>Returning VIP</b></div>
+      <div class="ph-plist">
+        {PRODUCTS.map((p, i) => (
+          <div class="ph-prow">
+            <span class="ph-rank">{i + 1}</span>
+            <span class="gthumb"><img src={p.img} alt="" loading={i === 0 ? 'eager' : 'lazy'} decoding="async" /></span>
+            <span class="ph-pname">{p.name}</span>
+            <span class="ph-pprice">{p.price}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  .ph-kicker { display:block; font-family:var(--mono); font-size:10px; font-weight:700;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:14px; }
+
+  .ph-rules { display:flex; flex-direction:column; }
+  .ph-rule { padding:11px 0; border-top:1px solid var(--line); }
+  .ph-rule:first-child { border-top:0; padding-top:0; }
+  .ph-rule-top { display:flex; align-items:center; gap:8px; }
+  .ph-rule-n { font-family:var(--mono); font-size:10px; font-weight:700; color:var(--faint); }
+  .ph-rule-name { flex:1; min-width:0; font-size:var(--fs-body); font-weight:600; color:var(--ink);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .ph-rule-stat { flex:none; display:flex; align-items:center; gap:5px; font-family:var(--mono);
+    font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--faint); }
+  .ph-rule-target { margin:4px 0 0 18px; font-size:.8rem; color:var(--ink-2); }
+  .ph-rule.skip, .ph-rule.idle { opacity:.55; }
+  .ph-rule.match .ph-rule-name { color:var(--ink); }
+  .ph-rule.match .ph-rule-stat { color:var(--green-ink); }
+  .ph-rule.match .ph-rule-target { color:var(--green-ink); font-weight:600; }
+  .ph-rule.match .ph-rule-stat i { width:6px; height:6px; border-radius:50%; background:var(--green);
+    animation:qpulse 1.9s var(--ease) infinite; }
+
+  .ph-chrome { display:flex; align-items:center; gap:6px; padding-bottom:12px; margin-bottom:14px;
+    border-bottom:1px solid var(--line); }
+  .ph-chrome i { width:7px; height:7px; border-radius:50%; background:var(--line); }
+  .ph-chrome span { margin-left:6px; font-family:var(--mono); font-size:10px; color:var(--muted);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; }
+
+  .ph-seg { display:flex; align-items:center; gap:7px; font-size:.82rem; color:var(--ink-2); margin-bottom:14px; }
+  .ph-seg b { color:var(--ink); font-weight:700; }
+  .ph-live { width:6px; height:6px; border-radius:50%; background:var(--green); flex:none;
+    animation:qpulse 1.9s var(--ease) infinite; }
+
+  .ph-prow { display:flex; align-items:center; gap:10px; padding:10px 11px; border-radius:11px;
+    background:var(--bg-2); border:1px solid var(--line); margin-bottom:8px; }
+  .ph-prow:last-child { margin-bottom:0; }
+  .ph-rank { flex:none; width:18px; font-family:var(--mono); font-size:10.5px; font-weight:700; color:var(--faint); }
+  .ph-pname { flex:1; min-width:0; font-size:.86rem; font-weight:600; color:var(--ink);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .ph-pprice { flex:none; font-family:var(--mono); font-size:.78rem; color:var(--muted); }
+</style>
