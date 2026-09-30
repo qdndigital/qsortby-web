@@ -1,0 +1,348 @@
+---
+/**
+ * HOME HERO VISUAL — the three jobs in one storefront, on a loop.
+ *
+ *   01 Auto-sort  the collection flips from "Manual" to live best-selling:
+ *                 the best seller climbs to the front, sold-out drops last.
+ *   02 Pair       the product that sells WITH the leader moves in beside it.
+ *   03 Upsell     the cart drawer offers that same paired product; it gets
+ *                 added, free shipping unlocks, the order grows.
+ *
+ * One product thread runs through all three (Trail Runner → Classic Cap) so
+ * it reads as one engine, not three widgets.
+ *
+ * Layout: a step switcher above a store window. Tiles are absolutely
+ * positioned and sized off the window's inline size (container query units);
+ * each tile carries its (col,row) for every layout as CSS vars and `data-l`
+ * on the root picks the set, so a re-order is a plain transform transition.
+ * Product art lives in public/products/hero/ (transparent, drawn for this
+ * visual) on a per-product tint, like studio product shots.
+ *
+ * Timeline: inline script below. Reduced motion → no autoplay; the sorted
+ * layout shows and the step buttons switch states on click.
+ */
+type Pos = [number, number];
+type Tile = { id: string; name: string; art: string; tint: string; price: string; raw: Pos; sorted: Pos; paired: Pos; out?: boolean };
+const TILES: Tile[] = [
+  { id: 'run', name: 'Trail Runner',       art: 'runner', tint: '#E6ECF0', price: '$64',  raw: [0, 1], sorted: [0, 0], paired: [0, 0] },
+  { id: 'tee', name: 'Everyday Tee',       art: 'tee',    tint: '#E5EEE7', price: '$28',  raw: [1, 0], sorted: [1, 0], paired: [2, 0] },
+  { id: 'cap', name: 'Classic Cap',        art: 'cap',    tint: '#E1ECE6', price: '$22',  raw: [2, 1], sorted: [1, 1], paired: [1, 0] },
+  { id: 'wat', name: 'Chrono Watch',       art: 'watch',  tint: '#F0E9DE', price: '$149', raw: [1, 1], sorted: [2, 0], paired: [0, 1] },
+  { id: 'tot', name: 'Canvas Tote',        art: 'tote',   tint: '#F1EBDF', price: '$36',  raw: [2, 0], sorted: [0, 1], paired: [1, 1] },
+  { id: 'bot', name: 'Steel Water Bottle', art: 'bottle', tint: '#E7EBEF', price: '$18',  raw: [0, 0], sorted: [2, 1], paired: [2, 1], out: true },
+];
+const STEPS = [
+  { label: 'Auto-sort', note: 'Ranks the collection on live sales and stock.' },
+  { label: 'Pair',      note: 'Keeps the products that sell together side by side.' },
+  { label: 'Upsell',    note: 'Offers the pair in the cart, at checkout and after.' },
+];
+const vars = (t: Tile) =>
+  `--rx:${t.raw[0]};--ry:${t.raw[1]};--sx:${t.sorted[0]};--sy:${t.sorted[1]};--px:${t.paired[0]};--py:${t.paired[1]};--tint:${t.tint}`;
+const art = (n: string) => `/products/hero/${n}.svg`;
+---
+<div class="hf" data-l="sorted" data-step="0" data-cart="off">
+  <div class="hf-ctl">
+    <div class="hf-steps" role="tablist" aria-label="What QSortby does">
+      {STEPS.map((s, i) => (
+        <button type="button" role="tab" class="hf-step" aria-selected={i === 0 ? 'true' : 'false'}>
+          <span class="hf-n">{i + 1}</span>{s.label}<span class="hf-prog"><i></i></span>
+        </button>
+      ))}
+    </div>
+    <p class="hf-cap" aria-live="polite">
+      {STEPS.map((s, i) => <span class={`hf-c hf-c${i}`}>{s.note}</span>)}
+    </p>
+  </div>
+
+  <div class="hf-win" aria-hidden="true">
+    <div class="hf-nav">
+      <span class="hf-store">Field&nbsp;&amp;&nbsp;Co.</span>
+      <span class="hf-links"><i>Shop</i><i>New in</i><i>Journal</i></span>
+      <span class="hf-bag">
+        <svg viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7zM9 8a3 3 0 0 1 6 0"/></svg>
+        <b class="hf-count"><span class="k1">1</span><span class="k2">2</span></b>
+      </span>
+    </div>
+
+    <div class="hf-page">
+      <div class="hf-head">
+        <div>
+          <span class="hf-crumb">Collections</span>
+          <span class="hf-coll">Best of Summer</span>
+        </div>
+        <span class="hf-sort">
+          <span class="hf-sl">Sort</span>
+          <span class="hf-sv"><span class="s0">Manual</span><span class="s1"><i></i>Best selling · live</span></span>
+        </span>
+      </div>
+
+      <div class="hf-grid">
+        {TILES.map((t, i) => (
+          <div class={`hf-t hf-p-${t.id}${t.out ? ' is-out' : ''}`} style={vars(t)}>
+            <span class="hf-img">
+              <img src={art(t.art)} alt="" width="200" height="200" loading={i < 3 ? 'eager' : 'lazy'} decoding="async" />
+              {t.id === 'run' && <span class="hf-badge hf-b-up">▲ Best seller</span>}
+              {t.id === 'bot' && <span class="hf-badge hf-b-down">Sold out</span>}
+              {t.id === 'cap' && <span class="hf-badge hf-b-pair">Bought together</span>}
+            </span>
+            <span class="hf-meta">
+              <span class="hf-nm">{t.name}</span>
+              <span class="hf-pr">{t.price}</span>
+            </span>
+          </div>
+        ))}
+        <span class="hf-link"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1"/></svg></span>
+      </div>
+    </div>
+
+    <span class="hf-scrim"></span>
+    <div class="hf-cart">
+      <div class="hf-ch"><b>Your cart</b><span class="hf-x">×</span></div>
+
+      <div class="hf-ship">
+        <span class="hf-shipt"><span class="f0">You're <b>$16</b> away from free shipping</span><span class="f1">✓ Free shipping unlocked</span></span>
+        <span class="hf-bar"><i></i></span>
+      </div>
+
+      <div class="hf-ci">
+        <span class="hf-cimg" style="--tint:#E6ECF0"><img src={art('runner')} alt="" width="48" height="48" /></span>
+        <span class="hf-cinfo"><b>Trail Runner</b><small>Slate · 42</small></span>
+        <span class="hf-cpr">$64</span>
+      </div>
+      <div class="hf-ci hf-added">
+        <span class="hf-cimg" style="--tint:#E1ECE6"><img src={art('cap')} alt="" width="48" height="48" /></span>
+        <span class="hf-cinfo"><b>Classic Cap</b><small>Pine · One size</small></span>
+        <span class="hf-cpr">$22</span>
+      </div>
+
+      <div class="hf-offer">
+        <span class="hf-ok">Pairs well with Trail Runner</span>
+        <div class="hf-oc">
+          <span class="hf-cimg" style="--tint:#fff"><img src={art('cap')} alt="" width="48" height="48" /></span>
+          <span class="hf-cinfo"><b>Classic Cap</b><small>$22</small></span>
+          <span class="hf-add">Add</span>
+        </div>
+      </div>
+
+      <div class="hf-also">
+        <span class="hf-gain">
+          <span class="g0">Same pair, also offered at checkout and on the thank-you page.</span>
+          <span class="g1"><b>+$22</b> added by the pairing offer. It shows again at checkout and on the thank-you page.</span>
+        </span>
+      </div>
+
+      <div class="hf-foot">
+        <div class="hf-tot"><span>Subtotal</span><span class="hf-tv"><span class="t1">$64.00</span><span class="t2">$86.00</span></span></div>
+        <span class="hf-co">Checkout</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+(function () {
+  var el = document.currentScript && document.currentScript.previousElementSibling;
+  if (!el || !el.classList.contains('hf')) return;
+  var btns = el.querySelectorAll('.hf-step');
+  var reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  // [layout, step, cart, ms]
+  var TL = [
+    ['raw', 0, 'off', 1100], ['sorted', 0, 'off', 3000],
+    ['paired', 1, 'off', 3600],
+    ['paired', 2, 'offer', 2300], ['paired', 2, 'added', 3000]
+  ];
+  var FIRST = [0, 2, 3];
+  var i = 0, timer = null, visible = true;
+  function apply(f) {
+    el.dataset.l = f[0]; el.dataset.step = f[1]; el.dataset.cart = f[2];
+    btns.forEach(function (b, k) { b.setAttribute('aria-selected', k === f[1] ? 'true' : 'false'); });
+  }
+  function stepMs(s) { return TL.reduce(function (a, f) { return f[1] === s ? a + f[3] : a; }, 0); }
+  function run() {
+    clearTimeout(timer);
+    var f = TL[i]; apply(f);
+    if (!TL[i - 1] || TL[i - 1][1] !== f[1]) {
+      el.style.setProperty('--dur', stepMs(f[1]) + 'ms');
+      el.classList.remove('play'); void el.offsetWidth; el.classList.add('play');
+    }
+    if (!visible) return;
+    timer = setTimeout(function () { i = (i + 1) % TL.length; run(); }, f[3]);
+  }
+  btns.forEach(function (b, k) {
+    b.addEventListener('click', function () {
+      if (reduce) { apply(k === 0 ? TL[1] : k === 1 ? TL[2] : TL[4]); return; }
+      i = FIRST[k]; run();
+    });
+  });
+  if (reduce) { el.classList.add('still'); apply(TL[1]); return; }
+  new IntersectionObserver(function (es) {
+    var v = es[0].isIntersecting;
+    if (v && !visible) { visible = true; run(); }
+    else if (!v) { visible = false; clearTimeout(timer); el.classList.remove('play'); }
+  }).observe(el);
+  run();
+})();
+</script>
+
+<style>
+  .hf { --ease:cubic-bezier(.22,.61,.21,1); position:relative; }
+
+  /* ── step switcher ─────────────────────────────────────────── */
+  .hf-ctl { display:flex; align-items:center; gap:16px; margin-bottom:14px; }
+  .hf-steps { display:inline-flex; flex:none; gap:2px; padding:4px; border-radius:999px; background:var(--surface); border:1px solid var(--line);
+    box-shadow:0 1px 2px rgba(30,30,26,.05); }
+  .hf-step { position:relative; display:inline-flex; align-items:center; gap:8px; padding:7px 14px 7px 8px; border:0; border-radius:999px;
+    background:transparent; font:inherit; font-size:13.5px; font-weight:600; color:var(--muted); cursor:pointer; overflow:hidden;
+    transition:background .3s, color .3s; }
+  .hf-step:hover { color:var(--ink); }
+  .hf-step:focus-visible { outline:2px solid var(--green); outline-offset:2px; }
+  .hf-n { display:grid; place-items:center; width:20px; height:20px; border-radius:50%; font-size:11px; font-weight:700;
+    background:var(--bg); color:var(--muted); transition:background .3s, color .3s; }
+  .hf-step[aria-selected="true"] { background:var(--ink); color:var(--bg); }
+  .hf-step[aria-selected="true"] .hf-n { background:var(--green); color:#fff; }
+  .hf-prog { position:absolute; left:14px; right:14px; bottom:3px; height:2px; border-radius:2px; overflow:hidden; opacity:0; }
+  .hf-prog i { display:block; height:100%; background:var(--green); transform:scaleX(0); transform-origin:left; }
+  .hf.play .hf-step[aria-selected="true"] .hf-prog { opacity:1; }
+  .hf.play .hf-step[aria-selected="true"] .hf-prog i { animation:hf-prog var(--dur,4000ms) linear both; }
+  @keyframes hf-prog { to { transform:scaleX(1); } }
+  .hf-cap { position:relative; display:grid; flex:1; margin:0; font-size:13.5px; line-height:1.4; color:var(--ink-2); }
+  .hf-c { grid-area:1/1; opacity:0; transform:translateY(4px); transition:opacity .35s, transform .35s; }
+  .hf[data-step="0"] .hf-c0, .hf[data-step="1"] .hf-c1, .hf[data-step="2"] .hf-c2 { opacity:1; transform:none; }
+
+  /* ── store window ──────────────────────────────────────────── */
+  .hf-win { --pad:18px; --gap:14px; --meta:40px;
+    --tw:calc((100cqw - 2 * var(--pad) - 2 * var(--gap)) / 3); --th:calc(var(--tw) + var(--meta));
+    container-type:inline-size; position:relative; overflow:hidden;
+    background:var(--surface); border:1px solid var(--line); border-radius:20px;
+    box-shadow:0 1px 2px rgba(30,30,26,.04), 0 30px 60px -30px rgba(30,30,26,.28); }
+  .hf-nav { display:flex; align-items:center; gap:18px; padding:13px var(--pad); border-bottom:1px solid var(--line); }
+  .hf-store { font-size:15px; font-weight:800; letter-spacing:-.02em; }
+  .hf-links { display:flex; gap:16px; flex:1; font-size:12px; color:var(--muted); }
+  .hf-links i { font-style:normal; }
+  .hf-bag { position:relative; width:22px; height:22px; color:var(--ink); }
+  .hf-bag svg { width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linejoin:round; }
+  .hf-count { position:absolute; top:-5px; right:-7px; display:grid; min-width:16px; height:16px; padding:0 4px; border-radius:999px;
+    background:var(--green); color:#fff; font-size:10px; line-height:16px; text-align:center;
+    transform:scale(0); transition:transform .3s var(--ease); }
+  .hf-count span { grid-area:1/1; transition:opacity .2s; }
+  .hf-count .k2 { opacity:0; }
+  .hf[data-cart="offer"] .hf-count, .hf[data-cart="added"] .hf-count { transform:scale(1); }
+  .hf[data-cart="added"] .hf-count .k1 { opacity:0; } .hf[data-cart="added"] .hf-count .k2 { opacity:1; }
+
+  .hf-page { padding:16px var(--pad) var(--pad); }
+  .hf-head { display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin-bottom:14px; }
+  .hf-crumb { display:block; font-size:11px; color:var(--muted); margin-bottom:2px; }
+  .hf-coll { display:block; font-size:18px; font-weight:700; letter-spacing:-.02em; }
+  .hf-sort { display:inline-flex; align-items:center; gap:6px; font-size:12px; padding:6px 11px; border:1px solid var(--line); border-radius:999px; white-space:nowrap; }
+  .hf-sl { color:var(--muted); }
+  .hf-sv { display:grid; font-weight:600; }
+  .hf-sv span { grid-area:1/1; display:inline-flex; align-items:center; gap:6px; transition:opacity .3s; }
+  .hf-sv .s1 { color:var(--green-ink); opacity:0; }
+  .hf-sv .s1 i { width:6px; height:6px; border-radius:50%; background:var(--green); box-shadow:0 0 0 3px var(--mint-2); }
+  .hf:not([data-l="raw"]) .hf-sv .s0 { opacity:0; }
+  .hf:not([data-l="raw"]) .hf-sv .s1 { opacity:1; }
+  .hf:not([data-l="raw"]) .hf-sort { border-color:var(--green-line); background:var(--green-soft); }
+
+  /* grid: tiles placed by transform, per layout */
+  .hf-grid { position:relative; height:calc(2 * var(--th) + var(--gap)); }
+  .hf-t { position:absolute; top:0; left:0; width:var(--tw); height:var(--th); display:flex; flex-direction:column;
+    transition:transform .8s var(--ease), opacity .45s;
+    transform:translate(calc(var(--x) * (var(--tw) + var(--gap))), calc(var(--y) * (var(--th) + var(--gap)))); }
+  .hf[data-l="raw"] .hf-t { --x:var(--rx); --y:var(--ry); }
+  .hf[data-l="sorted"] .hf-t { --x:var(--sx); --y:var(--sy); }
+  .hf[data-l="paired"] .hf-t { --x:var(--px); --y:var(--py); }
+  .hf-img { position:relative; height:var(--tw); display:grid; place-items:center; border-radius:14px; background:var(--tint);
+    transition:box-shadow .35s; }
+  .hf-img img { width:86%; height:86%; object-fit:contain; transition:transform .35s var(--ease); }
+  .hf-meta { display:flex; justify-content:space-between; align-items:baseline; gap:8px; padding:9px 2px 0; }
+  .hf-nm { font-size:12.5px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .hf-pr { font-size:12px; color:var(--muted); flex:none; }
+  .hf-t.is-out .hf-img img { filter:grayscale(.6); opacity:.55; }
+  .hf-t.is-out .hf-meta { opacity:.5; }
+  .hf[data-l="raw"] .hf-t.is-out .hf-img img, .hf[data-l="raw"] .hf-t.is-out .hf-meta { filter:none; opacity:1; }
+
+  .hf-badge { position:absolute; top:9px; left:9px; font-size:10px; font-weight:700; letter-spacing:.01em; padding:4px 9px; border-radius:999px;
+    opacity:0; transform:translateY(-4px); transition:opacity .3s .45s, transform .3s .45s; white-space:nowrap; }
+  .hf-b-up { background:var(--ink); color:var(--bg); }
+  .hf-b-down { background:rgba(255,255,255,.9); color:var(--muted); border:1px solid var(--line); }
+  .hf-b-pair { background:var(--green); color:#fff; }
+  .hf[data-l="sorted"] .hf-b-up, .hf:not([data-l="raw"]) .hf-b-down,
+  .hf[data-l="paired"] .hf-b-pair { opacity:1; transform:none; }
+
+  /* pairing: both images ring up, a link sits on the seam */
+  .hf[data-step="1"] .hf-p-run .hf-img, .hf[data-step="1"] .hf-p-cap .hf-img { box-shadow:0 0 0 2px var(--green), 0 0 0 6px var(--mint-2); }
+  .hf[data-step="1"] .hf-p-run .hf-img img, .hf[data-step="1"] .hf-p-cap .hf-img img { transform:scale(1.04); }
+  .hf-link { position:absolute; z-index:2; top:calc(var(--tw) / 2); left:calc(var(--tw) + var(--gap) / 2);
+    width:32px; height:32px; margin:-16px 0 0 -16px; display:grid; place-items:center; border-radius:50%;
+    background:var(--green); color:#fff; box-shadow:0 0 0 4px var(--surface), 0 6px 14px -6px rgba(0,163,107,.6);
+    opacity:0; transform:scale(.5); transition:opacity .3s, transform .35s var(--ease); }
+  .hf-link svg { width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+  .hf[data-step="1"] .hf-link { opacity:1; transform:none; transition-delay:.6s; }
+
+  /* upsell: a real cart drawer over a dimmed page */
+  .hf-scrim { position:absolute; inset:0; z-index:3; background:rgba(30,30,26,.32); opacity:0; transition:opacity .45s; pointer-events:none; }
+  .hf-cart { position:absolute; z-index:4; top:0; right:0; bottom:0; width:min(62%, 330px);
+    display:flex; flex-direction:column; gap:14px; padding:16px 18px 18px; background:var(--surface);
+    box-shadow:-24px 0 50px -24px rgba(30,30,26,.4);
+    transform:translateX(105%); transition:transform .6s var(--ease); }
+  .hf[data-step="2"] .hf-scrim { opacity:1; }
+  .hf[data-step="2"] .hf-cart { transform:none; }
+  .hf-ch { display:flex; justify-content:space-between; align-items:center; font-size:15px; padding-bottom:12px; border-bottom:1px solid var(--line); }
+  .hf-x { font-size:18px; color:var(--muted); line-height:1; }
+
+  .hf-ship { display:flex; flex-direction:column; gap:7px; }
+  .hf-shipt { display:grid; font-size:11.5px; color:var(--ink-2); }
+  .hf-shipt span { grid-area:1/1; transition:opacity .3s; }
+  .hf-shipt .f1 { opacity:0; color:var(--green-ink); font-weight:700; }
+  .hf[data-cart="added"] .hf-shipt .f0 { opacity:0; } .hf[data-cart="added"] .hf-shipt .f1 { opacity:1; }
+  .hf-bar { height:6px; border-radius:999px; background:var(--bg); overflow:hidden; }
+  .hf-bar i { display:block; height:100%; width:80%; border-radius:inherit; background:var(--green); transition:width .7s var(--ease) .15s; }
+  .hf[data-cart="added"] .hf-bar i { width:100%; }
+
+  .hf-ci, .hf-oc { display:grid; grid-template-columns:48px 1fr auto; align-items:center; gap:11px; }
+  .hf-cimg { width:48px; height:48px; border-radius:10px; background:var(--tint); display:grid; place-items:center; }
+  .hf-cimg img { width:40px; height:40px; }
+  .hf-cinfo { display:flex; flex-direction:column; gap:2px; min-width:0; }
+  .hf-cinfo b { font-size:13px; font-weight:600; }
+  .hf-cinfo small { font-size:11px; color:var(--muted); }
+  .hf-cpr { font-size:13px; font-weight:600; }
+  .hf-added { max-height:0; opacity:0; overflow:hidden; margin-top:-14px; transform:translateY(-6px);
+    transition:max-height .45s var(--ease), opacity .35s .1s, margin .45s var(--ease), transform .45s var(--ease); }
+  .hf[data-cart="added"] .hf-added { max-height:60px; opacity:1; margin-top:0; transform:none; }
+
+  .hf-offer { display:flex; flex-direction:column; gap:9px; padding:12px; border-radius:14px; background:var(--green-soft); border:1px solid var(--green-line);
+    max-height:120px; overflow:hidden; transition:opacity .3s, max-height .45s var(--ease), padding .45s, margin .45s, border-width .45s; }
+  .hf[data-cart="added"] .hf-offer { opacity:0; max-height:0; padding-block:0; margin-top:-14px; border-width:0; }
+  .hf-ok { font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--green-ink); }
+  .hf-add { font-size:12px; font-weight:700; color:#fff; background:var(--ink); border-radius:999px; padding:7px 16px; }
+  .hf[data-cart="offer"] .hf-add { animation:hf-tap 2.3s ease both; }
+  @keyframes hf-tap { 0%,72% { transform:none; background:var(--ink); } 80% { transform:scale(.9); background:var(--green-ink); } 90%,100% { transform:none; background:var(--green-ink); } }
+
+  .hf-also { margin-top:auto; padding:11px 12px; border-radius:12px; background:var(--bg); font-size:11.5px; line-height:1.45; color:var(--ink-2); }
+  .hf-gain { display:grid; }
+  .hf-gain span { grid-area:1/1; transition:opacity .3s; }
+  .hf-gain .g1 { opacity:0; } .hf-gain b { color:var(--green-ink); }
+  .hf[data-cart="added"] .hf-gain .g0 { opacity:0; } .hf[data-cart="added"] .hf-gain .g1 { opacity:1; }
+  .hf-foot { display:flex; flex-direction:column; gap:10px; padding-top:12px; border-top:1px solid var(--line); }
+  .hf-tot { display:flex; justify-content:space-between; font-size:13.5px; font-weight:700; }
+  .hf-tv { display:grid; text-align:right; }
+  .hf-tv span { grid-area:1/1; transition:opacity .3s; }
+  .hf-tv .t2 { opacity:0; }
+  .hf[data-cart="added"] .hf-tv .t1 { opacity:0; } .hf[data-cart="added"] .hf-tv .t2 { opacity:1; }
+  .hf-co { display:block; text-align:center; padding:11px; border-radius:12px; background:var(--ink); color:var(--bg); font-size:13px; font-weight:600; }
+
+  .hf.still * { transition:none !important; animation:none !important; }
+
+  @media (max-width:640px) {
+    .hf-ctl { flex-direction:column; align-items:flex-start; gap:10px; }
+    .hf-step { padding:6px 11px 6px 6px; font-size:12.5px; }
+    .hf-win { --pad:12px; --gap:10px; --meta:34px; border-radius:16px; }
+    .hf-links { display:none; } .hf-nav { justify-content:space-between; }
+    .hf-coll { font-size:15px; } .hf-crumb { display:none; }
+    .hf-sort { font-size:10.5px; padding:5px 8px; } .hf-sl { display:none; }
+    .hf-nm { font-size:10.5px; } .hf-pr { font-size:10px; }
+    .hf-badge { top:6px; left:6px; font-size:8.5px; padding:3px 6px; }
+    .hf-cart { width:78%; padding:12px; gap:10px; }
+    .hf-offer { padding:9px; }
+  }
+</style>
