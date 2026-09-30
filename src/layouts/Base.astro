@@ -2,7 +2,7 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import StickyCta from '../components/StickyCta.astro';
-import { DEMO_SCRIPT_URL, DEMO_PRODUCT_KEY, DEMO_EVENT, SUPPORT_EMAIL } from '../consts';
+import { DEMO_SCRIPT_URL, DEMO_PRODUCT_KEY, DEMO_EVENT, SUPPORT_EMAIL, CF_ANALYTICS_TOKEN } from '../consts';
 import '../styles/global.css';
 
 const { title, description, noindex = false, image, faq = [], breadcrumb } = Astro.props;
@@ -188,5 +188,15 @@ const jsonld = {
       data-layout="calendar"
       is:inline
       async></script>
+    {/* Cloudflare Web Analytics — cookieless, no consent banner needed.
+        Token lives in consts.ts; nothing renders until it is set, and only
+        production builds load it. */}
+    {import.meta.env.PROD && CF_ANALYTICS_TOKEN && (
+      <script
+        defer
+        src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon={JSON.stringify({ token: CF_ANALYTICS_TOKEN })}
+        is:inline></script>
+    )}
   </body>
 </html>

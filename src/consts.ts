@@ -52,3 +52,10 @@ export const FEATURES_NAV = [
   ["/features/personalization", "Personalization"],
   ["/features/upsell-blocks", "Upsell blocks"],
 ] as const;
+
+// Cloudflare Web Analytics — cookieless, free page-view analytics.
+// Token comes from Cloudflare dashboard → Analytics & Logs → Web Analytics →
+// Add a site → qsortby.com → "Manage site" → the JS snippet's `"token":"…"`.
+// Empty string = the beacon is not rendered at all. Only loads in production
+// builds, so `astro dev` and local previews don't pollute the numbers.
+export const CF_ANALYTICS_TOKEN = "030c6ca788604ff09ba075e968f569d4";
