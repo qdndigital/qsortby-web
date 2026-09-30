@@ -5,7 +5,7 @@
 
 /* =====================================================================
    QSortby — "Polaris Pro": 50% Shopify Polaris · 30% Linear · 20% Apple.
-   White ground, Shopify-green accent, Schibsted Grotesk, light borders, minimal
+   White ground, Shopify-green accent, Be Vietnam Pro, light borders, minimal
    shadow, no decorative gradients. Motion is quiet and quick.
    ===================================================================== */
 
@@ -28,7 +28,7 @@
     --ease:cubic-bezier(.22,.61,.21,1);
     /* The one place the typeface is named. tailwind.config.mjs reads this for
        every font role; the headline rules below read it too. */
-    --font-sans:'Schibsted Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;
+    --font-sans:'Be Vietnam Pro',system-ui,-apple-system,'Segoe UI',sans-serif;
     /* `--mono` was used in ~12 places (SortConsole, IntroVideo) and never
        defined — an invalid var, so those rules silently did nothing and the
        text inherited. It never showed because tailwind's `mono` role pointed at
@@ -124,7 +124,7 @@
   header.site.scrolled { border-bottom-color:var(--line); }
   .nav { @apply flex items-center justify-between h-16; }
   .logo { @apply flex items-center gap-2.5 font-display font-bold text-lg text-ink; letter-spacing:-.02em; }
-  .logomark { @apply w-7 h-7 shrink-0; }
+  .logomark { @apply h-7 w-auto shrink-0; }
   .nav-links { @apply hidden lg:flex items-center gap-7 text-sm font-medium text-ink-2; }
   .nav-links a { @apply transition-colors; }
   .nav-links a:hover { @apply text-ink; }
@@ -925,7 +925,7 @@ body { background:#fcfcfa; }
   inset:0 -2%;
   background:
     radial-gradient(34% 40% at 22% 14%, rgba(0,163,107,.26), transparent 70%),
-    radial-gradient(38% 44% at 84% 26%, rgba(177,84,47,.20), transparent 72%),
+    radial-gradient(38% 44% at 84% 26%, rgba(6,122,85,.16), transparent 72%),
     radial-gradient(46% 48% at 58% 92%, rgba(0,163,107,.14), transparent 72%);
   filter:blur(40px);
 }
@@ -1479,3 +1479,33 @@ header.site { background:rgba(252,252,250,.62); -webkit-backdrop-filter:blur(16p
   .fx-front { flex-basis:auto; width:100%; margin-left:0; }
 }
 @media (prefers-reduced-motion:reduce){ .fx-back, .fx-front { animation:none; } }
+
+/* =====================================================================
+   BRAND v1.0 (QSortby brand guidelines, Sept 2026) — final word on tokens.
+
+   The layers above re-set these tokens several times (Polaris white, warm
+   editorial white, …). This closes it out against the guideline palette:
+     Ink    #1E1E1A  text, dark surfaces, body of the Q
+     Paper  #F4F1EA  page ground (the 60% of the 60/30/10 split)
+     Green  #00A36B  the mark colour, one accent per layout (unchanged)
+     Deep   #067A55  green used as TEXT on light grounds (unchanged)
+     Light  #D6F3E7  soft accent fills (unchanged, = --mint-2)
+     Muted  #5E5C55  secondary text, captions
+   Cards and product windows stay white (--surface, --w-*) so they lift off
+   the paper, as in the guideline mock-ups. Borders move to the warm greys the
+   guideline uses; the cool Polaris greys read blue against paper.
+   ===================================================================== */
+:root {
+  --ink:#1E1E1A; --ink-2:#3D3C37; --muted:#5E5C55; --faint:#9A978E;
+  --line:#E2DDD1; --line-2:#D3CDBF;
+  --bg:#F4F1EA; --bg-2:#EDE9DF; --paper:#F4F1EA; --surface:#ffffff;
+  --btn:#1E1E1A; --btn-h:#3A3935;
+  --w-text:#1E1E1A;
+  /* The old --accent (#16d223) was never a brand colour. Pointed at the deep
+     green, which is the guideline's colour for green text on a light ground. */
+  --accent:#067A55; --accent-soft:#D6F3E7;
+}
+body { background:var(--bg); color:var(--ink); }
+header.site { background:rgba(244,241,234,.72); }
+.stickycta { background:rgba(244,241,234,.94); }
+::selection { background:var(--mint-2); }

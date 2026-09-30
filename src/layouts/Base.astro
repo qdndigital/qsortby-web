@@ -43,7 +43,7 @@ const jsonld = {
       email: SUPPORT_EMAIL,
       description:
         'QSortby is a Shopify collection sorting and upsell app: collections that rank themselves by best sellers and live demand, per-shopper feeds that work from the first visit, and cart, bundle and checkout upsells drawn from the same ranking.',
-      logo: 'https://qsortby.com/favicon.svg',
+      logo: 'https://qsortby.com/icon-512.png',
       areaServed: 'Worldwide',
     },
     {
@@ -140,15 +140,18 @@ const jsonld = {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {/* Self-hosted fonts (see src/styles/fonts.css) — no third-party origin.
-        One family now, so one preload: the roman carries everything above the
-        fold. The italic loads on demand — nothing in a hero uses it. */}
-    <link rel="preload" href="/fonts/schibsted-vf-latin.woff2" as="font" type="font/woff2" crossorigin />
+        Be Vietnam Pro is static, one file per weight: preload the two that
+        set everything above the fold (400 body, 700 headlines). The other
+        weights and the italics load on demand. */}
+    <link rel="preload" href="/fonts/bevietnam-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/bevietnam-700.woff2" as="font" type="font/woff2" crossorigin />
     <title>{title}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex,follow" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta name="theme-color" content="#ffffff" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#F4F1EA" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="QSortby" />
     <meta property="og:title" content={title} />

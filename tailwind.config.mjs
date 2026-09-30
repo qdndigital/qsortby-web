@@ -4,7 +4,7 @@
  * White ground, Shopify green accent, light borders, minimal shadow,
  * no decorative gradients. The product dashboard is the hero.
  *
- * Type: ONE family, Schibsted Grotesk, named once in `--font-sans`
+ * Type: ONE family, Be Vietnam Pro (brand guidelines v1.0), named once in `--font-sans`
  * (src/styles/global.css) so a swap touches a single declaration. See the
  * switching note at the top of src/styles/fonts.css.
  */
@@ -13,17 +13,17 @@ export default {
   theme: {
     extend: {
       colors: {
-        bg: "#ffffff",
-        "bg-2": "#f6f7f8",
+        bg: "#F4F1EA",
+        "bg-2": "#EDE9DF",
         surface: "#ffffff",
-        ink: "#101317",
-        "ink-2": "#41464d",
-        muted: "#697079",
-        faint: "#9aa0a8",
-        line: "#e6e7ea",
-        "line-2": "#d3d6da",
+        ink: "#1E1E1A",
+        "ink-2": "#3D3C37",
+        muted: "#5E5C55",
+        faint: "#9A978E",
+        line: "#E2DDD1",
+        "line-2": "#D3CDBF",
         // primary = ink/near-black; emerald is the accent (kept under `green.*`)
-        btn: { DEFAULT: "#111418", hover: "#2a2f37" },
+        btn: { DEFAULT: "#1E1E1A", hover: "#3A3935" },
         green: {
           DEFAULT: "#00a36b",
           ink: "#067a55",
